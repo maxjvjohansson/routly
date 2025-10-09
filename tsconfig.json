@@ -1,14 +1,8 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "ui": [
-        "packages/ui"
-      ],
-      "ui/*": [
-        "packages/ui/*"
-      ]
-    }
-  },
-  "extends": "expo/tsconfig.base"
+  "files": [],
+  "references": [
+    { "path": "apps/web" },
+    { "path": "apps/mobile" },
+    { "path": "packages/ui" }
+  ]
 }
