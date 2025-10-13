@@ -13,6 +13,6 @@
     { "path": "../../packages/ui" },
     { "path": "../../packages/lib" }
   ],
-  "include": ["src"],
+  "include": ["src", "../../packages/ui/styled.native.d.ts"],
   "exclude": ["node_modules"]
 }
