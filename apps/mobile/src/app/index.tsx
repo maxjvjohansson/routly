@@ -1,3 +1,4 @@
+import { Button } from "@routly/ui/components/Button/Button";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <Container>
       <Title>Routly App</Title>
+      <Button title="Login" color="#0598a8" variant="solid" />
     </Container>
   );
 }
