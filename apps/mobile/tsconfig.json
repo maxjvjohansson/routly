@@ -2,10 +2,17 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-native",
-    "baseUrl": "src",
+    "strict": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@routly/ui/*": ["../../packages/ui/*"],
+      "@routly/lib/*": ["../../packages/lib/*"]
     }
   },
-  "include": ["src"]
+  "references": [
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/lib" }
+  ],
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

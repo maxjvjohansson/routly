@@ -10,18 +10,17 @@
     "strict": true,
     "isolatedModules": true,
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
       "@routly/ui/*": ["../../packages/ui/*"],
-      "ui": ["../../packages/ui"]
+      "@routly/lib/*": ["../../packages/lib/*"]
     }
   },
-  "references": [{ "path": "../../packages/ui" }],
+  "references": [
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/lib" }
+  ],
   "include": [
     "next-env.d.ts",
     "src",
