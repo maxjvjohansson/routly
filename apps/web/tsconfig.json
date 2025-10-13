@@ -3,29 +3,30 @@
   "compilerOptions": {
     "jsx": "preserve",
     "moduleResolution": "bundler",
-    "types": [
-      "styled-components"
-    ],
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["styled-components"],
     "allowJs": true,
     "noEmit": true,
+    "strict": true,
+    "isolatedModules": true,
     "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@routly/ui/*": ["../../packages/ui/*"],
+      "ui": ["../../packages/ui"]
+    }
   },
+  "references": [{ "path": "../../packages/ui" }],
   "include": [
     "next-env.d.ts",
-    "src/**/*",
-    ".next/types/**/*.ts"
+    "src",
+    ".next/types/**/*.ts",
+    "../../packages/ui/styled.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

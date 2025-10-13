@@ -1,8 +1,11 @@
 export const theme = {
   colors: {
-    primary: "#05859B",
-    accent: "#FF7C36",
+    teal: "#05859b",
+    tealLight: "#85c5d2",
+    orange: "#ff7c36",
+    greenLight: "#d5ed85",
+    gray: "#e9e9e9",
     white: "#f5f5f5",
-    black: "#1E1E1E",
+    black: "#202020",
   },
 };

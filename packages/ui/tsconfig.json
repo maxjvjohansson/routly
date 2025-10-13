@@ -6,5 +6,5 @@
     "outDir": "dist",
     "emitDeclarationOnly": true
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "./styled.d.ts"]
 }

@@ -12,7 +12,7 @@ export default function ClientWrapper({
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <main>{children}</main>
+      {children}
     </ThemeProvider>
   );
 }
