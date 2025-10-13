@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "declaration": true,
+    "jsx": "react-native",
+    "baseUrl": ".",
     "composite": true,
-    "outDir": "dist",
-    "emitDeclarationOnly": true
+    "declaration": true,
+    "skipLibCheck": true,
+    "emitDeclarationOnly": false
   },
-  "include": ["**/*.ts", "**/*.tsx", "./styled.d.ts"]
+  "include": ["components", "theme.ts", "styled.native.d.ts", "styled.web.d.ts"]
 }
