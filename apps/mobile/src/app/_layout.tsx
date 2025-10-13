@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { ThemeProvider } from "styled-components/native";
-import { theme } from "ui";
+import { theme } from "@routly/ui/theme";
 
 export default function RootLayout() {
   return (
