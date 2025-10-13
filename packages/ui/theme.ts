@@ -5,7 +5,8 @@ export const theme = {
     orange: "#ff7c36",
     greenLight: "#d5ed85",
     gray: "#e9e9e9",
-    white: "#f5f5f5",
+    grayLight: "#f5f5f5",
+    white: "ffffff",
     black: "#202020",
   },
 };
