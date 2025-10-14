@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@routly/ui/components/Button/Button.web";
+import { Button } from "../components/Button/Button";
 import styled from "styled-components";
 
 const Title = styled.h1`
