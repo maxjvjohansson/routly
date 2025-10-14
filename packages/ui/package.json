@@ -2,12 +2,11 @@
   "name": "@routly/ui",
   "version": "1.0.0",
   "private": true,
-  "types": "./styled.web.d.ts",
-  "scripts": {
-    "check-types": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "typescript": "^5.4.0"
+  "types": "./styled.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts"
+    }
   },
   "peerDependencies": {
     "react": "*",

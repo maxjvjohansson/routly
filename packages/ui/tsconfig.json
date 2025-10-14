@@ -8,5 +8,6 @@
     "skipLibCheck": true,
     "emitDeclarationOnly": false
   },
-  "include": ["components", "theme.ts", "styled.native.d.ts", "styled.web.d.ts"]
+  "include": ["components", "theme.ts", "styled.d.ts"],
+  "exclude": ["node_modules"]
 }

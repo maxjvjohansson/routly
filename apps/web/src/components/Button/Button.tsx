@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 type ButtonProps = {
@@ -12,7 +11,7 @@ type ButtonProps = {
 
 const StyledButton = styled.button<{
   color?: string;
-  variant?: "solid" | "outline";
+  $variant?: "solid" | "outline";
 }>`
   display: inline-flex;
   align-items: center;
@@ -22,12 +21,12 @@ const StyledButton = styled.button<{
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  background-color: ${({ theme, variant, color }) =>
-    variant === "outline" ? "transparent" : color || theme.colors.black};
-  color: ${({ theme, variant, color }) =>
-    variant === "outline" ? color || theme.colors.black : theme.colors.white};
-  border: ${({ theme, color, variant }) =>
-    variant === "outline"
+  background-color: ${({ theme, $variant, color }) =>
+    $variant === "outline" ? "transparent" : color || theme.colors.black};
+  color: ${({ theme, $variant, color }) =>
+    $variant === "outline" ? color || theme.colors.black : theme.colors.white};
+  border: ${({ theme, color, $variant }) =>
+    $variant === "outline"
       ? `2px solid ${color || theme.colors.black}`
       : "none"};
   transition: opacity 0.2s ease;
@@ -59,7 +58,7 @@ export const Button = ({
     onClick={onClick}
     disabled={disabled}
     color={color}
-    variant={variant}
+    $variant={variant}
   >
     {icon && <span style={{ marginRight: 8 }}>{icon}</span>}
     {title}

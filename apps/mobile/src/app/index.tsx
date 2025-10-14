@@ -1,4 +1,4 @@
-import { Button } from "@routly/ui/components/Button/Button";
+import { Button } from "src/components/Button/Button";
 import styled from "styled-components/native";
 
 const Container = styled.View`

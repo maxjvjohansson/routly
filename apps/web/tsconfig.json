@@ -17,15 +17,11 @@
       "@routly/lib/*": ["../../packages/lib/*"]
     }
   },
-  "references": [
-    { "path": "../../packages/ui" },
-    { "path": "../../packages/lib" }
-  ],
   "include": [
     "next-env.d.ts",
     "src",
     ".next/types/**/*.ts",
-    "../../packages/ui/styled.native.d.ts"
+    "../../packages/ui/styled.d.ts"
   ],
   "exclude": ["node_modules"]
 }
