@@ -10,7 +10,9 @@ export default function Home() {
   return (
     <div>
       <Title>Routly Web</Title>
-      <Button title="Login" color="#0598a8" variant="solid" />
+      <Button label="Login" variant="solid" color="teal" />
+      <Button label="Login" variant="outline" color="orange" />
+      <Button label="Login" variant="outline" color="orange" disabled />
     </div>
   );
 }

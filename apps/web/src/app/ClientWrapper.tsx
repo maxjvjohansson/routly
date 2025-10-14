@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "styled-components";
-import { theme } from "@routly/ui/theme";
+import { webTheme as theme } from "@routly/ui/theme/web";
 import { GlobalStyle } from "./global-styles";
 
 export default function ClientWrapper({

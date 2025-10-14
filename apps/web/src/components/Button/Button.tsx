@@ -1,66 +1,97 @@
 import styled from "styled-components";
+import { webTheme as theme } from "@routly/ui/theme/web";
+
+type ButtonColor = keyof typeof theme.colors;
 
 type ButtonProps = {
-  title: string;
+  label: string;
   onClick?: () => void;
-  color?: string;
   variant?: "solid" | "outline";
-  icon?: React.ReactNode;
+  color?: ButtonColor;
   disabled?: boolean;
+  fullWidth?: boolean;
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
 };
 
 const StyledButton = styled.button<{
-  color?: string;
   $variant?: "solid" | "outline";
+  $color?: ButtonColor;
+  $fullWidth?: boolean;
 }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border-radius: 8px;
+  width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
+  gap: ${({ theme }) => theme.spacing.xxs};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.lg}`};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  font-size: ${({ theme }) => theme.typography.sm};
   font-weight: 600;
   cursor: pointer;
-  background-color: ${({ theme, $variant, color }) =>
-    $variant === "outline" ? "transparent" : color || theme.colors.black};
-  color: ${({ theme, $variant, color }) =>
-    $variant === "outline" ? color || theme.colors.black : theme.colors.white};
-  border: ${({ theme, color, $variant }) =>
+  transition: all 0.2s ease;
+
+  background-color: ${({ theme, $variant, $color }) =>
     $variant === "outline"
-      ? `2px solid ${color || theme.colors.black}`
-      : "none"};
-  transition: opacity 0.2s ease;
+      ? "transparent"
+      : $color
+        ? theme.colors[$color]
+        : theme.colors.black};
+
+  color: ${({ theme, $variant }) =>
+    $variant === "outline" ? theme.colors.black : theme.colors.white};
+
+  border: ${({ theme, $variant, $color }) =>
+    $variant === "outline"
+      ? `1px solid ${theme.colors.gray}`
+      : `1px solid transparent`};
 
   &:hover {
-    opacity: 0.85;
+    opacity: 0.7;
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.white};
+    outline: 2px solid ${({ theme }) => theme.colors.teal};
     outline-offset: 2px;
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    font-size: ${({ theme }) => theme.typography.md};
   }
 `;
 
 export const Button = ({
-  title,
+  label,
   onClick,
-  color,
   variant = "solid",
-  icon,
+  color = "black",
   disabled,
+  fullWidth,
+  iconLeft,
+  iconRight,
 }: ButtonProps) => (
   <StyledButton
     onClick={onClick}
     disabled={disabled}
-    color={color}
     $variant={variant}
+    $color={color}
+    $fullWidth={fullWidth}
   >
-    {icon && <span style={{ marginRight: 8 }}>{icon}</span>}
-    {title}
+    {iconLeft && (
+      <span style={{ display: "flex", marginRight: theme.spacing.xxs }}>
+        {iconLeft}
+      </span>
+    )}
+    {label}
+    {iconRight && (
+      <span style={{ display: "flex", marginLeft: theme.spacing.xxs }}>
+        {iconRight}
+      </span>
+    )}
   </StyledButton>
 );
