@@ -3,7 +3,8 @@ import type { AuthResponse } from "@supabase/supabase-js";
 
 export async function handleSignUp(
   email: string,
-  password: string
+  password: string,
+  fullName: string
 ): Promise<AuthResponse["data"]> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -13,6 +14,17 @@ export async function handleSignUp(
   if (error) {
     throw error;
   }
+
+  const user = data.user;
+  if (user) {
+    const { error: profileError } = await supabase.from("profiles").insert({
+      id: user.id,
+      full_name: fullName,
+    });
+
+    if (profileError) throw profileError;
+  }
+
   return data;
 }
 
