@@ -51,7 +51,7 @@ const StyledButton = styled.button<{
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.teal};
+    outline: 1px solid ${({ theme }) => theme.colors.teal};
     outline-offset: 2px;
   }
 
