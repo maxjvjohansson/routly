@@ -32,7 +32,7 @@ export const InputContainer = styled.div<{ $hasError?: boolean }>`
   align-items: center;
   background-color: ${theme.colors.white};
   border: 1px solid
-    ${({ $hasError }) => ($hasError ? theme.colors.orange : theme.colors.gray)};
+    ${({ $hasError }) => ($hasError ? theme.colors.red : theme.colors.gray)};
   border-radius: ${theme.radius.md};
   padding: ${theme.spacing.xxs} ${theme.spacing.sm};
   transition: border-color 0.2s ease;
@@ -49,11 +49,15 @@ export const StyledInput = styled.input`
   background: transparent;
   font-size: ${theme.typography.sm};
   color: ${theme.colors.black};
+
+  &::placeholder {
+    color: ${theme.colors.grayDark};
+  }
 `;
 
 export const ErrorText = styled.span`
-  color: ${theme.colors.orange};
-  font-size: ${theme.typography.xs};
+  color: ${theme.colors.red};
+  font-size: ${theme.typography.sm};
 `;
 
 export const InputField = ({

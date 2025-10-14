@@ -33,7 +33,7 @@ const InputContainer = styled(View)<{ $hasError?: boolean }>`
   background-color: ${theme.colors.white};
   border-width: 1px;
   border-color: ${({ $hasError }) =>
-    $hasError ? theme.colors.orange : theme.colors.gray};
+    $hasError ? theme.colors.red : theme.colors.gray};
   border-radius: ${theme.radius.md}px;
   padding: ${theme.spacing.xxs}px ${theme.spacing.sm}px;
 `;
@@ -46,8 +46,8 @@ const StyledInput = styled(TextInput)`
 `;
 
 const ErrorText = styled(Text)`
-  color: ${theme.colors.orange};
-  font-size: ${theme.typography.xs}px;
+  color: ${theme.colors.red};
+  font-size: ${theme.typography.sm}px;
   margin-top: ${theme.spacing.xxs}px;
 `;
 
@@ -78,6 +78,7 @@ export const InputField = ({
         secureTextEntry={type === "password"}
         editable={!disabled}
         keyboardType={type === "email" ? "email-address" : "default"}
+        placeholderTextColor={theme.colors.grayDark}
       />
 
       {iconRight && (
