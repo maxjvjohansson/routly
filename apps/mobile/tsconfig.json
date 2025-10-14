@@ -10,9 +10,9 @@
     }
   },
   "references": [
-    { "path": "../../packages/ui" },
+    { "path": "../../packages/ui/" },
     { "path": "../../packages/lib" }
   ],
-  "include": ["src", "../../packages/ui/styled.d.ts"],
+  "include": ["src", "../../packages/ui/styled.native.d.ts"],
   "exclude": ["node_modules"]
 }

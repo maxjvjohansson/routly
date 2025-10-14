@@ -17,11 +17,12 @@
       "@routly/lib/*": ["../../packages/lib/*"]
     }
   },
+  "references": [{ "path": "../../packages/ui/tsconfig.json" }],
   "include": [
     "next-env.d.ts",
     "src",
     ".next/types/**/*.ts",
-    "../../packages/ui/styled.d.ts"
+    "../../packages/ui/styled.web.d.ts"
   ],
   "exclude": ["node_modules"]
 }
