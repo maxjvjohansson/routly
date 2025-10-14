@@ -1,13 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-native",
+    "jsx": "react",
     "baseUrl": ".",
     "composite": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "emitDeclarationOnly": false
+    "skipLibCheck": true
   },
-  "include": ["components", "theme.ts", "styled.d.ts"],
+  "include": [
+    "styled.d.ts",
+    "theme/**/*.ts",
+    "components/**/*.tsx",
+    "index.ts"
+  ],
   "exclude": ["node_modules"]
 }
