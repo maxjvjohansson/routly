@@ -55,7 +55,7 @@ export default function IndexScreen() {
     } else {
       await signup(email, password, fullName);
     }
-    router.replace("/(tabs)");
+    router.replace("/generate");
   };
 
   return (

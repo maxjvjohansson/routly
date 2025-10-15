@@ -35,7 +35,7 @@ const FormHeader = styled(Text)`
   font-weight: 600;
   color: ${theme.colors.black};
   text-align: center;
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md}px;
 `;
 
 const SwitchWrapper = styled(View)`
