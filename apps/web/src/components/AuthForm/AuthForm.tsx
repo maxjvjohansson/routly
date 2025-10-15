@@ -10,7 +10,7 @@ type AuthFormProps = {
   onSubmit: (
     email: string,
     password: string,
-    fullName?: string
+    fullName: string
   ) => Promise<void>;
   loading?: boolean;
   error?: string;
@@ -104,6 +104,7 @@ export default function AuthForm({
           value={fullName}
           onChange={setFullName}
           fullWidth
+          required
         />
       )}
 
@@ -114,6 +115,7 @@ export default function AuthForm({
         value={email}
         onChange={setEmail}
         fullWidth
+        required
       />
 
       <InputField
@@ -123,6 +125,7 @@ export default function AuthForm({
         value={password}
         onChange={setPassword}
         fullWidth
+        required
       />
 
       {mode === "signup" && (
@@ -133,6 +136,7 @@ export default function AuthForm({
           value={confirm}
           onChange={setConfirm}
           fullWidth
+          required
         />
       )}
 

@@ -12,6 +12,7 @@ type InputFieldProps = {
   error?: string;
   disabled?: boolean;
   fullWidth?: boolean;
+  required?: boolean;
 };
 
 export const InputWrapper = styled.div<{ $fullWidth?: boolean }>`
@@ -71,6 +72,7 @@ export const InputField = ({
   error,
   disabled,
   fullWidth,
+  required,
 }: InputFieldProps) => (
   <InputWrapper $fullWidth={fullWidth}>
     {label && <Label>{label}</Label>}
@@ -84,6 +86,7 @@ export const InputField = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
+        required={required}
       />
       {iconRight && (
         <span style={{ marginLeft: theme.spacing.xxs }}>{iconRight}</span>
