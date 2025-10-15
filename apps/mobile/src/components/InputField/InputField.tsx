@@ -17,11 +17,11 @@ type InputFieldProps = {
 
 const Wrapper = styled(View)<{ $fullWidth?: boolean }>`
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
-  margin-bottom: ${theme.spacing.sm}px;
+  margin-bottom: ${theme.spacing.xs}px;
 `;
 
 const Label = styled(Text)`
-  font-size: ${theme.typography.sm}px;
+  font-size: ${theme.typography.xs}px;
   font-weight: 500;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
@@ -47,7 +47,7 @@ const StyledInput = styled(TextInput)`
 
 const ErrorText = styled(Text)`
   color: ${theme.colors.red};
-  font-size: ${theme.typography.sm}px;
+  font-size: ${theme.typography.xs}px;
   margin-top: ${theme.spacing.xxs}px;
 `;
 
