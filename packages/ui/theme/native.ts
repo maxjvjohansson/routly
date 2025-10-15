@@ -21,7 +21,8 @@ export const nativeTheme = {
   },
 
   typography: {
-    xs: 12,
+    xxs: 12,
+    xs: 14,
     sm: 16,
     md: 18,
     lg: 20,
