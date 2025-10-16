@@ -4,6 +4,7 @@ import Link from "next/link";
 import { InputField } from "../InputField/InputField";
 import { Button } from "../Button/Button";
 import { webTheme as theme } from "@routly/ui/theme/web";
+import { validateAuthFields } from "@routly/lib/validation/auth";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -90,27 +91,11 @@ export default function AuthForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: typeof fieldErrors = {};
 
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!email.includes("@")) {
-      newErrors.email = "Invalid email address";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (mode === "signup") {
-      if (!fullName.trim()) newErrors.fullName = "Full name is required";
-      if (!confirm.trim()) newErrors.confirm = "Please confirm your password";
-      if (password && confirm && password !== confirm) {
-        newErrors.confirm = "Passwords do not match";
-      }
-    }
+    const newErrors = validateAuthFields(
+      { email, password, confirm, fullName },
+      mode
+    );
 
     setFieldErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
