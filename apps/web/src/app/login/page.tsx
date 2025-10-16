@@ -9,9 +9,10 @@ export default function LoginPage() {
   const router = useRouter();
 
   const onSubmit = async (email: string, password: string) => {
-    await login(email, password);
-
-    router.push("/");
+    const user = await login(email, password);
+    if (user) {
+      router.push("/");
+    }
   };
 
   return (

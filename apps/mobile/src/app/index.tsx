@@ -50,12 +50,16 @@ export default function IndexScreen() {
     password: string,
     fullName: string
   ) => {
+    let user = null;
     if (mode === "login") {
-      await login(email, password);
+      user = await login(email, password);
     } else {
-      await signup(email, password, fullName);
+      user = await signup(email, password, fullName);
     }
-    router.replace("/generate");
+
+    if (user) {
+      router.replace("/generate");
+    }
   };
 
   return (
