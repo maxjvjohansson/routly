@@ -1,4 +1,4 @@
-import { createClient } from "./client";
+import { supabase } from "./client";
 import type { AuthResponse } from "@supabase/supabase-js";
 
 export async function handleSignUp(
@@ -6,14 +6,8 @@ export async function handleSignUp(
   password: string,
   fullName: string
 ): Promise<AuthResponse["data"]> {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-  if (error) {
-    throw error;
-  }
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) throw error;
 
   const user = data.user;
   if (user) {
@@ -21,10 +15,8 @@ export async function handleSignUp(
       id: user.id,
       full_name: fullName,
     });
-
     if (profileError) throw profileError;
   }
-
   return data;
 }
 
@@ -32,21 +24,15 @@ export async function handleLogin(
   email: string,
   password: string
 ): Promise<AuthResponse["data"]> {
-  const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
   return data;
 }
 
 export async function handleLogout(): Promise<void> {
-  const supabase = createClient();
   const { error } = await supabase.auth.signOut();
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 }
