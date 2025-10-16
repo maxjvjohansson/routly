@@ -11,9 +11,11 @@ export function useAuthActions() {
     setLoading(true);
     setError(null);
     try {
-      await handleLogin(email, password);
+      const data = await handleLogin(email, password);
+      return data.user;
     } catch (err: any) {
       setError(err.message);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -23,9 +25,11 @@ export function useAuthActions() {
     setLoading(true);
     setError(null);
     try {
-      await handleSignUp(email, password, fullName);
+      const data = await handleSignUp(email, password, fullName);
+      return data.user;
     } catch (err: any) {
       setError(err.message);
+      return null;
     } finally {
       setLoading(false);
     }

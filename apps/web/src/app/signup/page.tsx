@@ -13,9 +13,10 @@ export default function SignupPage() {
     password: string,
     fullName: string
   ) => {
-    await signup(email, password, fullName);
-
-    router.push("/");
+    const user = await signup(email, password, fullName);
+    if (user) {
+      router.push("/");
+    }
   };
 
   return (
