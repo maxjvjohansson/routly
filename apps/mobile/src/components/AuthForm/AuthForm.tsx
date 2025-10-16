@@ -78,14 +78,24 @@ export default function AuthForm({
   const handleSubmit = async () => {
     const newErrors: typeof fieldErrors = {};
 
-    if (!email.trim()) newErrors.email = "Email is required";
-    if (!password.trim()) newErrors.password = "Password is required";
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      newErrors.email = "Invalid email address";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
 
     if (mode === "signup") {
       if (!fullName.trim()) newErrors.fullName = "Full name is required";
       if (!confirm.trim()) newErrors.confirm = "Please confirm your password";
-      if (password && confirm && password !== confirm)
+      if (password && confirm && password !== confirm) {
         newErrors.confirm = "Passwords do not match";
+      }
     }
 
     setFieldErrors(newErrors);
