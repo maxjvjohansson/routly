@@ -81,13 +81,40 @@ export default function AuthForm({
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [fullName, setFullName] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    password?: string;
+    confirm?: string;
+    fullName?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode === "signup" && password !== confirm) {
-      alert("Passwords do not match");
-      return;
+    const newErrors: typeof fieldErrors = {};
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!email.includes("@")) {
+      newErrors.email = "Invalid email address";
     }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    if (mode === "signup") {
+      if (!fullName.trim()) newErrors.fullName = "Full name is required";
+      if (!confirm.trim()) newErrors.confirm = "Please confirm your password";
+      if (password && confirm && password !== confirm) {
+        newErrors.confirm = "Passwords do not match";
+      }
+    }
+
+    setFieldErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
     await onSubmit(email, password, fullName);
   };
 
@@ -104,7 +131,7 @@ export default function AuthForm({
           value={fullName}
           onChange={setFullName}
           fullWidth
-          required
+          error={fieldErrors.fullName}
         />
       )}
 
@@ -116,6 +143,7 @@ export default function AuthForm({
         onChange={setEmail}
         fullWidth
         required
+        error={fieldErrors.email}
       />
 
       <InputField
@@ -126,6 +154,7 @@ export default function AuthForm({
         onChange={setPassword}
         fullWidth
         required
+        error={fieldErrors.password}
       />
 
       {mode === "signup" && (
@@ -137,10 +166,13 @@ export default function AuthForm({
           onChange={setConfirm}
           fullWidth
           required
+          error={fieldErrors.confirm}
         />
       )}
 
-      {error && <ErrorText>{error}</ErrorText>}
+      {error && !Object.keys(fieldErrors).length && (
+        <ErrorText>{error}</ErrorText>
+      )}
 
       <Button
         label={
