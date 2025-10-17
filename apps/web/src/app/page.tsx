@@ -1,5 +1,6 @@
 "use client";
 
+import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
 import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
 import styled from "styled-components";
 
@@ -12,6 +13,7 @@ export default function HomePage() {
     <div>
       <Title>Routly Web</Title>
       <RoutlyMap />
+      <GenerateRouteForm />
     </div>
   );
 }
