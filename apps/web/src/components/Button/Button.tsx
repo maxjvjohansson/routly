@@ -3,6 +3,8 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 
 type ButtonColor = keyof typeof theme.colors;
 
+export type ButtonType = "button" | "submit" | "reset";
+
 type ButtonProps = {
   label: string;
   onClick?: () => void;
@@ -12,6 +14,7 @@ type ButtonProps = {
   fullWidth?: boolean;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  type?: ButtonType;
 };
 
 const StyledButton = styled.button<{
@@ -74,8 +77,10 @@ export const Button = ({
   fullWidth,
   iconLeft,
   iconRight,
+  type = "button",
 }: ButtonProps) => (
   <StyledButton
+    type={type}
     onClick={onClick}
     disabled={disabled}
     $variant={variant}
