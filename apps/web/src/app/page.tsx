@@ -1,5 +1,6 @@
 "use client";
 
+import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
 import styled from "styled-components";
 
 const Title = styled.h1`
@@ -10,6 +11,7 @@ export default function HomePage() {
   return (
     <div>
       <Title>Routly Web</Title>
+      <RoutlyMap />
     </div>
   );
 }
