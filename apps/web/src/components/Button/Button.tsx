@@ -3,68 +3,78 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 
 type ButtonColor = keyof typeof theme.colors;
 
-export type ButtonType = "button" | "submit" | "reset";
-
 type ButtonProps = {
   label: string;
   onClick?: () => void;
-  variant?: "solid" | "outline";
+  variant?: "solid" | "outline" | "toggle";
   color?: ButtonColor;
   disabled?: boolean;
   fullWidth?: boolean;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
-  type?: ButtonType;
+  type?: "button" | "submit" | "reset";
+  active?: boolean;
 };
 
 const StyledButton = styled.button<{
-  $variant?: "solid" | "outline";
+  $variant?: "solid" | "outline" | "toggle";
   $color?: ButtonColor;
   $fullWidth?: boolean;
+  $active?: boolean;
 }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
   gap: ${({ theme }) => theme.spacing.xxs};
-  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.lg}`};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
   border-radius: ${({ theme }) => theme.radius.lg};
   font-size: ${({ theme }) => theme.typography.sm};
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 
-  background-color: ${({ theme, $variant, $color }) =>
-    $variant === "outline"
-      ? "transparent"
-      : $color
-        ? theme.colors[$color]
-        : theme.colors.black};
-
-  color: ${({ theme, $variant }) =>
-    $variant === "outline" ? theme.colors.black : theme.colors.white};
-
-  border: ${({ theme, $variant, $color }) =>
-    $variant === "outline"
-      ? `1px solid ${theme.colors.gray}`
-      : `1px solid transparent`};
-
-  &:hover {
-    opacity: 0.7;
-  }
+  ${({ $variant, theme, $color, $active }) =>
+    $variant === "toggle"
+      ? `
+      font-weight: 500;
+        background-color: ${
+          $active ? theme.colors.teal : theme.colors.grayLight
+        };
+        color: ${$active ? theme.colors.white : theme.colors.black};
+        border: 1px solid ${$active ? theme.colors.teal : theme.colors.gray};
+        box-shadow: none;
+        &:hover {
+          background-color: ${$active ? theme.colors.teal : theme.colors.grayLight};
+        }
+      `
+      : `
+        background-color: ${
+          $variant === "outline"
+            ? "transparent"
+            : $color
+              ? theme.colors[$color]
+              : theme.colors.black
+        };
+        color: ${
+          $variant === "outline" ? theme.colors.black : theme.colors.white
+        };
+        border: ${
+          $variant === "outline"
+            ? `1px solid ${theme.colors.gray}`
+            : "1px solid transparent"
+        };
+        &:hover { opacity: 0.8; }
+      `}
 
   &:focus-visible {
-    outline: 1px solid ${({ theme }) => theme.colors.teal};
+    outline: 1px solid ${theme.colors.teal};
     outline-offset: 2px;
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-
-  ${({ theme }) => theme.media.md} {
-    font-size: ${({ theme }) => theme.typography.md};
   }
 `;
 
@@ -78,14 +88,16 @@ export const Button = ({
   iconLeft,
   iconRight,
   type = "button",
+  active = false,
 }: ButtonProps) => (
   <StyledButton
-    type={type}
     onClick={onClick}
     disabled={disabled}
     $variant={variant}
     $color={color}
     $fullWidth={fullWidth}
+    type={type}
+    $active={active}
   >
     {iconLeft && (
       <span style={{ display: "flex", marginRight: theme.spacing.xxs }}>
