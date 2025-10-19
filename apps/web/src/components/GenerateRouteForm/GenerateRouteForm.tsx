@@ -10,7 +10,7 @@ import LocationInputs from "./LocationInputs";
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.md};
+  gap: ${theme.spacing.xs};
   width: 100%;
   max-width: 800px;
   background-color: ${theme.colors.white};

@@ -14,21 +14,19 @@ type ActivitySelectProps = {
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xs};
+  gap: ${theme.spacing.xxs};
 `;
 
 const Label = styled.label`
   font-size: ${theme.typography.sm};
-  font-weight: 600;
+  font-weight: 500;
   color: ${theme.colors.black};
 `;
 
-const OptionsRow = styled.div`
+const CapsuleGroup = styled.div`
   display: flex;
-  gap: ${theme.spacing.sm};
-  background-color: ${theme.colors.grayLight};
-  padding: ${theme.spacing.xxs};
-  border-radius: ${theme.radius.lg};
+  gap: ${theme.spacing.xxs};
+  border-radius: ${theme.radius.xl};
 `;
 
 export default function ActivitySelect({
@@ -38,24 +36,24 @@ export default function ActivitySelect({
   return (
     <Section>
       <Label>Activity Type</Label>
-      <OptionsRow>
+      <CapsuleGroup>
         <Button
           label="Running"
           onClick={() => onChange("run")}
-          color={value === "run" ? "teal" : "grayLight"}
-          variant={value === "run" ? "solid" : "outline"}
+          variant="toggle"
+          color="teal"
+          active={value === "run"}
           fullWidth
-          type="button"
         />
         <Button
           label="Cycling"
           onClick={() => onChange("cycle")}
-          color={value === "cycle" ? "teal" : "grayLight"}
-          variant={value === "cycle" ? "solid" : "outline"}
+          variant="toggle"
+          color="teal"
+          active={value === "cycle"}
           fullWidth
-          type="button"
         />
-      </OptionsRow>
+      </CapsuleGroup>
     </Section>
   );
 }
