@@ -27,7 +27,7 @@ const OptionsRow = styled.div`
   display: flex;
   gap: ${theme.spacing.sm};
   background-color: ${theme.colors.grayLight};
-  padding: ${theme.spacing.xs};
+  padding: ${theme.spacing.xxs};
   border-radius: ${theme.radius.lg};
 `;
 
