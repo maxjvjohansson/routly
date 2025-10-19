@@ -6,6 +6,7 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import ActivitySelect from "./ActivitySelect";
 import LocationInputs from "./LocationInputs";
+import DistanceSelector from "./DistanceSelector";
 
 const FormContainer = styled.form`
   display: flex;
@@ -51,6 +52,12 @@ export default function GenerateRouteForm() {
     <FormContainer onSubmit={handleSubmit}>
       <ActivitySelect value={activity} onChange={setActivity} />
 
+      <DistanceSelector
+        value={distance}
+        onChange={setDistance}
+        activity={activity}
+      />
+
       <LocationInputs
         start={startLocation}
         end={endDestination}
@@ -59,7 +66,7 @@ export default function GenerateRouteForm() {
         onUseCurrentLocation={handleUseLocation}
       />
 
-      <Button type="submit" label="Generate Route" color="teal" fullWidth />
+      <Button type="submit" label="Generate Route" color="orange" fullWidth />
     </FormContainer>
   );
 }
