@@ -16,7 +16,7 @@ type LocationInputsProps = {
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.sm};
+  gap: ${theme.spacing.xs};
 `;
 
 const Row = styled.div`
