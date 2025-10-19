@@ -165,6 +165,7 @@ export default function AuthForm({
         }
         disabled={loading}
         fullWidth
+        type="submit"
       />
 
       <SwitchText>
