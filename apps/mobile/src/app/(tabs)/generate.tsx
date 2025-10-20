@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
+import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
 
 const Container = styled.View`
   flex: 1;
@@ -12,7 +12,7 @@ const Container = styled.View`
 export default function GenerateScreen() {
   return (
     <Container>
-      <RoutlyMap />
+      <GenerateRouteForm />
     </Container>
   );
 }
