@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ClientWrapper from "./ClientWrapper";
 import StyledComponentsRegistry from "./registry";
 import { Outfit } from "next/font/google";
+import Navbar from "src/components/Navbar/Navbar";
 
 export const metadata: Metadata = {
   title: "Routly",
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ClientWrapper>
+            <Navbar />
             <main>{children}</main>
           </ClientWrapper>
         </StyledComponentsRegistry>
