@@ -9,16 +9,9 @@ const Container = styled.View`
   background-color: ${theme.colors.grayLight};
 `;
 
-const Title = styled.Text`
-  font-size: ${theme.typography.lg}px;
-  font-weight: 600;
-  color: ${theme.colors.black};
-`;
-
 export default function GenerateScreen() {
   return (
     <Container>
-      <Title>Generate</Title>
       <RoutlyMap />
     </Container>
   );
