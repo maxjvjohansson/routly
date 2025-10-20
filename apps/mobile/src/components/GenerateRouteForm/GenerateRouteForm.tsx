@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ScrollView, Alert } from "react-native";
 import styled from "styled-components/native";
 import * as Location from "expo-location";
-
 import { Button } from "../Button/Button";
 import ActivitySelect from "./ActivitySelect";
 import DistanceSelector from "./DistanceSelector";
@@ -10,9 +9,10 @@ import LocationInputs from "./LocationInputs";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 
 const FormContainer = styled(ScrollView)`
-  flex: 1;
   padding: ${theme.spacing.lg}px;
   background-color: ${theme.colors.white};
+  border: 1px solid ${theme.colors.gray};
+  border-radius: ${theme.radius.xl}px;
 `;
 
 export default function GenerateRouteForm() {
