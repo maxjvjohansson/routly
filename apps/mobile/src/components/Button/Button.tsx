@@ -7,56 +7,77 @@ type ButtonColor = keyof typeof theme.colors;
 type ButtonProps = {
   label: string;
   onPress?: () => void;
-  variant?: "solid" | "outline";
+  variant?: "solid" | "outline" | "toggle";
   color?: ButtonColor;
   disabled?: boolean;
   fullWidth?: boolean;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  active?: boolean;
 };
 
 interface StyledButtonProps {
-  $variant?: "solid" | "outline";
+  $variant?: "solid" | "outline" | "toggle";
   $color?: ButtonColor;
   $fullWidth?: boolean;
   $disabled?: boolean;
+  $active?: boolean;
 }
 
-const StyledButton = styled(TouchableOpacity)<
-  StyledButtonProps & { theme: typeof theme }
->`
+const StyledButton = styled(TouchableOpacity)<StyledButtonProps>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
-
   padding: ${({ theme }) => `${theme.spacing.xs}px ${theme.spacing.lg}px`};
-
-  border-radius: ${({ theme }) => theme.radius.lg}px;
-
-  background-color: ${({ theme, $variant, $color }) =>
-    $variant === "outline" ? "transparent" : theme.colors[$color ?? "black"]};
-
-  border-width: ${({ $variant }) => ($variant === "outline" ? 1 : 0)}px;
-  border-color: ${({ theme, $variant }) =>
-    $variant === "outline" ? theme.colors.gray : "transparent"};
-
+  border-radius: ${theme.radius.lg}px;
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  border-width: 1px;
+
+  ${({ $variant, $color, $active }) => {
+    switch ($variant) {
+      case "outline":
+        return `
+          background-color: transparent;
+          border-color: ${theme.colors.gray};
+        `;
+      case "toggle":
+        return `
+          background-color: ${
+            $active ? theme.colors[$color ?? "teal"] : theme.colors.grayLight
+          };
+          border-color: ${
+            $active ? theme.colors[$color ?? "teal"] : theme.colors.gray
+          };
+        `;
+      default:
+        return `
+          background-color: ${theme.colors[$color ?? "black"]};
+          border-color: transparent;
+        `;
+    }
+  }}
 `;
 
-const Label = styled(Text)<{ $variant?: "solid" | "outline" }>`
-  color: ${({ theme, $variant }) =>
-    $variant === "outline" ? theme.colors.black : theme.colors.white};
-  font-size: ${({ theme }) => theme.typography.sm}px;
-  font-weight: 600;
+const Label = styled(Text)<{ $variant?: string; $active?: boolean }>`
+  font-size: ${theme.typography.sm}px;
+  font-weight: ${({ $variant }) => ($variant === "toggle" ? 500 : 600)};
+  color: ${({ $variant, $active }) =>
+    $variant === "toggle"
+      ? $active
+        ? theme.colors.white
+        : theme.colors.black
+      : $variant === "outline"
+        ? theme.colors.black
+        : theme.colors.white};
 `;
 
 const IconLeft = styled(View)`
-  margin-right: ${({ theme }) => theme.spacing.xxs}px;
+  margin-right: ${theme.spacing.xxs}px;
 `;
+
 const IconRight = styled(View)`
-  margin-left: ${({ theme }) => theme.spacing.xxs}px;
+  margin-left: ${theme.spacing.xxs}px;
 `;
 
 export const Button = ({
@@ -68,6 +89,7 @@ export const Button = ({
   fullWidth,
   iconLeft,
   iconRight,
+  active = false,
 }: ButtonProps) => (
   <StyledButton
     activeOpacity={0.8}
@@ -77,11 +99,14 @@ export const Button = ({
     $color={color}
     $fullWidth={fullWidth}
     $disabled={disabled}
+    $active={active}
     accessibilityRole="button"
     accessibilityState={{ disabled: !!disabled }}
   >
     {iconLeft ? <IconLeft>{iconLeft}</IconLeft> : null}
-    <Label $variant={variant}>{label}</Label>
+    <Label $variant={variant} $active={active}>
+      {label}
+    </Label>
     {iconRight ? <IconRight>{iconRight}</IconRight> : null}
   </StyledButton>
 );
