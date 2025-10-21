@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
-export const NavbarContainer = styled.nav`
+export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,6 +14,16 @@ export const NavbarContainer = styled.nav`
   position: sticky;
   top: 0;
   z-index: 999;
+  transition:
+    box-shadow 0.2s ease,
+    border-bottom-color 0.2s ease;
+
+  ${({ $scrolled }) =>
+    $scrolled &&
+    `
+    border-bottom-color: transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  `}
 `;
 
 export const LogoLink = styled(Link)`
