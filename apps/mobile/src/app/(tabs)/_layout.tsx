@@ -83,6 +83,12 @@ export default function TabsLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="settings"
+          options={{
+            href: null,
+          }}
+        />
       </Tabs>
 
       <MenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />

@@ -1,16 +1,12 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
-
-const Screen = styled(SafeAreaView)`
-  flex: 1;
-  background-color: ${theme.colors.white};
-`;
+import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
+import { ScrollView } from "react-native";
 
 const Wrapper = styled.View`
-  padding: 0 ${theme.spacing.lg}px;
-  margin-bottom: ${theme.spacing.lg}px;
+  padding: ${theme.spacing.lg}px ${theme.spacing.lg}px;
+  background-color: ${theme.colors.white};
 `;
 
 const Title = styled.Text`
@@ -28,7 +24,7 @@ const Subtitle = styled.Text`
 
 export default function GenerateScreen() {
   return (
-    <Screen>
+    <ScrollView>
       <Wrapper>
         <Title>Create your next route</Title>
         <Subtitle>
@@ -37,6 +33,7 @@ export default function GenerateScreen() {
         </Subtitle>
       </Wrapper>
       <GenerateRouteForm />
-    </Screen>
+      <RoutlyMap />
+    </ScrollView>
   );
 }

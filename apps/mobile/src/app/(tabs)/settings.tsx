@@ -5,7 +5,7 @@ const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: ${theme.colors.grayLight};
+  background-color: ${theme.colors.white};
 `;
 
 const Title = styled.Text`
