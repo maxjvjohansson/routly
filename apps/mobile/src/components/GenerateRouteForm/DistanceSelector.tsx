@@ -11,7 +11,7 @@ type DistanceSelectorProps = {
 
 const Container = styled(View)`
   flex-direction: column;
-  gap: ${theme.spacing.xs}px;
+  margin-bottom: ${theme.spacing.sm}px;
 `;
 
 const LabelRow = styled(View)`

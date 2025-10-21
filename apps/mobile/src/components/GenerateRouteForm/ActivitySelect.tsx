@@ -12,6 +12,7 @@ type ActivitySelectProps = {
 const Section = styled.View`
   width: 100%;
   flex-direction: column;
+  margin-bottom: ${theme.spacing.sm}px;
 `;
 
 const Label = styled.Text`
