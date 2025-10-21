@@ -14,16 +14,12 @@ export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   position: sticky;
   top: 0;
   z-index: 999;
-  transition:
-    box-shadow 0.2s ease,
-    border-bottom-color 0.2s ease;
-
+  transition: box-shadow 0.2s ease;
   ${({ $scrolled }) =>
     $scrolled &&
     `
-    border-bottom-color: transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  `}
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  `};
 `;
 
 export const LogoLink = styled(Link)`
@@ -67,7 +63,7 @@ export const Avatar = styled.div`
   width: ${theme.spacing.lg};
   height: ${theme.spacing.lg};
   border-radius: ${theme.radius.full};
-  background-color: ${theme.colors.orange};
+  background-color: ${theme.colors.teal};
   color: ${theme.colors.white};
   cursor: pointer;
   display: flex;

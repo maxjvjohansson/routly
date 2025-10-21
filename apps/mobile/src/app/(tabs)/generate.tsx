@@ -1,15 +1,15 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
 
-const Screen = styled.SafeAreaView`
+const Screen = styled(SafeAreaView)`
   flex: 1;
   background-color: ${theme.colors.white};
 `;
 
 const Wrapper = styled.View`
   padding: 0 ${theme.spacing.lg}px;
-  margin-top: ${theme.spacing.sm}px;
   margin-bottom: ${theme.spacing.lg}px;
 `;
 
