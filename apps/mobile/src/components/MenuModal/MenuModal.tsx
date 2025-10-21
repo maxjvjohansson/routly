@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Modal, Animated, Dimensions } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { useRouter } from "expo-router";
 import { handleLogout } from "@routly/lib/supabase/auth";
@@ -17,14 +18,14 @@ const Overlay = styled.TouchableOpacity`
   background-color: rgba(0, 0, 0, 0.35);
 `;
 
-const MenuContainer = styled(Animated.View)`
+const MenuContainer = styled(Animated.createAnimatedComponent(SafeAreaView))`
   position: absolute;
   top: 0;
   right: 0;
-  width: 75%;
+  width: 70%;
   height: 100%;
   background-color: ${theme.colors.white};
-  padding: 0 ${theme.spacing.md}px;
+  padding: ${theme.spacing.md}px;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -63,7 +64,7 @@ export default function MenuModal({ visible, onClose }: MenuModalProps) {
 
   const logout = async () => {
     await handleLogout();
-    router.replace("/index");
+    router.replace("/");
   };
 
   return (
