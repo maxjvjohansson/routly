@@ -3,6 +3,7 @@
 import { ThemeProvider } from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { GlobalStyle } from "./global-styles";
+import Navbar from "src/components/Navbar/Navbar";
 
 export default function ClientWrapper({
   children,
@@ -12,6 +13,7 @@ export default function ClientWrapper({
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+      <Navbar />
       {children}
     </ThemeProvider>
   );
