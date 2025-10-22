@@ -2,7 +2,7 @@
 
 import { NavLinks, NavLink } from "./styles";
 import ProfileDropdown from "./ProfileDropdown";
-import { useAuth } from "src/context/AuthContext";
+import { useAuth } from "@routly/lib/context/AuthContext";
 
 export default function DesktopNav() {
   const { user } = useAuth();

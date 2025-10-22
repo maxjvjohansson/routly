@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "src/context/AuthContext";
+import { useAuth } from "@routly/lib/context/AuthContext";
 import {
   HamburgerButton,
   MobileMenuWrapper,
