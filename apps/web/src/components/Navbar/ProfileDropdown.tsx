@@ -9,10 +9,14 @@ import {
   DropdownItem,
   DropdownItemLink,
 } from "./styles";
+import { isProtectedPath } from "@routly/lib/config/routes";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -27,9 +31,13 @@ export default function ProfileDropdown() {
   const onLogout = async () => {
     try {
       await handleLogout();
-      window.location.href = "/";
+      if (isProtectedPath(pathname)) {
+        router.replace("/");
+      } else {
+        router.refresh();
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Logout failed:", err);
     }
   };
 
