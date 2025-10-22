@@ -12,7 +12,7 @@ import {
 import { isProtectedPath } from "@routly/lib/config/routes";
 import { useRouter, usePathname } from "next/navigation";
 import { getUserInitial } from "@routly/lib/utils/user";
-import { useAuth } from "src/context/AuthContext";
+import { useAuth } from "@routly/lib/context/AuthContext";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);

@@ -3,7 +3,7 @@ import ClientWrapper from "./ClientWrapper";
 import StyledComponentsRegistry from "./registry";
 import { Outfit } from "next/font/google";
 import { createClient } from "@routly/lib/supabase/server";
-import { AuthProvider } from "src/context/AuthContext";
+import { AuthProvider } from "@routly/lib/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Routly",
