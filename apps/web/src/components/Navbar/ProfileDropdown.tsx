@@ -11,12 +11,16 @@ import {
 } from "./styles";
 import { isProtectedPath } from "@routly/lib/config/routes";
 import { useRouter, usePathname } from "next/navigation";
+import { getUserInitial } from "@routly/lib/utils/user";
+import { useAuth } from "src/context/AuthContext";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const { user } = useAuth();
+  const userInitial = getUserInitial(user);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -43,7 +47,7 @@ export default function ProfileDropdown() {
 
   return (
     <DropdownWrapper ref={ref}>
-      <Avatar onClick={() => setOpen((prev) => !prev)}></Avatar>
+      <Avatar onClick={() => setOpen((prev) => !prev)}>{userInitial}</Avatar>
       {open && (
         <Dropdown>
           <DropdownItemLink href="/profile">Profile</DropdownItemLink>
