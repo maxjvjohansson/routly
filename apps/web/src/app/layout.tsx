@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import ClientWrapper from "./ClientWrapper";
 import StyledComponentsRegistry from "./registry";
 import { Outfit } from "next/font/google";
+import { createClient } from "@routly/lib/supabase/server";
+import { AuthProvider } from "src/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Routly",
@@ -15,18 +17,27 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log(user);
+
   return (
     <html lang="en" className={outfit.variable}>
       <body>
         <StyledComponentsRegistry>
-          <ClientWrapper>
-            <main>{children}</main>
-          </ClientWrapper>
+          <AuthProvider initialUser={user}>
+            <ClientWrapper>
+              <main>{children}</main>
+            </ClientWrapper>
+          </AuthProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
