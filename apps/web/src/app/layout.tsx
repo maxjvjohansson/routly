@@ -27,8 +27,6 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user);
-
   return (
     <html lang="en" className={outfit.variable}>
       <body>
