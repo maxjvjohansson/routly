@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isProtectedPath } from "@routly/lib/config/routes";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -33,9 +34,7 @@ export async function updateSession(request: NextRequest) {
   const url = request.nextUrl.clone();
   const path = url.pathname;
 
-  const protectedPaths = ["/generate", "/profile", "/settings"];
-
-  if (!user && protectedPaths.some((p) => path.startsWith(p))) {
+  if (!user && isProtectedPath(path)) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
