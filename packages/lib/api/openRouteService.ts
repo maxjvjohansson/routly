@@ -19,18 +19,26 @@ export async function fetchRoute({
   coordinates: [number, number][];
   profile?: ORSProfile;
 }) {
-  const res = await fetch(`${ORS_BASE_URL}/directions/${profile}`, {
+  if (!ORS_API_KEY) {
+    throw new Error("ORS API key is not configured");
+  }
+
+  const url = `${ORS_BASE_URL}/directions/${profile}`;
+  const body = JSON.stringify({ coordinates });
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
-      Authorization: ORS_API_KEY!,
+      Authorization: ORS_API_KEY,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ coordinates }),
+    body,
   });
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`ORS request failed: ${text}`);
+    console.error("ORS error response:", text);
+    throw new Error(`ORS request failed (${res.status}): ${text}`);
   }
 
   return res.json();
