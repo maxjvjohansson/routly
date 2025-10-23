@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import MenuModal from "src/components/MenuModal/MenuModal";
+import { useAuth } from "@routly/lib/context/AuthContext";
+import { getUserInitial } from "@routly/lib/utils/user";
 
 const LogoText = styled.Text`
   font-size: ${theme.typography.xl}px;
@@ -18,7 +20,7 @@ const Avatar = styled.TouchableOpacity`
   background-color: ${theme.colors.teal};
   align-items: center;
   justify-content: center;
-  margin-right: ${theme.spacing.md};
+  margin-right: ${theme.spacing.md}px;
 `;
 
 const AvatarText = styled.Text`
@@ -29,7 +31,9 @@ const AvatarText = styled.Text`
 
 export default function TabsLayout() {
   const [menuVisible, setMenuVisible] = useState(false);
-  const userInitial = "R";
+  const { user } = useAuth();
+  const userInitial = getUserInitial(user);
+
   return (
     <>
       <Tabs

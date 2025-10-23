@@ -5,7 +5,7 @@ import { createBrowserClient } from "@supabase/ssr";
 type AuthContextType = {
   user: any;
   setUser: (user: any) => void;
-  supabase: ReturnType<typeof createBrowserClient>;
+  supabase: any;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -15,27 +15,60 @@ export const AuthProvider = ({
   initialUser,
 }: {
   children: React.ReactNode;
-  initialUser: any;
+  initialUser?: any;
 }) => {
-  const [user, setUser] = useState(initialUser);
-
-  const [supabase] = useState(() =>
-    createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-    )
-  );
+  const [user, setUser] = useState(initialUser ?? null);
+  const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
+    const initSupabase = async () => {
+      const isExpo =
+        typeof navigator !== "undefined" && navigator.product === "ReactNative";
+
+      if (isExpo) {
+        const { supabase: nativeClient } = await import(
+          "@routly/lib/supabase/client.native"
+        );
+        setSupabase(nativeClient);
+      } else {
+        const webClient = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+        );
+        setSupabase(webClient);
+      }
+    };
+
+    initSupabase();
+  }, []);
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    const loadUser = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session?.user) {
+        setUser(sessionData.session.user);
+        return;
+      }
+
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData?.user) {
+        setUser(userData.user);
+      }
+    };
+
+    loadUser();
+
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    } = supabase.auth.onAuthStateChange(
+      (_event: any, session: { user: any }) => {
+        setUser(session?.user ?? null);
+      }
+    );
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, [supabase]);
 
   return (
