@@ -6,7 +6,13 @@ export async function handleSignUp(
   password: string,
   fullName: string
 ): Promise<AuthResponse["data"]> {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: fullName },
+    },
+  });
   if (error) throw error;
 
   const user = data.user;

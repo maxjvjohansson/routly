@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { Modal, Animated, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import { useRouter } from "expo-router";
+import { useRouter, usePathname } from "expo-router";
 import { handleLogout } from "@routly/lib/supabase/auth";
+import { isProtectedPath } from "@routly/lib/config/routes";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 
 type MenuModalProps = {
@@ -47,6 +48,7 @@ const LogoutText = styled(MenuText)`
 
 export default function MenuModal({ visible, onClose }: MenuModalProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const slideAnim = useRef(new Animated.Value(width)).current;
 
   useEffect(() => {
@@ -63,8 +65,14 @@ export default function MenuModal({ visible, onClose }: MenuModalProps) {
   };
 
   const logout = async () => {
-    await handleLogout();
-    router.replace("/");
+    try {
+      await handleLogout();
+      if (isProtectedPath(pathname)) {
+        router.replace("/");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
 
   return (
