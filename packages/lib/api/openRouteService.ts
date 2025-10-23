@@ -23,7 +23,7 @@ export async function fetchRoute({
     throw new Error("ORS API key is not configured");
   }
 
-  const url = `${ORS_BASE_URL}/directions/${profile}`;
+  const url = `${ORS_BASE_URL}/directions/${profile}/geojson`;
   const body = JSON.stringify({ coordinates });
 
   const res = await fetch(url, {
