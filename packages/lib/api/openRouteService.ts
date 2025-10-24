@@ -1,6 +1,5 @@
 const ORS_BASE_URL = "https://api.openrouteservice.org/v2";
-const ORS_API_KEY =
-  process.env.EXPO_PUBLIC_ORS_API_KEY || process.env.NEXT_PUBLIC_ORS_API_KEY;
+const ORS_API_KEY = process.env.ORS_API_KEY || process.env.ORS_API_KEY;
 
 if (!ORS_API_KEY) {
   console.warn("Missing ORS API key in environment variables");
