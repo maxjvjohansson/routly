@@ -1,5 +1,19 @@
 import Constants from "expo-constants";
 
+export interface WeatherData {
+  temperature: number | null;
+  windSpeed: number | null;
+  windDirection: number | null;
+  windCardinal: string | null;
+  humidity: number | null;
+  condition: string | null;
+  feelsLike: number | null;
+  precipitationChance: number | null;
+  pressure: number | null;
+  icon?: string | null;
+  raw?: any;
+}
+
 const BASE_URL = "https://weather.googleapis.com/v1";
 const API_KEY =
   process.env.GOOGLE_WEATHER_API_KEY ||
@@ -11,23 +25,31 @@ if (!API_KEY) {
   console.warn("Missing Google Weather API key");
 }
 
-export async function fetchWeather(latitude: number, longitude: number) {
-  try {
-    const url = `${BASE_URL}/weather?location.latitude=${latitude}&location.longitude=${longitude}&key=${API_KEY}`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`Weather API failed: ${res.status}`);
-    }
+export async function fetchWeather(
+  latitude: number,
+  longitude: number
+): Promise<WeatherData> {
+  const url = `${BASE_URL}/currentConditions:lookup?key=${API_KEY}&location.latitude=${latitude}&location.longitude=${longitude}`;
+  const res = await fetch(url);
 
-    const data = await res.json();
-    return {
-      temperature: data?.currentWeather?.temperature?.value,
-      windSpeed: data?.currentWeather?.wind?.speed?.value,
-      windDirection: data?.currentWeather?.wind?.direction?.value,
-      raw: data,
-    };
-  } catch (error) {
-    console.error("Weather fetch error:", error);
-    throw error;
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Weather API failed ${res.status}: ${txt}`);
   }
+
+  const data = await res.json();
+  const current = data;
+  return {
+    temperature: current?.temperature?.degrees ?? null,
+    windSpeed: current?.wind?.speed?.value ?? null,
+    windDirection: current?.wind?.direction?.degrees ?? null,
+    windCardinal: current?.wind?.direction?.cardinal ?? null,
+    humidity: current?.relativeHumidity ?? null,
+    condition: current?.weatherCondition?.description?.text ?? null,
+    icon: current?.weatherCondition?.iconBaseUri ?? null,
+    feelsLike: current?.feelsLikeTemperature?.degrees ?? null,
+    precipitationChance: current?.precipitation?.probability?.percent ?? null,
+    pressure: current?.airPressure?.meanSeaLevelMillibars ?? null,
+    raw: data,
+  };
 }
