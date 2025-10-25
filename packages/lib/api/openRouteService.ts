@@ -11,34 +11,71 @@ export type ORSProfile =
   | "foot-walking"
   | "foot-hiking";
 
-export async function fetchRoute({
+export async function fetchRouteWithElevation({
   coordinates,
   profile = "cycling-regular",
 }: {
   coordinates: [number, number][];
   profile?: ORSProfile;
 }) {
-  if (!ORS_API_KEY) {
-    throw new Error("ORS API key is not configured");
-  }
+  if (!ORS_API_KEY) throw new Error("ORS API key is not configured");
 
-  const url = `${ORS_BASE_URL}/directions/${profile}/geojson`;
-  const body = JSON.stringify({ coordinates });
-
-  const res = await fetch(url, {
+  // Directions endpoint (For route coordinates)
+  const directionsUrl = `${ORS_BASE_URL}/directions/${profile}/geojson`;
+  const directionsRes = await fetch(directionsUrl, {
     method: "POST",
     headers: {
       Authorization: ORS_API_KEY,
       "Content-Type": "application/json",
     },
-    body,
+    body: JSON.stringify({ coordinates }),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("ORS error response:", text);
-    throw new Error(`ORS request failed (${res.status}): ${text}`);
+  if (!directionsRes.ok) {
+    const text = await directionsRes.text();
+    throw new Error(`ORS directions failed (${directionsRes.status}): ${text}`);
   }
 
-  return res.json();
+  const routeData = await directionsRes.json();
+  const geometry = routeData.features[0]?.geometry;
+
+  if (!geometry) {
+    throw new Error("ORS directions response missing geometry");
+  }
+
+  // Elevations endpoint (For topography data of direction coordinates)
+  const elevationRes = await fetch(
+    "https://api.openrouteservice.org/elevation/line",
+    {
+      method: "POST",
+      headers: {
+        Authorization: ORS_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        format_in: "geojson",
+        format_out: "geojson",
+        geometry,
+      }),
+    }
+  );
+
+  if (!elevationRes.ok) {
+    const text = await elevationRes.text();
+    throw new Error(`ORS elevation failed (${elevationRes.status}): ${text}`);
+  }
+
+  const elevationData = await elevationRes.json();
+
+  const routeWithElevation = {
+    ...routeData,
+    features: [
+      {
+        ...routeData.features[0],
+        geometry: elevationData.geometry,
+      },
+    ],
+  };
+
+  return routeWithElevation;
 }
