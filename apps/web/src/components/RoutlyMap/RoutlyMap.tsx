@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -26,12 +27,38 @@ const MapContainer = styled.div`
 export default function RoutlyMap({ route }: RoutlyMapProps) {
   const container = useRef<HTMLDivElement | null>(null);
   const map = useRef<maplibregl.Map | null>(null);
+  const startMarker = useRef<maplibregl.Marker | null>(null);
+  const endMarker = useRef<maplibregl.Marker | null>(null);
 
+  const { startPoint, endPoint, setStartPoint, setEndPoint, clearPoints } =
+    useRouteGeneration();
+
+  // Keep track of last click-interaction without triggering re-init of map
+  const clickHandlerRef = useRef<
+    ((e: maplibregl.MapMouseEvent) => void) | null
+  >(null);
+
+  clickHandlerRef.current = (e: maplibregl.MapMouseEvent) => {
+    const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
+    const m = map.current;
+    if (!m) return;
+
+    m.easeTo({ center: coords, duration: 300 });
+
+    if (!startPoint) {
+      setStartPoint(coords);
+    } else if (!endPoint) {
+      setEndPoint(coords);
+    } else {
+      clearPoints();
+    }
+  };
+
+  // Initiate only one map instance on mount
   useEffect(() => {
     if (!container.current) return;
 
     const styleUrl = `https://api.maptiler.com/maps/streets-v4/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`;
-
     const mapInstance = new maplibregl.Map({
       container: container.current,
       style: styleUrl,
@@ -40,21 +67,85 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
     });
 
     mapInstance.addControl(new maplibregl.NavigationControl(), "top-right");
-    map.current = mapInstance;
+    mapInstance.getCanvas().style.cursor = "default";
 
+    mapInstance.on("dragstart", () => {
+      mapInstance.getCanvas().style.cursor = "move";
+    });
+    mapInstance.on("dragend", () => {
+      mapInstance.getCanvas().style.cursor = "default";
+    });
+
+    mapInstance.on("click", (e) => {
+      clickHandlerRef.current?.(e);
+    });
+
+    map.current = mapInstance;
     return () => mapInstance.remove();
   }, []);
 
+  // Draggable pin markers
   useEffect(() => {
-    if (!map.current || !route) return;
-    const id = "route";
-    if (map.current.getSource(id)) {
-      map.current.removeLayer("route-line");
-      map.current.removeSource(id);
-    }
-    map.current.addSource(id, { type: "geojson", data: route });
-    map.current.addLayer({
-      id: "route-line",
+    const m = map.current;
+    if (!m) return;
+
+    requestAnimationFrame(() => {
+      if (startMarker.current) startMarker.current.remove();
+      if (startPoint) {
+        const marker = new maplibregl.Marker({
+          color: theme.colors.teal,
+          draggable: true,
+        })
+          .setLngLat(startPoint)
+          .addTo(m);
+
+        marker.on("dragstart", () => {
+          m.getCanvas().style.cursor = "grabbing";
+        });
+        marker.on("dragend", () => {
+          const pos = marker.getLngLat();
+          setStartPoint([pos.lng, pos.lat]);
+          m.getCanvas().style.cursor = "default";
+        });
+
+        startMarker.current = marker;
+      }
+
+      if (endMarker.current) endMarker.current.remove();
+      if (endPoint) {
+        const marker = new maplibregl.Marker({
+          color: theme.colors.orange,
+          draggable: true,
+        })
+          .setLngLat(endPoint)
+          .addTo(m);
+
+        marker.on("dragstart", () => {
+          m.getCanvas().style.cursor = "grabbing";
+        });
+        marker.on("dragend", () => {
+          const pos = marker.getLngLat();
+          setEndPoint([pos.lng, pos.lat]);
+          m.getCanvas().style.cursor = "default";
+        });
+
+        endMarker.current = marker;
+      }
+    });
+  }, [startPoint, endPoint, setStartPoint, setEndPoint]);
+
+  // Draw route on map
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !route) return;
+
+    const id = "route-line";
+    if (m.getLayer(id)) m.removeLayer(id);
+    if (m.getSource(id)) m.removeSource(id);
+
+    m.addSource(id, { type: "geojson", data: route });
+    m.addLayer({
+      id,
       type: "line",
       source: id,
       paint: {
@@ -62,6 +153,15 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
         "line-width": 4,
       },
     });
+
+    const bounds = new maplibregl.LngLatBounds();
+    route.features.forEach((feature) => {
+      const coords = (feature.geometry as any).coordinates;
+      coords.forEach(([lng, lat]: [number, number]) =>
+        bounds.extend([lng, lat])
+      );
+    });
+    m.fitBounds(bounds, { padding: 60, animate: true });
   }, [route]);
 
   return <MapContainer ref={container} />;

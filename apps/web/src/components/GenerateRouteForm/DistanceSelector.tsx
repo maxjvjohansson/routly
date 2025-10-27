@@ -67,9 +67,11 @@ const ManualInput = styled.input`
 `;
 
 export default function DistanceSelector() {
-  const { activity, distance, setDistance } = useRouteGeneration();
+  const { activity, distance, setDistance, endPoint } = useRouteGeneration();
   const max = activity === "run" ? 40 : 200;
   const fillPercent = Math.min((distance / max) * 100, 100);
+
+  const isRoundTrip = !endPoint;
 
   return (
     <Container>
@@ -80,6 +82,12 @@ export default function DistanceSelector() {
           min={1}
           value={distance}
           onChange={(e) => setDistance(Number(e.target.value))}
+          disabled={!isRoundTrip}
+          title={
+            isRoundTrip
+              ? ""
+              : "Distance automatically determined by start and end points"
+          }
         />
       </LabelRow>
 
@@ -92,6 +100,7 @@ export default function DistanceSelector() {
           value={Math.min(distance, max)}
           onChange={(e) => setDistance(Number(e.target.value))}
           $fillPercent={fillPercent}
+          disabled={!isRoundTrip}
         />
       </RangeWrapper>
 

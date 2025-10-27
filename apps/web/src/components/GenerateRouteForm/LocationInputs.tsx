@@ -27,12 +27,19 @@ export default function LocationInputs() {
   const [endText, setEndText] = useState("");
 
   useEffect(() => {
-    if (startPoint)
+    if (startPoint) {
       setStartText(`${startPoint[1].toFixed(5)}, ${startPoint[0].toFixed(5)}`);
+    } else {
+      setStartText("");
+    }
   }, [startPoint]);
+
   useEffect(() => {
-    if (endPoint)
+    if (endPoint) {
       setEndText(`${endPoint[1].toFixed(5)}, ${endPoint[0].toFixed(5)}`);
+    } else {
+      setEndText("");
+    }
   }, [endPoint]);
 
   const handleUseLocation = () => {
