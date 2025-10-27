@@ -3,13 +3,7 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
-
-type Activity = "run" | "cycle";
-
-type ActivitySelectProps = {
-  value: Activity;
-  onChange: (val: Activity) => void;
-};
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Section = styled.div`
   display: flex;
@@ -29,28 +23,27 @@ const CapsuleGroup = styled.div`
   border-radius: ${theme.radius.xl};
 `;
 
-export default function ActivitySelect({
-  value,
-  onChange,
-}: ActivitySelectProps) {
+export default function ActivitySelect() {
+  const { activity, setActivity } = useRouteGeneration();
+
   return (
     <Section>
       <Label>Activity Type</Label>
       <CapsuleGroup>
         <Button
           label="Running"
-          onClick={() => onChange("run")}
+          onClick={() => setActivity("run")}
           variant="toggle"
           color="teal"
-          active={value === "run"}
+          active={activity === "run"}
           fullWidth
         />
         <Button
           label="Cycling"
-          onClick={() => onChange("cycle")}
+          onClick={() => setActivity("cycle")}
           variant="toggle"
           color="teal"
-          active={value === "cycle"}
+          active={activity === "cycle"}
           fullWidth
         />
       </CapsuleGroup>
