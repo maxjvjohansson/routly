@@ -1,13 +1,11 @@
 "use client";
 
-import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
-import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
+import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
 
 export default function HomePage() {
   return (
     <>
-      <GenerateRouteForm />
-      <RoutlyMap />
+      <GenerateRouteSection />
     </>
   );
 }
