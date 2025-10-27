@@ -13,6 +13,7 @@ import { isProtectedPath } from "@routly/lib/config/routes";
 import { useRouter, usePathname } from "next/navigation";
 import { getUserInitial } from "@routly/lib/utils/user";
 import { useAuth } from "@routly/lib/context/AuthContext";
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ export default function ProfileDropdown() {
   const pathname = usePathname();
   const { user } = useAuth();
   const userInitial = getUserInitial(user);
+  const { reset } = useRouteGeneration();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -35,6 +37,7 @@ export default function ProfileDropdown() {
   const onLogout = async () => {
     try {
       await handleLogout();
+      reset();
       if (isProtectedPath(pathname)) {
         router.replace("/");
       } else {
