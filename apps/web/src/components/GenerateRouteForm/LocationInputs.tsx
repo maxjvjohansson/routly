@@ -17,6 +17,7 @@ const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xs};
+  margin-bottom: ${theme.spacing.sm};
 `;
 
 const Row = styled.div`

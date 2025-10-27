@@ -13,13 +13,9 @@ const FormContainer = styled.form`
   flex-direction: column;
   gap: ${theme.spacing.xs};
   width: 100%;
+  height: 100%;
   max-width: 800px;
   background-color: ${theme.colors.white};
-  border-radius: ${theme.radius.xl};
-  box-shadow:
-    0 8px 10px 0 rgba(0, 0, 0, 0.1),
-    0 20px 25px 0 rgba(0, 0, 0, 0.1);
-  padding: ${theme.spacing.lg};
 `;
 
 export default function GenerateRouteForm() {

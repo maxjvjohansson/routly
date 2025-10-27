@@ -8,12 +8,12 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 
 type RoutlyMapProps = {
   route?: GeoJSON.FeatureCollection;
-  height?: string;
 };
 
-const MapContainer = styled.div<{ $height: string }>`
+const MapContainer = styled.div`
   width: 100%;
-  height: ${({ $height }) => $height};
+  min-height: 400px;
+  flex: 1;
   border-radius: ${theme.radius.lg};
   overflow: hidden;
   position: relative;
@@ -23,7 +23,7 @@ const MapContainer = styled.div<{ $height: string }>`
   }
 `;
 
-export default function RoutlyMap({ route, height = "400px" }: RoutlyMapProps) {
+export default function RoutlyMap({ route }: RoutlyMapProps) {
   const container = useRef<HTMLDivElement | null>(null);
   const map = useRef<maplibregl.Map | null>(null);
 
@@ -64,5 +64,5 @@ export default function RoutlyMap({ route, height = "400px" }: RoutlyMapProps) {
     });
   }, [route]);
 
-  return <MapContainer ref={container} $height={height} />;
+  return <MapContainer ref={container} />;
 }
