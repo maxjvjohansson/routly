@@ -11,12 +11,14 @@ import {
 } from "./styles";
 import { handleLogout } from "@routly/lib/supabase/auth";
 import { isProtectedPath } from "@routly/lib/config/routes";
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { reset } = useRouteGeneration();
 
   const toggleMenu = () => setOpen((p) => !p);
   const closeMenu = () => setOpen(false);
@@ -25,6 +27,7 @@ export default function MobileMenu() {
     try {
       await handleLogout();
       closeMenu();
+      reset();
       if (isProtectedPath(pathname)) {
         router.replace("/");
       } else {
