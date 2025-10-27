@@ -2,16 +2,27 @@
 
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "src/components/AuthForm/AuthForm";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@routly/lib/context/AuthContext";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const { login, loading, error } = useAuthActions();
   const router = useRouter();
+  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get("next") || "/";
+
+  useEffect(() => {
+    if (user) {
+      router.replace(nextUrl);
+    }
+  }, [user, nextUrl, router]);
 
   const onSubmit = async (email: string, password: string) => {
     const user = await login(email, password);
     if (user) {
-      router.push("/");
+      router.replace(nextUrl);
     }
   };
 

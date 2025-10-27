@@ -2,11 +2,22 @@
 
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "src/components/AuthForm/AuthForm";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@routly/lib/context/AuthContext";
+import { useEffect } from "react";
 
 export default function SignupPage() {
   const { signup, loading, error } = useAuthActions();
   const router = useRouter();
+  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get("next") || "/";
+
+  useEffect(() => {
+    if (user) {
+      router.replace(nextUrl);
+    }
+  }, [user, nextUrl, router]);
 
   const onSubmit = async (
     email: string,
@@ -15,7 +26,7 @@ export default function SignupPage() {
   ) => {
     const user = await signup(email, password, fullName);
     if (user) {
-      router.push("/");
+      router.replace(nextUrl);
     }
   };
 
