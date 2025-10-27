@@ -4,6 +4,7 @@ import StyledComponentsRegistry from "./registry";
 import { Outfit } from "next/font/google";
 import { createClient } from "@routly/lib/supabase/server";
 import { AuthProvider } from "@routly/lib/context/AuthContext";
+import { RouteGenerationProvider } from "@routly/lib/context/RouteGenerationContext";
 
 export const metadata: Metadata = {
   title: "Routly",
@@ -32,9 +33,11 @@ export default async function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <AuthProvider initialUser={user}>
-            <ClientWrapper>
-              <main>{children}</main>
-            </ClientWrapper>
+            <RouteGenerationProvider>
+              <ClientWrapper>
+                <main>{children}</main>
+              </ClientWrapper>
+            </RouteGenerationProvider>
           </AuthProvider>
         </StyledComponentsRegistry>
       </body>
