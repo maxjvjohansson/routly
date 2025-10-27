@@ -4,14 +4,7 @@ import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { InputField } from "../InputField/InputField";
 import { Button } from "../Button/Button";
-
-type LocationInputsProps = {
-  start: string;
-  end: string;
-  onChangeStart: (val: string) => void;
-  onChangeEnd: (val: string) => void;
-  onUseCurrentLocation?: () => void;
-};
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Section = styled.div`
   display: flex;
@@ -26,16 +19,23 @@ const Row = styled.div`
   align-items: flex-end;
 `;
 
-export default function LocationInputs({
-  start,
-  end,
-  onChangeStart,
-  onChangeEnd,
-  onUseCurrentLocation,
-}: LocationInputsProps) {
-  const handleUseLocation = async () => {
-    if (!onUseCurrentLocation) return;
-    await onUseCurrentLocation();
+export default function LocationInputs() {
+  const { startPoint, endPoint, setStartPoint, setEndPoint } =
+    useRouteGeneration();
+
+  const formatCoords = (coords?: [number, number]) =>
+    coords ? `${coords[1].toFixed(5)}, ${coords[0].toFixed(5)}` : "";
+
+  const parseCoords = (val: string): [number, number] | undefined => {
+    const [lat, lon] = val.split(",").map(Number);
+    return !isNaN(lat) && !isNaN(lon) ? [lon, lat] : undefined;
+  };
+
+  const handleUseLocation = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setStartPoint([pos.coords.longitude, pos.coords.latitude]);
+    });
   };
 
   return (
@@ -44,8 +44,8 @@ export default function LocationInputs({
         <InputField
           label="Start point"
           placeholder="Enter starting location"
-          value={start}
-          onChange={onChangeStart}
+          value={formatCoords(startPoint)}
+          onChange={(v) => setStartPoint(parseCoords(v)!)}
           fullWidth
         />
         <Button
@@ -60,8 +60,8 @@ export default function LocationInputs({
       <InputField
         label="End point (optional)"
         placeholder="Enter destination (leave blank for loop)"
-        value={end}
-        onChange={onChangeEnd}
+        value={formatCoords(endPoint)}
+        onChange={(v) => setEndPoint(parseCoords(v)!)}
         fullWidth
       />
     </Section>

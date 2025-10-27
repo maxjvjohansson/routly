@@ -2,12 +2,7 @@
 
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
-
-type DistanceSelectorProps = {
-  value: number;
-  onChange: (val: number) => void;
-  activity: "run" | "cycle";
-};
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Container = styled.div`
   display: flex;
@@ -71,13 +66,10 @@ const ManualInput = styled.input`
   }
 `;
 
-export default function DistanceSelector({
-  value,
-  onChange,
-  activity,
-}: DistanceSelectorProps) {
+export default function DistanceSelector() {
+  const { activity, distance, setDistance } = useRouteGeneration();
   const max = activity === "run" ? 40 : 200;
-  const fillPercent = Math.min((value / max) * 100, 100);
+  const fillPercent = Math.min((distance / max) * 100, 100);
 
   return (
     <Container>
@@ -86,8 +78,8 @@ export default function DistanceSelector({
         <ManualInput
           type="number"
           min={1}
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
+          value={distance}
+          onChange={(e) => setDistance(Number(e.target.value))}
         />
       </LabelRow>
 
@@ -97,8 +89,8 @@ export default function DistanceSelector({
           min={1}
           max={max}
           step={1}
-          value={Math.min(value, max)}
-          onChange={(e) => onChange(Number(e.target.value))}
+          value={Math.min(distance, max)}
+          onChange={(e) => setDistance(Number(e.target.value))}
           $fillPercent={fillPercent}
         />
       </RangeWrapper>
