@@ -74,18 +74,11 @@ export default function GenerateRouteForm() {
       // Control and log route data
       const coords = data?.features?.[0]?.geometry?.coordinates;
       if (coords && coords.length) {
-        const sample = coords.slice(0, 5).map((c: number[]) => ({
-          lng: c[0],
-          lat: c[1],
-          elevation: c[2] ?? null,
-        }));
-
         const hasElevation = coords.some((c: number[]) => c.length === 3);
 
         console.groupCollapsed("Generated route:");
         console.log("Total points:", coords.length);
         console.log("Elevation included:", hasElevation);
-        console.table(sample);
         console.log("Summary:", data?.features?.[0]?.properties);
         console.groupEnd();
       } else {
