@@ -38,6 +38,7 @@ export function RouteGenerationProvider({ children }: { children: ReactNode }) {
   const clearPoints = () => {
     setStartPoint(undefined);
     setEndPoint(undefined);
+    setRoutes([]);
   };
 
   const reset = () => {
