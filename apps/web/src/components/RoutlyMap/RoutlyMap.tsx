@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import styled from "styled-components";
@@ -26,6 +26,7 @@ export default function RoutlyMap() {
   const map = useRef<maplibregl.Map | null>(null);
   const startMarker = useRef<maplibregl.Marker | null>(null);
   const endMarker = useRef<maplibregl.Marker | null>(null);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   const {
     startPoint,
@@ -76,6 +77,11 @@ export default function RoutlyMap() {
 
     mapInstance.on("click", (e) => clickHandlerRef.current?.(e));
 
+    // Wait for mapstyle to be ready
+    mapInstance.on("load", () => {
+      setIsMapReady(true);
+    });
+
     map.current = mapInstance;
     return () => mapInstance.remove();
   }, []);
@@ -95,13 +101,9 @@ export default function RoutlyMap() {
           .setLngLat(startPoint)
           .addTo(m);
 
-        marker.on("dragstart", () => {
-          m.getCanvas().style.cursor = "grabbing";
-        });
         marker.on("dragend", () => {
           const pos = marker.getLngLat();
           setStartPoint([pos.lng, pos.lat]);
-          m.getCanvas().style.cursor = "default";
         });
 
         startMarker.current = marker;
@@ -116,13 +118,9 @@ export default function RoutlyMap() {
           .setLngLat(endPoint)
           .addTo(m);
 
-        marker.on("dragstart", () => {
-          m.getCanvas().style.cursor = "grabbing";
-        });
         marker.on("dragend", () => {
           const pos = marker.getLngLat();
           setEndPoint([pos.lng, pos.lat]);
-          m.getCanvas().style.cursor = "default";
         });
 
         endMarker.current = marker;
@@ -134,7 +132,7 @@ export default function RoutlyMap() {
   useEffect(() => {
     const m = map.current;
     const route = routes?.[0];
-    if (!m || !route) return;
+    if (!m || !route || !isMapReady) return;
 
     const id = "route-line";
 
@@ -163,8 +161,39 @@ export default function RoutlyMap() {
       );
     });
 
-    if (!bounds.isEmpty()) m.fitBounds(bounds, { padding: 60, animate: true });
-  }, [routes]);
+    if (!bounds.isEmpty()) {
+      m.fitBounds(bounds, { padding: 60, animate: true });
+    }
+  }, [routes, isMapReady]);
+
+  // Cleanup route when points are cleared or switched
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+
+    const id = "route-line";
+
+    // Helper to safely remove existing route
+    const removeRoute = () => {
+      if (m.getLayer(id)) m.removeLayer(id);
+      if (m.getSource(id)) m.removeSource(id);
+    };
+
+    // If no points exist, remove any visible route from map
+    if (!startPoint && !endPoint && m.getSource(id)) {
+      removeRoute();
+    }
+
+    // If user switches from a roundtrip (only start) to a new end point, clear old route
+    if (startPoint && endPoint && routes.length === 0 && m.getSource(id)) {
+      removeRoute();
+    }
+
+    // If the user previously had a route drawn (roundtrip) and places a new end marker — remove route
+    if (startPoint && endPoint && routes.length > 0) {
+      removeRoute();
+    }
+  }, [startPoint, endPoint]);
 
   return <MapContainer ref={container} />;
 }
