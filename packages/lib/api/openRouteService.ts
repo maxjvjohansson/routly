@@ -1,3 +1,5 @@
+import { roundTripSeeds } from "../data/roundTripSeeds";
+
 const ORS_BASE_URL = "https://api.openrouteservice.org/v2";
 const ORS_API_KEY = process.env.ORS_API_KEY;
 
@@ -6,7 +8,6 @@ export type ORSProfile =
   | "cycling-road"
   | "foot-walking"
   | "foot-hiking";
-
 export async function fetchRouteWithElevation({
   start,
   end,
@@ -21,16 +22,14 @@ export async function fetchRouteWithElevation({
   attempt?: number;
 }) {
   if (!ORS_API_KEY) throw new Error("ORS API key missing");
-
   const directionsUrl = `${ORS_BASE_URL}/directions/${profile}/geojson`;
+
+  const seed: number =
+    roundTripSeeds[Math.floor(Math.random() * roundTripSeeds.length)];
 
   // Include elevation + units directly in body
   const body = end
-    ? {
-        coordinates: [start, end],
-        elevation: true,
-        units: "km",
-      }
+    ? { coordinates: [start, end], elevation: true, units: "km" }
     : {
         coordinates: [start],
         elevation: true,
@@ -38,8 +37,8 @@ export async function fetchRouteWithElevation({
         options: {
           round_trip: {
             length: (distance ?? 10) * 1000,
-            points: 6,
-            seed: Math.floor(Math.random() * 1000),
+            points: 3,
+            seed: seed,
           },
           avoid_features: ["ferries"],
         },
@@ -47,10 +46,7 @@ export async function fetchRouteWithElevation({
 
   const res = await fetch(directionsUrl, {
     method: "POST",
-    headers: {
-      Authorization: ORS_API_KEY,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: ORS_API_KEY, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 
