@@ -7,10 +7,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
-type RoutlyMapProps = {
-  route?: GeoJSON.FeatureCollection;
-};
-
 const MapContainer = styled.div`
   width: 100%;
   min-height: 400px;
@@ -25,20 +21,25 @@ const MapContainer = styled.div`
   }
 `;
 
-export default function RoutlyMap({ route }: RoutlyMapProps) {
+export default function RoutlyMap() {
   const container = useRef<HTMLDivElement | null>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const startMarker = useRef<maplibregl.Marker | null>(null);
   const endMarker = useRef<maplibregl.Marker | null>(null);
 
-  const { startPoint, endPoint, setStartPoint, setEndPoint, clearPoints } =
-    useRouteGeneration();
+  const {
+    startPoint,
+    endPoint,
+    setStartPoint,
+    setEndPoint,
+    clearPoints,
+    routes,
+  } = useRouteGeneration();
 
   // Keep track of last click-interaction without triggering re-init of map
   const clickHandlerRef = useRef<
     ((e: maplibregl.MapMouseEvent) => void) | null
   >(null);
-
   clickHandlerRef.current = (e: maplibregl.MapMouseEvent) => {
     const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
     const m = map.current;
@@ -46,16 +47,12 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
 
     m.easeTo({ center: coords, duration: 300 });
 
-    if (!startPoint) {
-      setStartPoint(coords);
-    } else if (!endPoint) {
-      setEndPoint(coords);
-    } else {
-      clearPoints();
-    }
+    if (!startPoint) setStartPoint(coords);
+    else if (!endPoint) setEndPoint(coords);
+    else clearPoints();
   };
 
-  // Initiate only one map instance on mount
+  // Initiate map
   useEffect(() => {
     if (!container.current) return;
 
@@ -77,15 +74,13 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
       mapInstance.getCanvas().style.cursor = "default";
     });
 
-    mapInstance.on("click", (e) => {
-      clickHandlerRef.current?.(e);
-    });
+    mapInstance.on("click", (e) => clickHandlerRef.current?.(e));
 
     map.current = mapInstance;
     return () => mapInstance.remove();
   }, []);
 
-  // Draggable pin markers
+  // Handle start and end markers
   useEffect(() => {
     const m = map.current;
     if (!m) return;
@@ -135,15 +130,19 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
     });
   }, [startPoint, endPoint, setStartPoint, setEndPoint]);
 
-  // Draw route on map
+  // Draw route on map (on change)
   useEffect(() => {
     const m = map.current;
+    const route = routes?.[0];
     if (!m || !route) return;
 
     const id = "route-line";
+
+    // Remove old route (if old route exists)
     if (m.getLayer(id)) m.removeLayer(id);
     if (m.getSource(id)) m.removeSource(id);
 
+    // Draw new route
     m.addSource(id, { type: "geojson", data: route });
     m.addLayer({
       id,
@@ -151,10 +150,11 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
       source: id,
       paint: {
         "line-color": theme.colors.teal,
-        "line-width": 4,
+        "line-width": 6,
       },
     });
 
+    // Adjust view to route boundaries
     const bounds = new maplibregl.LngLatBounds();
     route.features.forEach((feature) => {
       const coords = (feature.geometry as any).coordinates;
@@ -162,8 +162,9 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
         bounds.extend([lng, lat])
       );
     });
-    m.fitBounds(bounds, { padding: 60, animate: true });
-  }, [route]);
+
+    if (!bounds.isEmpty()) m.fitBounds(bounds, { padding: 60, animate: true });
+  }, [routes]);
 
   return <MapContainer ref={container} />;
 }
