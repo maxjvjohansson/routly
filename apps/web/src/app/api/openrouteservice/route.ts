@@ -3,17 +3,21 @@ import { fetchRouteWithElevation } from "@routly/lib/api/openRouteService";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { coordinates, profile } = body;
+    const { start, end, distance, profile } = await req.json();
 
-    if (!coordinates) {
+    if (!start) {
       return NextResponse.json(
-        { error: "Missing coordinates" },
+        { error: "Missing start point" },
         { status: 400 }
       );
     }
 
-    const data = await fetchRouteWithElevation({ coordinates, profile });
+    const data = await fetchRouteWithElevation({
+      start,
+      end,
+      distance,
+      profile,
+    });
     return NextResponse.json(data);
   } catch (err: any) {
     console.error("ORS Combined API error:", err);
