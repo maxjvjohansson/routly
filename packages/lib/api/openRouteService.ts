@@ -1,152 +1,125 @@
 const ORS_BASE_URL = "https://api.openrouteservice.org/v2";
 const ORS_API_KEY = process.env.ORS_API_KEY;
 
-if (!ORS_API_KEY) {
-  console.warn("Missing ORS API key in environment variables");
-}
-
 export type ORSProfile =
   | "cycling-regular"
   | "cycling-road"
   | "foot-walking"
   | "foot-hiking";
 
-// Snap point to nearest accessible road/path
-async function snapToNearest(
-  coord: [number, number]
-): Promise<[number, number]> {
-  try {
-    const res = await fetch(`${ORS_BASE_URL}/nearest`, {
-      method: "POST",
-      headers: {
-        Authorization: ORS_API_KEY!,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ coordinates: [coord] }),
-    });
-
-    if (!res.ok) return coord;
-    const data = await res.json();
-    return data.coordinates?.[0] ?? coord;
-  } catch {
-    return coord;
-  }
-}
-
 export async function fetchRouteWithElevation({
   start,
   end,
   distance,
   profile = "cycling-regular",
+  attempt = 1,
 }: {
   start: [number, number];
   end?: [number, number];
-  distance?: number; // km
+  distance?: number;
   profile?: ORSProfile;
+  attempt?: number;
 }) {
-  if (!ORS_API_KEY) throw new Error("ORS API key is not configured");
+  if (!ORS_API_KEY) throw new Error("ORS API key missing");
 
-  // Fallback profiles
-  const profileFallbacks: Record<ORSProfile, ORSProfile[]> = {
-    "cycling-regular": ["cycling-road", "foot-walking"],
-    "cycling-road": ["foot-walking"],
-    "foot-walking": ["foot-hiking"],
-    "foot-hiking": [],
-  };
+  const directionsUrl = `${ORS_BASE_URL}/directions/${profile}/geojson`;
 
-  // Snap-points to nearest working road/profile
-  const snappedStart = await snapToNearest(start);
-  const snappedEnd = end ? await snapToNearest(end) : undefined;
+  // Include elevation + units directly in body
+  const body = end
+    ? {
+        coordinates: [start, end],
+        elevation: true,
+        units: "km",
+      }
+    : {
+        coordinates: [start],
+        elevation: true,
+        units: "km",
+        options: {
+          round_trip: {
+            length: (distance ?? 10) * 1000,
+            points: 6,
+            seed: Math.floor(Math.random() * 1000),
+          },
+          avoid_features: ["ferries"],
+        },
+      };
 
-  // Get routes with fallback profiles
-  const profilesToTry = [profile, ...(profileFallbacks[profile] || [])];
-  let routeData: any;
-  let usedProfile: ORSProfile = profile;
+  const res = await fetch(directionsUrl, {
+    method: "POST",
+    headers: {
+      Authorization: ORS_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 
-  for (const prof of profilesToTry) {
-    const directionsUrl = `${ORS_BASE_URL}/directions/${prof}/geojson`;
-    const body = end
-      ? { coordinates: [snappedStart, snappedEnd] }
-      : {
-          coordinates: [snappedStart],
-          options: { round_trip: { length: (distance ?? 10) * 1000 } },
-        };
-
-    const directionsRes = await fetch(directionsUrl, {
-      method: "POST",
-      headers: {
-        Authorization: ORS_API_KEY!,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!directionsRes.ok) {
-      console.warn(
-        `ORS ${prof} failed (${directionsRes.status}), trying fallback...`
-      );
-      continue;
+  if (!res.ok) {
+    if (attempt === 1 && profile === "cycling-regular") {
+      console.warn("Retrying with 'cycling-road'...");
+      return fetchRouteWithElevation({
+        start,
+        end,
+        distance,
+        profile: "cycling-road",
+        attempt: 2,
+      });
+    }
+    if (attempt === 2 && profile === "cycling-road") {
+      console.warn("Retrying with 'foot-walking'...");
+      return fetchRouteWithElevation({
+        start,
+        end,
+        distance,
+        profile: "foot-walking",
+        attempt: 3,
+      });
     }
 
-    routeData = await directionsRes.json();
-    usedProfile = prof;
-    break;
+    const text = await res.text();
+    throw new Error(`ORS request failed (${res.status}): ${text}`);
   }
 
-  if (!routeData) throw new Error("ORS could not find a valid route");
+  const routeData = await res.json();
+  const feature = routeData.features?.[0];
+  const geometry = feature?.geometry;
+  const summary = feature?.properties?.summary;
 
-  const geometry = routeData.features?.[0]?.geometry;
-  const summary = routeData.features?.[0]?.properties?.summary;
-  if (!geometry) throw new Error("ORS directions response missing geometry");
-
-  // Elevation data
-  const elevationRes = await fetch(
-    "https://api.openrouteservice.org/elevation/line",
-    {
-      method: "POST",
-      headers: {
-        Authorization: ORS_API_KEY!,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        format_in: "geojson",
-        format_out: "geojson",
-        geometry,
-      }),
+  if (!geometry?.coordinates?.length || geometry.coordinates.length < 30) {
+    if (attempt < 3) {
+      console.warn("Route unrealistic — retrying with fallback profile...");
+      const nextProfile =
+        profile === "cycling-regular"
+          ? "cycling-road"
+          : profile === "cycling-road"
+            ? "foot-walking"
+            : "foot-hiking";
+      return fetchRouteWithElevation({
+        start,
+        end,
+        distance,
+        profile: nextProfile,
+        attempt: attempt + 1,
+      });
     }
-  );
-
-  if (!elevationRes.ok) {
-    const text = await elevationRes.text();
-    throw new Error(`ORS elevation failed (${elevationRes.status}): ${text}`);
+    throw new Error("ORS route seems invalid or too short");
   }
 
-  const elevationData = await elevationRes.json();
-
-  // Clear eventual nulls from elevation data and replace with 0
-  const cleanedGeometry = {
-    ...elevationData.geometry,
-    coordinates: elevationData.geometry.coordinates.map((coord: number[]) => {
-      const [lng, lat, ele] = coord;
-      return [lng, lat, ele ?? 0];
-    }),
-  };
-
-  // Metadata
-  const distanceKm = +(summary?.distance / 1000).toFixed(2);
+  // Extract elevation correctly (now in geometry)
+  const distanceKm = +(summary?.distance ?? 0).toFixed(2);
   const durationMin = Math.round((summary?.duration ?? 0) / 60);
 
   return {
     ...routeData,
     features: [
       {
-        ...routeData.features[0],
-        geometry: cleanedGeometry,
+        ...feature,
+        geometry,
         properties: {
           ...summary,
-          usedProfile,
           distanceKm,
           durationMin,
+          usedProfile: profile,
         },
       },
     ],

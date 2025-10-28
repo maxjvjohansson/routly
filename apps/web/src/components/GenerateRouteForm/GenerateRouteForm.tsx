@@ -7,7 +7,7 @@ import ActivitySelect from "./ActivitySelect";
 import DistanceSelector from "./DistanceSelector";
 import LocationInputs from "./LocationInputs";
 import { useAuth } from "@routly/lib/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const FormContainer = styled.form`
@@ -34,12 +34,70 @@ const ButtonWrapper = styled.div`
 export default function GenerateRouteForm() {
   const { user } = useAuth();
   const router = useRouter();
-  const { isRoundTrip } = useRouteGeneration();
+  const pathname = usePathname();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { startPoint, endPoint, distance, activity, setRoutes, isRoundTrip } =
+    useRouteGeneration();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) router.push("/login?next=/generate");
-    else router.push("/generate");
+
+    if (!user) {
+      router.push("/login?next=/generate");
+      return;
+    }
+
+    if (!startPoint) {
+      alert("Please select a start point on the map");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/openrouteservice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          start: startPoint,
+          end: endPoint,
+          distance,
+          profile: activity === "run" ? "foot-walking" : "cycling-regular",
+        }),
+      });
+
+      if (!res.ok) {
+        alert("Failed to generate route. Please try again.");
+        return;
+      }
+
+      const data = await res.json();
+
+      // Control and log route data
+      const coords = data?.features?.[0]?.geometry?.coordinates;
+      if (coords && coords.length) {
+        const sample = coords.slice(0, 5).map((c: number[]) => ({
+          lng: c[0],
+          lat: c[1],
+          elevation: c[2] ?? null,
+        }));
+
+        const hasElevation = coords.some((c: number[]) => c.length === 3);
+
+        console.groupCollapsed("Generated route:");
+        console.log("Total points:", coords.length);
+        console.log("Elevation included:", hasElevation);
+        console.table(sample);
+        console.log("Summary:", data?.features?.[0]?.properties);
+        console.groupEnd();
+      } else {
+        console.warn("No coordinates found in route geometry");
+      }
+
+      if (data) setRoutes([data]);
+      if (pathname !== "/generate") router.push("/generate");
+    } catch (err) {
+      console.error("Route generation failed:", err);
+      alert("Something went wrong while generating the route.");
+    }
   };
 
   return (
@@ -49,6 +107,7 @@ export default function GenerateRouteForm() {
         <LocationInputs />
         {isRoundTrip && <DistanceSelector />}
       </FormFields>
+
       <ButtonWrapper>
         <Button type="submit" label="Generate Route" color="orange" fullWidth />
       </ButtonWrapper>
