@@ -14,6 +14,7 @@ type RoutlyMapProps = {
 const MapContainer = styled.div`
   width: 100%;
   min-height: 400px;
+  max-width: 800px;
   flex: 1;
   border-radius: ${theme.radius.lg};
   overflow: hidden;
@@ -62,8 +63,8 @@ export default function RoutlyMap({ route }: RoutlyMapProps) {
     const mapInstance = new maplibregl.Map({
       container: container.current,
       style: styleUrl,
-      center: [18.0686, 59.3293],
-      zoom: 11,
+      center: [11.9671, 57.7072],
+      zoom: 12,
     });
 
     mapInstance.addControl(new maplibregl.NavigationControl(), "top-right");
