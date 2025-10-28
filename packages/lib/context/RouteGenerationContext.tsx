@@ -20,6 +20,8 @@ type RouteGenerationContextType = {
 
   clearPoints: () => void;
   reset: () => void;
+
+  isRoundTrip: boolean;
 };
 
 const RouteGenerationContext = createContext<RouteGenerationContextType | null>(
@@ -33,6 +35,8 @@ export function RouteGenerationProvider({ children }: { children: ReactNode }) {
   const [distance, setDistance] = useState<number>(10);
   const [routes, setRoutes] = useState<GeoJSON.FeatureCollection[]>([]);
   const [activeField, setActiveField] = useState<"start" | "end" | null>(null);
+
+  const isRoundTrip = !!startPoint && !endPoint;
 
   const clearPoints = () => {
     setStartPoint(undefined);
@@ -65,6 +69,7 @@ export function RouteGenerationProvider({ children }: { children: ReactNode }) {
         setRoutes,
         reset,
         clearPoints,
+        isRoundTrip,
       }}
     >
       {children}

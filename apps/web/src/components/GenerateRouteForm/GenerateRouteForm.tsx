@@ -8,20 +8,33 @@ import DistanceSelector from "./DistanceSelector";
 import LocationInputs from "./LocationInputs";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: ${theme.spacing.sm};
   width: 100%;
-  height: 100%;
+  min-height: 438.5px;
   max-width: 800px;
   background-color: ${theme.colors.white};
+`;
+
+const FormFields = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.sm};
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: ${theme.spacing.md};
 `;
 
 export default function GenerateRouteForm() {
   const { user } = useAuth();
   const router = useRouter();
+  const { isRoundTrip } = useRouteGeneration();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +44,14 @@ export default function GenerateRouteForm() {
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <ActivitySelect />
-      <DistanceSelector />
-      <LocationInputs />
-      <Button type="submit" label="Generate Route" color="orange" fullWidth />
+      <FormFields>
+        <ActivitySelect />
+        <LocationInputs />
+        {isRoundTrip && <DistanceSelector />}
+      </FormFields>
+      <ButtonWrapper>
+        <Button type="submit" label="Generate Route" color="orange" fullWidth />
+      </ButtonWrapper>
     </FormContainer>
   );
 }
