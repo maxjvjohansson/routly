@@ -9,6 +9,7 @@ import LocationInputs from "./LocationInputs";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import { fetchCombinedRouteData } from "@routly/lib/routeAlgorithms/fetchCombinedRouteData";
 
 const FormContainer = styled.form`
   display: flex;
@@ -53,43 +54,38 @@ export default function GenerateRouteForm() {
     }
 
     try {
-      const res = await fetch("/api/openrouteservice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          start: startPoint,
-          end: endPoint,
-          distance,
-          profile: activity === "run" ? "foot-walking" : "cycling-regular",
-        }),
+      console.log("Generating 3 routes + weather...");
+
+      const { routes, weather } = await fetchCombinedRouteData(
+        startPoint,
+        endPoint ?? null,
+        distance,
+        activity
+      );
+
+      console.group("Combined route result");
+      console.log("Weather data:", weather);
+      routes.forEach((r, i) => {
+        const summary = r?.data?.features?.[0]?.properties;
+        console.log(`Route ${i + 1}:`);
+        console.log("Seed:", r.seed);
+        console.log("Profile:", r.profile);
+        console.log("Distance (km):", summary?.distanceKm);
+        console.log("Duration (min):", summary?.durationMin);
+        console.log("Used profile (after fallback):", summary?.usedProfile);
+        console.log(
+          "Elevation points:",
+          r?.data?.features?.[0]?.geometry?.coordinates?.length
+        );
+        console.log("───");
       });
+      console.groupEnd();
+      setRoutes(routes.map((r) => r.data));
 
-      if (!res.ok) {
-        alert("Failed to generate route. Please try again.");
-        return;
-      }
-
-      const data = await res.json();
-
-      // Control and log route data
-      const coords = data?.features?.[0]?.geometry?.coordinates;
-      if (coords && coords.length) {
-        const hasElevation = coords.some((c: number[]) => c.length === 3);
-
-        console.groupCollapsed("Generated route:");
-        console.log("Total points:", coords.length);
-        console.log("Elevation included:", hasElevation);
-        console.log("Summary:", data?.features?.[0]?.properties);
-        console.groupEnd();
-      } else {
-        console.warn("No coordinates found in route geometry");
-      }
-
-      if (data) setRoutes([data]);
       if (pathname !== "/generate") router.push("/generate");
     } catch (err) {
       console.error("Route generation failed:", err);
-      alert("Something went wrong while generating the route.");
+      alert("Something went wrong while generating the routes.");
     }
   };
 

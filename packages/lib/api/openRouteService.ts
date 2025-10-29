@@ -14,18 +14,20 @@ export async function fetchRouteWithElevation({
   distance,
   profile = "cycling-regular",
   attempt = 1,
+  seed,
 }: {
   start: [number, number];
   end?: [number, number];
   distance?: number;
   profile?: ORSProfile;
   attempt?: number;
+  seed?: number;
 }) {
   if (!ORS_API_KEY) throw new Error("ORS API key missing");
   const directionsUrl = `${ORS_BASE_URL}/directions/${profile}/geojson`;
 
-  const seed: number =
-    roundTripSeeds[Math.floor(Math.random() * roundTripSeeds.length)];
+  const seedToUse: number =
+    seed ?? roundTripSeeds[Math.floor(Math.random() * roundTripSeeds.length)];
 
   // Include elevation + units directly in body
   const body = end
@@ -38,7 +40,7 @@ export async function fetchRouteWithElevation({
           round_trip: {
             length: (distance ?? 10) * 1000,
             points: 3,
-            seed: seed,
+            seed: seedToUse,
           },
           avoid_features: ["ferries"],
         },
