@@ -3,7 +3,7 @@ import { fetchRouteWithElevation } from "@routly/lib/api/openRouteService";
 
 export async function POST(req: Request) {
   try {
-    const { start, end, distance, profile } = await req.json();
+    const { start, end, distance, profile, seed } = await req.json();
 
     if (!start) {
       return NextResponse.json(
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
       end,
       distance,
       profile,
+      seed,
     });
     return NextResponse.json(data);
   } catch (err: any) {
