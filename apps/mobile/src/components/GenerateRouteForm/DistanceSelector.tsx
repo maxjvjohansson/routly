@@ -2,12 +2,7 @@ import styled from "styled-components/native";
 import Slider from "@react-native-community/slider";
 import { View, Text, TextInput } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-
-type DistanceSelectorProps = {
-  value: number;
-  onChange: (val: number) => void;
-  activity: "run" | "cycle";
-};
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Container = styled(View)`
   flex-direction: column;
@@ -41,11 +36,8 @@ const RangeWrapper = styled(View)`
   width: 100%;
 `;
 
-export default function DistanceSelector({
-  value,
-  onChange,
-  activity,
-}: DistanceSelectorProps) {
+export default function DistanceSelector() {
+  const { activity, distance, setDistance } = useRouteGeneration();
   const max = activity === "run" ? 40 : 200;
 
   return (
@@ -54,10 +46,10 @@ export default function DistanceSelector({
         <LabelText>Distance (km)</LabelText>
         <ManualInput
           keyboardType="numeric"
-          value={String(value)}
+          value={String(distance)}
           onChangeText={(text: string) => {
             const num = Number(text);
-            if (!isNaN(num)) onChange(num);
+            if (!isNaN(num)) setDistance(num);
           }}
         />
       </LabelRow>
@@ -67,8 +59,8 @@ export default function DistanceSelector({
           minimumValue={1}
           maximumValue={max}
           step={1}
-          value={value}
-          onValueChange={(v) => onChange(v)}
+          value={distance}
+          onValueChange={(v) => setDistance(v)}
           minimumTrackTintColor={theme.colors.teal}
           maximumTrackTintColor={theme.colors.grayLight}
           thumbTintColor={theme.colors.teal}
