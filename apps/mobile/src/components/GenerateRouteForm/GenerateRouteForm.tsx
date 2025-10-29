@@ -58,7 +58,6 @@ export default function GenerateRouteForm() {
       });
 
       setRoutes([data]);
-      Alert.alert("Success", "Route generated successfully!");
     } catch (err) {
       console.error("Route generation failed:", err);
       Alert.alert("Error", "Something went wrong while generating the route.");
