@@ -1,13 +1,7 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
-
-type Activity = "run" | "cycle";
-
-type ActivitySelectProps = {
-  value: Activity;
-  onChange: (val: Activity) => void;
-};
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Section = styled.View`
   width: 100%;
@@ -36,10 +30,9 @@ const Spacer = styled.View`
   width: ${theme.spacing.xs}px;
 `;
 
-export default function ActivitySelect({
-  value,
-  onChange,
-}: ActivitySelectProps) {
+export default function ActivitySelect() {
+  const { activity, setActivity } = useRouteGeneration();
+
   return (
     <Section>
       <Label>Activity Type</Label>
@@ -47,10 +40,10 @@ export default function ActivitySelect({
         <HalfWidth>
           <Button
             label="Running"
-            onPress={() => onChange("run")}
+            onPress={() => setActivity("run")}
             variant="toggle"
             color="teal"
-            active={value === "run"}
+            active={activity === "run"}
             fullWidth
           />
         </HalfWidth>
@@ -60,10 +53,10 @@ export default function ActivitySelect({
         <HalfWidth>
           <Button
             label="Cycling"
-            onPress={() => onChange("cycle")}
+            onPress={() => setActivity("cycle")}
             variant="toggle"
             color="teal"
-            active={value === "cycle"}
+            active={activity === "cycle"}
             fullWidth
           />
         </HalfWidth>
