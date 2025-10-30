@@ -54,9 +54,7 @@ export default function GenerateRouteForm() {
     }
 
     try {
-      console.log("Generating 3 routes + weather...");
-
-      const { routes, weather } = await fetchCombinedRouteData(
+      const { routes, weatherByRoute } = await fetchCombinedRouteData(
         startPoint,
         endPoint ?? null,
         distance,
@@ -64,7 +62,12 @@ export default function GenerateRouteForm() {
       );
 
       console.group("Combined route result");
-      console.log("Weather data:", weather);
+
+      // Log weather for each route
+      weatherByRoute.forEach((w, i) => {
+        console.log(`Weather for route ${i + 1}:`, w.weather);
+      });
+
       routes.forEach((r, i) => {
         const summary = r?.data?.features?.[0]?.properties;
         console.log(`Route ${i + 1}:`);
@@ -79,6 +82,7 @@ export default function GenerateRouteForm() {
         );
         console.log("───");
       });
+
       console.groupEnd();
       setRoutes(routes.map((r) => r.data));
 
