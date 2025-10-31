@@ -35,6 +35,7 @@ export default function RoutlyMap() {
     setEndPoint,
     clearPoints,
     routes,
+    activeRouteIndex,
   } = useRouteGeneration();
 
   // Keep track of last click-interaction without triggering re-init of map
@@ -128,19 +129,21 @@ export default function RoutlyMap() {
     });
   }, [startPoint, endPoint, setStartPoint, setEndPoint]);
 
-  // Draw route on map (on change)
+  // Draw the currently active route on map
   useEffect(() => {
     const m = map.current;
-    const route = routes?.[0];
-    if (!m || !route || !isMapReady) return;
+    if (!m || !isMapReady || !routes.length) return;
+
+    const route = routes[activeRouteIndex];
+    if (!route) return;
 
     const id = "route-line";
 
-    // Remove old route (if old route exists)
+    // Remove old route layer/source if it exists
     if (m.getLayer(id)) m.removeLayer(id);
     if (m.getSource(id)) m.removeSource(id);
 
-    // Draw new route
+    // Add the new active route
     m.addSource(id, { type: "geojson", data: route });
     m.addLayer({
       id,
@@ -149,10 +152,11 @@ export default function RoutlyMap() {
       paint: {
         "line-color": theme.colors.teal,
         "line-width": 6,
+        "line-opacity": 0.9,
       },
     });
 
-    // Adjust view to route boundaries
+    // Fit map to the route bounds
     const bounds = new maplibregl.LngLatBounds();
     route.features.forEach((feature) => {
       const coords = (feature.geometry as any).coordinates;
@@ -162,9 +166,9 @@ export default function RoutlyMap() {
     });
 
     if (!bounds.isEmpty()) {
-      m.fitBounds(bounds, { padding: 60, animate: true });
+      m.fitBounds(bounds, { padding: 60, animate: true, duration: 1000 });
     }
-  }, [routes, isMapReady]);
+  }, [routes, activeRouteIndex, isMapReady]);
 
   // Cleanup route when points are cleared or switched
   useEffect(() => {
