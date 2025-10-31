@@ -5,6 +5,7 @@ import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
+import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 
 const Card = styled(View)<{ $active?: boolean }>`
   border-width: ${({ $active }: { $active: any }) => ($active ? 2 : 1)}px;
@@ -58,7 +59,7 @@ export default function PreviewRouteCard({
   const [showDetails, setShowDetails] = useState(false);
   const summary: any = route?.features?.[0]?.properties ?? {};
   const distance = summary?.distanceKm?.toFixed(1) ?? "—";
-  const elevation = summary?.ascent?.toFixed(0) ?? "—";
+  const ascent = calculateTotalAscent(route);
   const duration = summary?.durationMin?.toFixed(0) ?? "—";
 
   return (
@@ -67,7 +68,7 @@ export default function PreviewRouteCard({
 
       <InfoList>
         <RouteInfoItem label="Distance" value={`${distance} km`} />
-        <RouteInfoItem label="Elevation" value={`+${elevation} m`} />
+        <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
         <RouteWeatherInfo weather={weather} />
       </InfoList>
 

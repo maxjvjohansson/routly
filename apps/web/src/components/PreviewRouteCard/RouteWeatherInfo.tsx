@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
+import { formatWindDirection } from "@routly/lib/routeAlgorithms/formatWindDirection";
 
 const Row = styled.div`
   display: flex;
@@ -42,7 +43,7 @@ export default function RouteWeatherInfo({ weather, icon }: Props) {
 
   const windLabel =
     windCardinal && windSpeed != null
-      ? `${windCardinal} (${windSpeed} m/s)`
+      ? `${formatWindDirection(windCardinal)} (${windSpeed} m/s)`
       : (windCardinal ?? "—");
 
   return (
