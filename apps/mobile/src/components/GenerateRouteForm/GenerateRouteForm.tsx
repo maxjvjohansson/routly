@@ -17,8 +17,16 @@ const FormContainer = styled(View)`
 `;
 
 export default function GenerateRouteForm() {
-  const { startPoint, endPoint, distance, activity, setRoutes, isRoundTrip } =
-    useRouteGeneration();
+  const {
+    startPoint,
+    endPoint,
+    distance,
+    activity,
+    setRoutes,
+    isRoundTrip,
+    setWeatherByRoute,
+    setActiveRouteIndex,
+  } = useRouteGeneration();
 
   const handleSubmit = async () => {
     if (!startPoint) {
@@ -26,12 +34,12 @@ export default function GenerateRouteForm() {
       return;
     }
 
-    // During development, fetch from NextJs proxy (Localhost)
+    // Under development: fetch from Next.js proxy
     const base: string = "http://localhost:3000";
     const profile = activity === "run" ? "foot-walking" : "cycling-regular";
 
     try {
-      console.log("🚀 Generating routes (Expo)…");
+      console.log("Generating routes (Expo)…");
 
       const routeResults: any[] = [];
 
@@ -106,9 +114,12 @@ export default function GenerateRouteForm() {
         });
       });
 
+      // Update global context
       setRoutes(routeResults.map((r) => r.data));
+      setWeatherByRoute(weatherByRoute);
+      setActiveRouteIndex(0);
     } catch (err) {
-      console.error("Route generation failed:", err);
+      console.error("Route generation failed (Expo):", err);
       Alert.alert("Error", "Something went wrong while generating the routes.");
     }
   };
