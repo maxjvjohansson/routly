@@ -6,6 +6,7 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Card = styled(View)<{ $active?: boolean }>`
   border-width: ${({ $active }: { $active: any }) => ($active ? 2 : 1)}px;
@@ -43,6 +44,11 @@ const DetailsToggle = styled(Text)<{ $active?: boolean }>`
   margin-top: ${theme.spacing.xs}px;
 `;
 
+const DetailsText = styled(Text)`
+  margin-top: ${theme.spacing.xs}px;
+  color: ${theme.colors.grayDark};
+`;
+
 export default function PreviewRouteCard({
   index,
   route,
@@ -57,10 +63,13 @@ export default function PreviewRouteCard({
   onSelect: () => void;
 }) {
   const [showDetails, setShowDetails] = useState(false);
+  const { activity } = useRouteGeneration();
   const summary: any = route?.features?.[0]?.properties ?? {};
-  const distance = summary?.distanceKm?.toFixed(1) ?? "—";
-  const ascent = calculateTotalAscent(route);
-  const duration = summary?.durationMin?.toFixed(0) ?? "—";
+  const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
+  const ascent: number = calculateTotalAscent(route);
+  const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
+  const averageRunSpeedKmH: number = 10;
+  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
 
   return (
     <Card $active={isActive}>
@@ -88,14 +97,12 @@ export default function PreviewRouteCard({
         </DetailsToggle>
 
         {showDetails && (
-          <Text
-            style={{
-              marginTop: theme.spacing.xs,
-              color: theme.colors.grayDark,
-            }}
-          >
-            Est. duration: {duration} min
-          </Text>
+          <DetailsText>Est. duration: {duration} min</DetailsText>
+        )}
+        {showDetails && activity === "run" && (
+          <DetailsText>
+            Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
+          </DetailsText>
         )}
       </DetailsSection>
     </Card>

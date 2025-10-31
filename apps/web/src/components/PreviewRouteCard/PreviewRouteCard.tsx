@@ -6,6 +6,7 @@ import { Button } from "../Button/Button";
 import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
+import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Card = styled.div<{ $active?: boolean }>`
   border: ${({ $active }) =>
@@ -35,18 +36,23 @@ const InfoList = styled.div`
   margin-bottom: ${theme.spacing.md};
 `;
 
-const DetailsSection = styled.details<{ $active?: boolean }>`
+const DetailsSection = styled.details`
   margin-top: ${theme.spacing.sm};
   border-top: 1px solid ${theme.colors.grayLight};
   padding-top: ${theme.spacing.xs};
+`;
 
-  summary {
-    cursor: pointer;
-    color: ${({ $active }) =>
-      $active ? theme.colors.orange : theme.colors.teal};
-    font-weight: 500;
-    font-size: ${theme.typography.sm};
-  }
+const Summary = styled.summary<{ $active?: boolean }>`
+  cursor: pointer;
+  color: ${({ $active }) =>
+    $active ? theme.colors.orange : theme.colors.teal};
+  font-weight: 500;
+  font-size: ${theme.typography.sm};
+`;
+
+const DetailsText = styled.p`
+  margin-top: ${theme.spacing.xs};
+  color: ${theme.colors.grayDark};
 `;
 
 type Props = {
@@ -64,10 +70,13 @@ export default function PreviewRouteCard({
   isActive,
   onSelect,
 }: Props) {
+  const { activity } = useRouteGeneration();
   const summary: any = route?.features?.[0]?.properties ?? {};
-  const distance = summary?.distanceKm?.toFixed(1) ?? "—";
-  const ascent = calculateTotalAscent(route);
-  const duration = summary?.durationMin?.toFixed(0) ?? "—";
+  const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
+  const ascent: number = calculateTotalAscent(route);
+  const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
+  const averageRunSpeedKmH: number = 10;
+  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
 
   return (
     <Card $active={isActive}>
@@ -86,9 +95,14 @@ export default function PreviewRouteCard({
         onClick={onSelect}
       />
 
-      <DetailsSection $active={isActive}>
-        <summary>More details</summary>
-        <p>Est. duration: {duration} min</p>
+      <DetailsSection>
+        <Summary $active={isActive}>More details</Summary>
+        <DetailsText>Est. duration: {duration} min</DetailsText>
+        {activity === "run" && (
+          <DetailsText>
+            Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
+          </DetailsText>
+        )}
       </DetailsSection>
     </Card>
   );
