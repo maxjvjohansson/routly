@@ -23,13 +23,17 @@ export default function RoutlyMap({ height = 400 }: { height?: number }) {
     setEndPoint,
     clearPoints,
     routes,
+    activeRouteIndex,
   } = useRouteGeneration();
 
   const initialOverview = { latitude: 57.7072, longitude: 11.9671 };
 
-  // Convert GeoJSON to polyline coordinates for react-native-maps
+  // Pick currently active route based on index
+  const activeRoute = routes?.[activeRouteIndex ?? 0];
+
+  // Convert active route to map coordinates
   const routeCoords = useMemo(() => {
-    const feature = routes?.[0]?.features?.[0];
+    const feature = activeRoute?.features?.[0];
     const geometry = feature?.geometry;
     if (!geometry || !("coordinates" in geometry)) return undefined;
 
@@ -40,15 +44,11 @@ export default function RoutlyMap({ height = 400 }: { height?: number }) {
       latitude: lat,
       longitude: lng,
     }));
-  }, [routes]);
+  }, [activeRoute]);
 
-  // Fit map to route bounds when route is generated
+  // Fit map to route bounds whenever the active route changes
   useEffect(() => {
     if (!routeCoords || routeCoords.length === 0 || !mapRef.current) return;
-
-    // Calculate bounds from route coordinates
-    const lats = routeCoords.map((c) => c.latitude);
-    const lngs = routeCoords.map((c) => c.longitude);
 
     mapRef.current.fitToCoordinates(routeCoords, {
       edgePadding: {
@@ -61,28 +61,24 @@ export default function RoutlyMap({ height = 400 }: { height?: number }) {
     });
   }, [routeCoords]);
 
-  // Handle tap to place start/end markers
+  // Handle taps for start/end markers
   const handleMapPress = useCallback(
     (e: MapPressEvent) => {
       const { latitude, longitude } = e.nativeEvent.coordinate;
 
+      // If a route is already displayed, clear markers on tap
       if (routeCoords) {
         clearPoints();
         return;
       }
 
-      if (!startPoint) {
-        setStartPoint([longitude, latitude]);
-      } else if (!endPoint) {
-        setEndPoint([longitude, latitude]);
-      } else {
-        clearPoints();
-      }
+      if (!startPoint) setStartPoint([longitude, latitude]);
+      else if (!endPoint) setEndPoint([longitude, latitude]);
+      else clearPoints();
     },
     [startPoint, endPoint, routeCoords, setStartPoint, setEndPoint, clearPoints]
   );
 
-  // Handle dragging start marker
   const handleStartDragEnd = useCallback(
     (e: any) => {
       const { latitude, longitude } = e.nativeEvent.coordinate;
@@ -91,7 +87,6 @@ export default function RoutlyMap({ height = 400 }: { height?: number }) {
     [setStartPoint]
   );
 
-  // Handle dragging end marker
   const handleEndDragEnd = useCallback(
     (e: any) => {
       const { latitude, longitude } = e.nativeEvent.coordinate;
@@ -141,7 +136,7 @@ export default function RoutlyMap({ height = 400 }: { height?: number }) {
           </>
         )}
 
-        {/* Show manual markers only before route is generated */}
+        {/* Show manual markers before route generation */}
         {!routeCoords && startPoint && (
           <Marker
             coordinate={{
