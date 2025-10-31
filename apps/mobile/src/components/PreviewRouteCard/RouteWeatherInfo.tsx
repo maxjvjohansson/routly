@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Text, View } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
+import { formatWindDirection } from "@routly/lib/routeAlgorithms/formatWindDirection";
 
 const Row = styled(View)`
   flex-direction: row;
@@ -36,7 +37,7 @@ export default function RouteWeatherInfo({
 
   const windLabel =
     windCardinal && windSpeed != null
-      ? `${windCardinal} (${windSpeed} m/s)`
+      ? `${formatWindDirection(windCardinal)} (${windSpeed} m/s)`
       : (windCardinal ?? "—");
 
   return (
