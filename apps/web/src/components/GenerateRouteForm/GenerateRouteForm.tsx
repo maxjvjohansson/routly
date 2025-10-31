@@ -37,8 +37,16 @@ export default function GenerateRouteForm() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { startPoint, endPoint, distance, activity, setRoutes, isRoundTrip } =
-    useRouteGeneration();
+  const {
+    startPoint,
+    endPoint,
+    distance,
+    activity,
+    setRoutes,
+    isRoundTrip,
+    setWeatherByRoute,
+    setActiveRouteIndex,
+  } = useRouteGeneration();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +62,7 @@ export default function GenerateRouteForm() {
     }
 
     try {
+      console.log("Generating routes + weather (Web)...");
       const { routes, weatherByRoute } = await fetchCombinedRouteData(
         startPoint,
         endPoint ?? null,
@@ -68,6 +77,7 @@ export default function GenerateRouteForm() {
         console.log(`Weather for route ${i + 1}:`, w.weather);
       });
 
+      // Log routes
       routes.forEach((r, i) => {
         const summary = r?.data?.features?.[0]?.properties;
         console.log(`Route ${i + 1}:`);
@@ -82,9 +92,12 @@ export default function GenerateRouteForm() {
         );
         console.log("───");
       });
-
       console.groupEnd();
+
+      // Update global context
       setRoutes(routes.map((r) => r.data));
+      setWeatherByRoute(weatherByRoute);
+      setActiveRouteIndex(0); // first route visible by default
 
       if (pathname !== "/generate") router.push("/generate");
     } catch (err) {
