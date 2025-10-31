@@ -3,6 +3,7 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
 import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
 import { ScrollView } from "react-native";
+import PreviewRouteList from "src/components/PreviewRouteList/PreviewRouteList";
 
 const Wrapper = styled.View`
   padding: ${theme.spacing.lg}px ${theme.spacing.lg}px;
@@ -34,6 +35,7 @@ export default function GenerateScreen() {
       </Wrapper>
       <GenerateRouteForm />
       <RoutlyMap />
+      <PreviewRouteList />
     </ScrollView>
   );
 }
