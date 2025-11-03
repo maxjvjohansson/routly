@@ -8,14 +8,14 @@ import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
-const Card = styled(View)<{ $active?: boolean }>`
+const Card = styled(View)<{ $active?: boolean; $width?: number }>`
+  width: ${({ $width }: { $width: any }) => ($width ? `${$width}px` : "auto")};
   border-width: ${({ $active }: { $active: any }) => ($active ? 2 : 1)}px;
   border-color: ${({ $active }: { $active: any }) =>
     $active ? theme.colors.orange : theme.colors.gray};
   background-color: ${theme.colors.white};
   border-radius: ${theme.radius.lg}px;
   padding: ${theme.spacing.lg}px;
-  margin-bottom: ${theme.spacing.md}px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 `;
 
@@ -27,13 +27,14 @@ const Title = styled(Text)`
 `;
 
 const InfoList = styled(View)`
+  display: flex;
+  flex-direction: column;
   gap: ${theme.spacing.sm}px;
   margin-bottom: ${theme.spacing.md}px;
 `;
 
 const DetailsSection = styled(View)`
-  border-top-width: 1px;
-  border-top-color: ${theme.colors.grayLight};
+  border-top: 1px solid ${theme.colors.grayLight};
 `;
 
 const DetailsToggle = styled(Text)<{ $active?: boolean }>`
@@ -55,12 +56,14 @@ export default function PreviewRouteCard({
   weather,
   isActive,
   onSelect,
+  width,
 }: {
   index: number;
   route: GeoJSON.FeatureCollection;
   weather?: any;
   isActive: boolean;
   onSelect: () => void;
+  width?: number;
 }) {
   const [showDetails, setShowDetails] = useState(false);
   const { activity } = useRouteGeneration();
@@ -68,11 +71,11 @@ export default function PreviewRouteCard({
   const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
   const ascent: number = calculateTotalAscent(route);
   const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
-  const averageRunSpeedKmH: number = 10;
-  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
+  const averageRunSpeedKmH = 10;
+  const adjustedRunTimeMin = (distance / averageRunSpeedKmH) * 60;
 
   return (
-    <Card $active={isActive}>
+    <Card $active={isActive} $width={width}>
       <Title>Route {index + 1}</Title>
 
       <InfoList>

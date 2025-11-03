@@ -14,7 +14,7 @@ const MapContainer = styled.View<{ $height: number }>`
   position: relative;
 `;
 
-export default function RoutlyMap({ height = 400 }: { height?: number }) {
+export default function RoutlyMap({ height = 350 }: { height?: number }) {
   const mapRef = useRef<MapView>(null);
   const {
     startPoint,
