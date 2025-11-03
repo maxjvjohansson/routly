@@ -6,7 +6,6 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${theme.spacing.xs} 0;
   font-size: ${theme.typography.sm};
   color: ${theme.colors.grayDark};
 `;
