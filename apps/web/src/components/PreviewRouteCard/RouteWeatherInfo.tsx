@@ -40,7 +40,7 @@ export default function RouteWeatherInfo({ weather, icon }: Props) {
 
   const { windCardinal, windSpeed } = weather;
 
-  const windLabel =
+  const windLabel: string =
     windCardinal && windSpeed != null
       ? `${formatWindDirection(windCardinal)} (${windSpeed} m/s)`
       : (windCardinal ?? "—");
