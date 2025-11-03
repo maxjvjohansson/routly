@@ -19,20 +19,6 @@ const CarouselWrapper = styled.div`
   position: relative;
 `;
 
-const BottomBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  margin-top: ${theme.spacing.md};
-`;
-
-const GoBackButton = styled.div`
-  position: absolute;
-  left: 0;
-`;
-
 const CardContainer = styled.div`
   position: relative;
   width: 100%;
@@ -86,6 +72,21 @@ const LeftArrow = styled(ArrowButton)`
 
 const RightArrow = styled(ArrowButton)`
   right: -${theme.spacing.sm};
+`;
+
+const BottomBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  margin-top: ${theme.spacing.md};
+`;
+
+const BackButton = styled.div`
+  position: absolute;
+  left: 0;
+  margin-bottom: ${theme.spacing.md};
 `;
 
 export default function PreviewRouteCarousel() {
@@ -170,11 +171,10 @@ export default function PreviewRouteCarousel() {
           ›
         </RightArrow>
       )}
-
       <BottomBar>
-        <GoBackButton>
+        <BackButton>
           <Button label="Go Back" color="teal" onClick={handleStartOver} />
-        </GoBackButton>
+        </BackButton>
 
         <CarouselDots
           count={routes.length}
