@@ -1,4 +1,4 @@
-import { Alert, View } from "react-native";
+import { View, Text } from "react-native";
 import styled from "styled-components/native";
 import { Button } from "../Button/Button";
 import ActivitySelect from "./ActivitySelect";
@@ -7,6 +7,7 @@ import LocationInputs from "./LocationInputs";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { roundTripSeeds } from "@routly/lib/data/roundTripSeeds";
+import { useState, useEffect } from "react";
 
 const FormContainer = styled(View)`
   padding: ${theme.spacing.lg}px;
@@ -14,6 +15,14 @@ const FormContainer = styled(View)`
   border: 1px solid ${theme.colors.gray};
   border-radius: ${theme.radius.xl}px;
   gap: ${theme.spacing.md}px;
+`;
+
+const ErrorText = styled(Text)`
+  color: ${theme.colors.red};
+  font-size: ${theme.typography.sm}px;
+  text-align: center;
+  margin-top: -${theme.spacing.xs}px;
+  margin-bottom: ${theme.spacing.xs}px;
 `;
 
 export default function GenerateRouteForm() {
@@ -28,29 +37,36 @@ export default function GenerateRouteForm() {
     setActiveRouteIndex,
   } = useRouteGeneration();
 
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (error && startPoint) setError(null);
+  }, [startPoint, endPoint]);
+
   const handleSubmit = async () => {
+    setError(null);
+
     if (!startPoint) {
-      Alert.alert("Missing start point", "Please select a start point first.");
+      setError("Please select a start point on the map first.");
       return;
     }
 
     // Under development: fetch from Next.js proxy
-    const base: string = "http://localhost:3000";
+    const base = "http://localhost:3000";
     const profile = activity === "run" ? "foot-walking" : "cycling-regular";
 
     try {
-      console.log("Generating routes (Expo)…");
-
+      setIsLoading(true);
       const routeResults: any[] = [];
 
+      // Pick 3 unique seeds for variation
       if (isRoundTrip) {
-        // Pick 3 unique seeds for variation
         const startIndex = Math.floor(Math.random() * roundTripSeeds.length);
         const seeds = Array.from(
           { length: 3 },
           (_, i) => roundTripSeeds[(startIndex + i) % roundTripSeeds.length]
         );
-        console.log("Using seeds:", seeds);
 
         // Sequential fetches
         for (const seed of seeds) {
@@ -69,7 +85,6 @@ export default function GenerateRouteForm() {
           routeResults.push({ seed, data });
         }
       } else {
-        console.log("Generating direct route A → B");
         const res = await fetch(`${base}/api/openrouteservice`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -101,26 +116,15 @@ export default function GenerateRouteForm() {
         weatherByRoute.push({ seed: r.seed, weather });
       }
 
-      console.log("Combined route + weather result:");
-      weatherByRoute.forEach((w, i) =>
-        console.log(`Weather for route ${i + 1}:`, w.weather)
-      );
-      routeResults.forEach((r, i) => {
-        const props = r.data?.features?.[0]?.properties;
-        console.log(`Route ${i + 1}:`, {
-          seed: r.seed,
-          distanceKm: props?.distanceKm,
-          durationMin: props?.durationMin,
-        });
-      });
-
       // Update global context
       setRoutes(routeResults.map((r) => r.data));
       setWeatherByRoute(weatherByRoute);
       setActiveRouteIndex(0);
     } catch (err) {
       console.error("Route generation failed (Expo):", err);
-      Alert.alert("Error", "Something went wrong while generating the routes.");
+      setError("Something went wrong while generating the routes.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,11 +134,14 @@ export default function GenerateRouteForm() {
       <LocationInputs />
       {isRoundTrip && <DistanceSelector />}
 
+      {error && <ErrorText>{error}</ErrorText>}
+
       <Button
-        label="Generate Route"
+        label={isLoading ? "Generating..." : "Generate Route"}
         color="orange"
         fullWidth
         onPress={handleSubmit}
+        disabled={isLoading}
       />
     </FormContainer>
   );
