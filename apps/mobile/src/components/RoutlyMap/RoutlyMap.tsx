@@ -8,7 +8,7 @@ import { useMemo, useCallback, useRef, useEffect } from "react";
 
 const MapContainer = styled.View<{ $height: number }>`
   width: 100%;
-  height: ${({ $height }: { $height: number }) => `${$height}px`};
+  height: ${({ $height }: { $height: any }) => `${$height}px`};
   border-radius: ${theme.radius.lg}px;
   overflow: hidden;
   position: relative;
@@ -26,73 +26,59 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
     activeRouteIndex,
   } = useRouteGeneration();
 
+  const hasRoutes = routes.length > 0;
   const initialOverview = { latitude: 57.7072, longitude: 11.9671 };
 
-  // Pick currently active route based on index
   const activeRoute = routes?.[activeRouteIndex ?? 0];
 
-  // Convert active route to map coordinates
+  // Convert current route to coordinates
   const routeCoords = useMemo(() => {
     const feature = activeRoute?.features?.[0];
     const geometry = feature?.geometry;
     if (!geometry || !("coordinates" in geometry)) return undefined;
-
     const coords = geometry.coordinates as [number, number][];
-    if (!coords?.length) return undefined;
-
-    return coords.map(([lng, lat]) => ({
-      latitude: lat,
-      longitude: lng,
-    }));
+    return coords.map(([lng, lat]) => ({ latitude: lat, longitude: lng }));
   }, [activeRoute]);
 
-  // Fit map to route bounds whenever the active route changes
+  // Fit map to route bounds when route changes
   useEffect(() => {
-    if (!routeCoords || routeCoords.length === 0 || !mapRef.current) return;
-
+    if (!routeCoords?.length || !mapRef.current) return;
     mapRef.current.fitToCoordinates(routeCoords, {
-      edgePadding: {
-        top: 60,
-        right: 40,
-        bottom: 60,
-        left: 40,
-      },
+      edgePadding: { top: 60, right: 40, bottom: 60, left: 40 },
       animated: true,
     });
   }, [routeCoords]);
 
-  // Handle taps for start/end markers
+  // Handle taps for setting start/end markers
   const handleMapPress = useCallback(
     (e: MapPressEvent) => {
-      const { latitude, longitude } = e.nativeEvent.coordinate;
+      if (hasRoutes) return; // Prevent editing when routes are active
 
-      // If a route is already displayed, clear markers on tap
-      if (routeCoords) {
-        clearPoints();
-        return;
-      }
+      const { latitude, longitude } = e.nativeEvent.coordinate;
 
       if (!startPoint) setStartPoint([longitude, latitude]);
       else if (!endPoint) setEndPoint([longitude, latitude]);
       else clearPoints();
     },
-    [startPoint, endPoint, routeCoords, setStartPoint, setEndPoint, clearPoints]
+    [startPoint, endPoint, hasRoutes, setStartPoint, setEndPoint, clearPoints]
   );
 
   const handleStartDragEnd = useCallback(
     (e: any) => {
+      if (hasRoutes) return; // Locked
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setStartPoint([longitude, latitude]);
     },
-    [setStartPoint]
+    [setStartPoint, hasRoutes]
   );
 
   const handleEndDragEnd = useCallback(
     (e: any) => {
+      if (hasRoutes) return; // Locked
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setEndPoint([longitude, latitude]);
     },
-    [setEndPoint]
+    [setEndPoint, hasRoutes]
   );
 
   return (
@@ -108,6 +94,7 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
         }}
         onPress={handleMapPress}
         customMapStyle={mapStyle}
+        zoomEnabled={true}
       >
         {routeCoords && (
           <>
@@ -120,23 +107,21 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
               coordinate={routeCoords[0]}
               title="Start"
               pinColor={theme.colors.teal}
-              draggable
+              draggable={!hasRoutes}
               onDragEnd={handleStartDragEnd}
             />
-            {/* Only show finish marker if it's not a roundtrip */}
             {routeCoords.length > 1 && startPoint && endPoint && (
               <Marker
                 coordinate={routeCoords[routeCoords.length - 1]}
                 title="Finish"
                 pinColor={theme.colors.orange}
-                draggable
+                draggable={!hasRoutes}
                 onDragEnd={handleEndDragEnd}
               />
             )}
           </>
         )}
 
-        {/* Show manual markers before route generation */}
         {!routeCoords && startPoint && (
           <Marker
             coordinate={{
