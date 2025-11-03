@@ -74,11 +74,15 @@ export default function PreviewRouteCard({
   const averageRunSpeedKmH = 10;
   const adjustedRunTimeMin = (distance / averageRunSpeedKmH) * 60;
 
+  const activityText: string =
+    activity.charAt(0).toUpperCase() + activity.slice(1);
+
   return (
     <Card $active={isActive} $width={width}>
       <Title>Route {index + 1}</Title>
 
       <InfoList>
+        <RouteInfoItem label="Activity" value={activityText} />
         <RouteInfoItem label="Distance" value={`${distance} km`} />
         <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
         <RouteWeatherInfo weather={weather} />
