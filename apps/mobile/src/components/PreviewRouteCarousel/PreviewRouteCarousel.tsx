@@ -5,7 +5,9 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   View,
+  TouchableOpacity,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
@@ -19,7 +21,7 @@ const CarouselContainer = styled(ScrollView).attrs({
 })`
   width: 100%;
   background-color: ${theme.colors.white};
-  padding: ${theme.spacing.md}px 0;
+  padding: ${theme.spacing.sm}px 0;
 `;
 
 const CardWrapper = styled(View)<{ $width: number }>`
@@ -28,9 +30,28 @@ const CardWrapper = styled(View)<{ $width: number }>`
   align-items: center;
 `;
 
+const ButtonWrapper = styled.View`
+  padding: 0 ${theme.spacing.lg}px;
+`;
+
+const BackButton = styled(TouchableOpacity)`
+  align-self: flex-end;
+  background-color: ${theme.colors.teal};
+  border-radius: ${theme.radius.full}px;
+  width: ${theme.spacing.lg}px;
+  height: ${theme.spacing.lg}px;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function PreviewRouteCarousel() {
-  const { routes, weatherByRoute, activeRouteIndex, setActiveRouteIndex } =
-    useRouteGeneration();
+  const {
+    routes,
+    weatherByRoute,
+    activeRouteIndex,
+    setActiveRouteIndex,
+    reset,
+  } = useRouteGeneration();
 
   const [visibleIndex, setVisibleIndex] = useState(0);
   const { width } = Dimensions.get("window");
@@ -43,10 +64,20 @@ export default function PreviewRouteCarousel() {
     if (newIndex !== visibleIndex) setVisibleIndex(newIndex);
   };
 
+  const handleGoBack = () => {
+    if (typeof reset === "function") reset();
+  };
+
   const cardWidth = width - theme.spacing.lg * 2;
 
   return (
     <>
+      <ButtonWrapper>
+        <BackButton onPress={handleGoBack} accessibilityLabel="Go back">
+          <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
+        </BackButton>
+      </ButtonWrapper>
+
       <CarouselContainer onScroll={handleScroll} scrollEventThrottle={16}>
         {routes.map((route, index) => (
           <CardWrapper key={index} $width={width}>
