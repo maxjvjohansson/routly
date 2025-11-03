@@ -2,8 +2,11 @@ import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import GenerateRouteForm from "src/components/GenerateRouteForm/GenerateRouteForm";
 import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
-import { ScrollView } from "react-native";
-import PreviewRouteList from "src/components/PreviewRouteList/PreviewRouteList";
+import PreviewRouteCarousel from "src/components/PreviewRouteCarousel/PreviewRouteCarousel";
+
+const ScrollWrapper = styled.ScrollView`
+  background-color: ${theme.colors.white};
+`;
 
 const Wrapper = styled.View`
   padding: ${theme.spacing.lg}px ${theme.spacing.lg}px;
@@ -25,7 +28,7 @@ const Subtitle = styled.Text`
 
 export default function GenerateScreen() {
   return (
-    <ScrollView>
+    <ScrollWrapper>
       <Wrapper>
         <Title>Create your next route</Title>
         <Subtitle>
@@ -35,7 +38,7 @@ export default function GenerateScreen() {
       </Wrapper>
       <GenerateRouteForm />
       <RoutlyMap />
-      <PreviewRouteList />
-    </ScrollView>
+      <PreviewRouteCarousel />
+    </ScrollWrapper>
   );
 }
