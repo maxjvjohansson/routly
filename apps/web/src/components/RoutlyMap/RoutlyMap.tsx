@@ -19,6 +19,11 @@ const MapContainer = styled.div`
   .maplibregl-canvas {
     border-radius: ${theme.radius.lg};
   }
+
+  &.locked {
+    cursor: not-allowed;
+    opacity: 0.95;
+  }
 `;
 
 export default function RoutlyMap() {
@@ -38,11 +43,15 @@ export default function RoutlyMap() {
     activeRouteIndex,
   } = useRouteGeneration();
 
+  const mapLocked = routes.length > 0; // Lock map interactions when routes exist
+
   // Keep track of last click-interaction without triggering re-init of map
   const clickHandlerRef = useRef<
     ((e: maplibregl.MapMouseEvent) => void) | null
   >(null);
   clickHandlerRef.current = (e: maplibregl.MapMouseEvent) => {
+    if (mapLocked) return; // Ignore clicks if map is locked
+
     const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
     const m = map.current;
     if (!m) return;
@@ -97,15 +106,17 @@ export default function RoutlyMap() {
       if (startPoint) {
         const marker = new maplibregl.Marker({
           color: theme.colors.teal,
-          draggable: true,
+          draggable: !mapLocked, // Disable dragging when routes exist
         })
           .setLngLat(startPoint)
           .addTo(m);
 
-        marker.on("dragend", () => {
-          const pos = marker.getLngLat();
-          setStartPoint([pos.lng, pos.lat]);
-        });
+        if (!mapLocked) {
+          marker.on("dragend", () => {
+            const pos = marker.getLngLat();
+            setStartPoint([pos.lng, pos.lat]);
+          });
+        }
 
         startMarker.current = marker;
       }
@@ -114,20 +125,22 @@ export default function RoutlyMap() {
       if (endPoint) {
         const marker = new maplibregl.Marker({
           color: theme.colors.orange,
-          draggable: true,
+          draggable: !mapLocked, // Disable dragging when routes exist
         })
           .setLngLat(endPoint)
           .addTo(m);
 
-        marker.on("dragend", () => {
-          const pos = marker.getLngLat();
-          setEndPoint([pos.lng, pos.lat]);
-        });
+        if (!mapLocked) {
+          marker.on("dragend", () => {
+            const pos = marker.getLngLat();
+            setEndPoint([pos.lng, pos.lat]);
+          });
+        }
 
         endMarker.current = marker;
       }
     });
-  }, [startPoint, endPoint, setStartPoint, setEndPoint]);
+  }, [startPoint, endPoint, setStartPoint, setEndPoint, mapLocked]);
 
   // Draw the currently active route on map
   useEffect(() => {
@@ -193,11 +206,16 @@ export default function RoutlyMap() {
       removeRoute();
     }
 
-    // If the user previously had a route drawn (roundtrip) and places a new end marker — remove route
+    // If the user previously had a route drawn (roundtrip) and places a new end marker, remove route
     if (startPoint && endPoint && routes.length > 0) {
       removeRoute();
     }
   }, [startPoint, endPoint]);
 
-  return <MapContainer ref={container} />;
+  return (
+    <MapContainer
+      ref={container}
+      className={mapLocked ? "locked" : undefined}
+    />
+  );
 }
