@@ -10,6 +10,7 @@ import { useAuth } from "@routly/lib/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { fetchCombinedRouteData } from "@routly/lib/routeAlgorithms/fetchCombinedRouteData";
+import { useEffect, useState } from "react";
 
 const FormContainer = styled.form`
   display: flex;
@@ -32,6 +33,14 @@ const ButtonWrapper = styled.div`
   margin-top: ${theme.spacing.md};
 `;
 
+const ErrorText = styled.p`
+  color: ${theme.colors.red};
+  font-size: ${theme.typography.sm};
+  text-align: center;
+  margin-top: -${theme.spacing.xs};
+  margin-bottom: ${theme.spacing.xs};
+`;
+
 export default function GenerateRouteForm() {
   const { user } = useAuth();
   const router = useRouter();
@@ -48,8 +57,16 @@ export default function GenerateRouteForm() {
     setActiveRouteIndex,
   } = useRouteGeneration();
 
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (error && (startPoint || endPoint)) setError(null);
+  }, [startPoint, endPoint]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
     if (!user) {
       router.push("/login?next=/generate");
@@ -57,12 +74,15 @@ export default function GenerateRouteForm() {
     }
 
     if (!startPoint) {
-      alert("Please select a start point on the map");
+      setError(
+        "Please select a start point on the map before generating a route."
+      );
       return;
     }
 
     try {
-      console.log("Generating routes + weather (Web)...");
+      setIsLoading(true);
+
       const { routes, weatherByRoute } = await fetchCombinedRouteData(
         startPoint,
         endPoint ?? null,
@@ -70,39 +90,18 @@ export default function GenerateRouteForm() {
         activity
       );
 
-      console.group("Combined route result");
-
-      // Log weather for each route
-      weatherByRoute.forEach((w, i) => {
-        console.log(`Weather for route ${i + 1}:`, w.weather);
-      });
-
-      // Log routes
-      routes.forEach((r, i) => {
-        const summary = r?.data?.features?.[0]?.properties;
-        console.log(`Route ${i + 1}:`);
-        console.log("Seed:", r.seed);
-        console.log("Profile:", r.profile);
-        console.log("Distance (km):", summary?.distanceKm);
-        console.log("Duration (min):", summary?.durationMin);
-        console.log("Used profile (after fallback):", summary?.usedProfile);
-        console.log(
-          "Elevation points:",
-          r?.data?.features?.[0]?.geometry?.coordinates?.length
-        );
-        console.log("───");
-      });
-      console.groupEnd();
-
-      // Update global context
       setRoutes(routes.map((r) => r.data));
       setWeatherByRoute(weatherByRoute);
-      setActiveRouteIndex(0); // first route visible by default
+      setActiveRouteIndex(0);
 
       if (pathname !== "/generate") router.push("/generate");
     } catch (err) {
       console.error("Route generation failed:", err);
-      alert("Something went wrong while generating the routes.");
+      setError(
+        "Something went wrong while generating your routes. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,10 +111,17 @@ export default function GenerateRouteForm() {
         <ActivitySelect />
         <LocationInputs />
         {isRoundTrip && <DistanceSelector />}
+        {error && <ErrorText>{error}</ErrorText>}
       </FormFields>
 
       <ButtonWrapper>
-        <Button type="submit" label="Generate Route" color="orange" fullWidth />
+        <Button
+          type="submit"
+          label={isLoading ? "Generating..." : "Generate Route"}
+          color="orange"
+          fullWidth
+          disabled={isLoading}
+        />
       </ButtonWrapper>
     </FormContainer>
   );
