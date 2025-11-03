@@ -134,9 +134,11 @@ export default function PreviewRouteCarousel() {
 
   return (
     <CarouselWrapper>
-      <LeftArrow onClick={handlePrev} disabled={visibleIndex === 0}>
-        ‹
-      </LeftArrow>
+      {routes.length > 1 && (
+        <LeftArrow onClick={handlePrev} disabled={visibleIndex === 0}>
+          ‹
+        </LeftArrow>
+      )}
       <CardContainer onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
         <CardTrack $offset={offset}>
           {routes.map((route, i) => (
@@ -160,12 +162,14 @@ export default function PreviewRouteCarousel() {
           ))}
         </CardTrack>
       </CardContainer>
-      <RightArrow
-        onClick={handleNext}
-        disabled={visibleIndex === routes.length - 1}
-      >
-        ›
-      </RightArrow>
+      {routes.length > 1 && (
+        <RightArrow
+          onClick={handleNext}
+          disabled={visibleIndex === routes.length - 1}
+        >
+          ›
+        </RightArrow>
+      )}
 
       <BottomBar>
         <GoBackButton>

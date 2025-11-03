@@ -1,18 +1,11 @@
 export function formatWindDirection(direction?: string): string {
   if (!direction) return "—";
-  const parts: string[] = direction.toLowerCase().split("_");
 
-  return parts
-    .map((part: string, i: number): string => {
-      if (parts.length === 2 && i === 0) {
-        return (
-          part.charAt(0).toUpperCase() +
-          part.slice(1) +
-          parts[1].charAt(0).toUpperCase() +
-          parts[1].slice(1)
-        );
-      }
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join(parts.length > 2 ? " " : "");
+  const parts = direction.toLowerCase().split("_");
+
+  // Capitalize each part
+  const formatted = parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1));
+
+  // Join with "-" for two parts, or space for longer ones
+  return formatted.join(parts.length === 2 ? "-" : " ");
 }
