@@ -9,6 +9,7 @@ import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotal
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
 const Card = styled.div<{ $active?: boolean }>`
+  width: 100%;
   border: ${({ $active }) =>
     $active
       ? `2px solid ${theme.colors.orange}`
@@ -16,10 +17,6 @@ const Card = styled.div<{ $active?: boolean }>`
   background: ${theme.colors.white};
   border-radius: ${theme.radius.lg};
   padding: ${theme.spacing.lg};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition:
-    border 0.2s ease,
-    box-shadow 0.2s ease;
 `;
 
 const Title = styled.h3`
@@ -32,7 +29,7 @@ const Title = styled.h3`
 const InfoList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xs};
+  gap: ${theme.spacing.sm};
   margin-bottom: ${theme.spacing.md};
 `;
 
@@ -78,11 +75,15 @@ export default function PreviewRouteCard({
   const averageRunSpeedKmH: number = 10;
   const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
 
+  const activityText: string =
+    activity.charAt(0).toUpperCase() + activity.slice(1);
+
   return (
     <Card $active={isActive}>
       <Title>Route {index + 1}</Title>
 
       <InfoList>
+        <RouteInfoItem label="Activity" value={activityText} />
         <RouteInfoItem label="Distance" value={`${distance} km`} />
         <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
         <RouteWeatherInfo weather={weather} />
