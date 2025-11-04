@@ -7,8 +7,9 @@ import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
-import { useSaveRoute } from "@routly/lib/hooks/useSaveRoutes";
+import { useSaveRouteWithFeedback } from "@routly/lib/hooks/useSaveRouteWithFeedback";
 import { useState } from "react";
+import NameRouteModal from "../Modal/NameRouteModal";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -65,7 +66,7 @@ const ErrorText = styled.p`
   color: ${theme.colors.red};
   font-size: ${theme.typography.sm};
   text-align: center;
-  margin-top: -${theme.spacing.xs};
+  margin-top: ${theme.spacing.xs};
   margin-bottom: ${theme.spacing.xs};
 `;
 
@@ -73,7 +74,7 @@ const SuccessText = styled.p`
   color: ${theme.colors.green};
   font-size: ${theme.typography.sm};
   text-align: center;
-  margin-top: -${theme.spacing.xs};
+  margin-top: ${theme.spacing.xs};
   margin-bottom: ${theme.spacing.xs};
 `;
 
@@ -92,12 +93,10 @@ export default function PreviewRouteCard({
   isActive,
   onSelect,
 }: Props) {
-  const { activity } = useRouteGeneration();
-  const { saveRoute, loading } = useSaveRoute();
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [statusType, setStatusType] = useState<"error" | "success" | null>(
-    null
-  );
+  const { activity, isRoundTrip, startPoint, endPoint } = useRouteGeneration();
+  const { handleSaveRoute, loading, statusMessage, statusType } =
+    useSaveRouteWithFeedback();
+  const [showModal, setShowModal] = useState(false);
   const summary: any = route?.features?.[0]?.properties ?? {};
   const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
   const ascent: number = calculateTotalAscent(route);
@@ -108,10 +107,7 @@ export default function PreviewRouteCard({
   const activityText: string =
     activity.charAt(0).toUpperCase() + activity.slice(1);
 
-  const handleSave = async () => {
-    const routeName = prompt("Name your route:", `Route ${index + 1}`);
-    if (!routeName) return;
-
+  const onConfirmName = async (name: string) => {
     const normalizedActivity =
       activity === "run"
         ? "running"
@@ -119,27 +115,15 @@ export default function PreviewRouteCard({
           ? "cycling"
           : activity;
 
-    setStatusMessage(null);
-    setStatusType(null);
-
-    try {
-      await saveRoute({
-        name: routeName,
-        activity: normalizedActivity,
-        isRoundTrip: !route?.features?.[0]?.properties?.end,
-        routeData: route,
-        seed: (route as any).seed || null,
-        profileUsed: (route as any).profile || null,
-        startName: "Start point",
-        endName: "End point",
-      });
-
-      setStatusType("success");
-      setStatusMessage("Route saved successfully!");
-    } catch (err: any) {
-      setStatusType("error");
-      setStatusMessage(`${err.message || "Could not save route."}`);
-    }
+    await handleSaveRoute({
+      name,
+      activity: normalizedActivity,
+      isRoundTrip,
+      routeData: route,
+      startName: startPoint ? "Start point" : null,
+      endName: endPoint ? "End point" : null,
+    });
+    setShowModal(false);
   };
 
   return (
@@ -165,9 +149,17 @@ export default function PreviewRouteCard({
           color="teal"
           fullWidth
           disabled={loading}
-          onClick={handleSave}
+          onClick={() => setShowModal(true)}
         />
       </ButtonWrapper>
+
+      <NameRouteModal
+        isOpen={showModal}
+        defaultValue={`Route ${index + 1}`}
+        loading={loading}
+        onCancel={() => setShowModal(false)}
+        onConfirm={onConfirmName}
+      />
 
       {statusMessage &&
         (statusType === "error" ? (

@@ -14,19 +14,11 @@ export const useSaveRoute = () => {
     activity,
     isRoundTrip,
     routeData,
-    seed,
-    profileUsed,
-    startName,
-    endName,
   }: {
     name: string;
     activity: string;
     isRoundTrip: boolean;
     routeData: GeoJSON.FeatureCollection;
-    seed?: number | null;
-    profileUsed?: string;
-    startName?: string;
-    endName?: string;
   }) => {
     if (!user) throw new Error("User not logged in");
     setLoading(true);
@@ -38,33 +30,34 @@ export const useSaveRoute = () => {
         throw new Error("Invalid route geometry");
       }
 
-      // Type assert as LineString
       const coords = feature.geometry.coordinates as LineCoordinates[];
+      const props = feature.properties as any;
 
-      const summary = (feature.properties as any)?.summary || {};
+      const formattedCoords = coords.map(([lng, lat, elevation]) => ({
+        lat,
+        lng,
+        elevation: elevation ?? 0,
+      }));
 
-      // Explicit typing inside map
-      const formattedCoords = coords.map(
-        ([lng, lat, elevation]: LineCoordinates) => ({
-          lat,
-          lng,
-          elevation: elevation ?? 0,
-        })
-      );
+      // start = first point, end = last (or same if roundtrip)
+      const [startLng, startLat] = coords[0];
+      const [endLng, endLat] = isRoundTrip
+        ? coords[0]
+        : coords[coords.length - 1];
 
       const payload = {
         user_id: user.id,
         name: name || "Untitled route",
         activity,
-        distance_km: summary.distance ? summary.distance / 1000 : null,
+        distance_km: props.distanceKm ?? null,
         elevation_gain: calculateTotalAscent(routeData),
-        duration_estimate: summary.duration ? summary.duration / 60 : null,
+        duration_estimate: props.durationMin ?? null,
         coordinates: formattedCoords,
-        start_location: startName || null,
-        end_location: endName || null,
+        start_lat: startLat,
+        start_lng: startLng,
+        end_lat: endLat,
+        end_lng: endLng,
         is_roundtrip: isRoundTrip,
-        seed: seed || null,
-        profile_used: profileUsed || null,
       };
 
       const { data, error } = await supabase.from("routes").insert(payload);
