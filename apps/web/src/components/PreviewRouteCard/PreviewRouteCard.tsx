@@ -7,6 +7,8 @@ import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import { useSaveRoute } from "@routly/lib/hooks/useSaveRoutes";
+import { useState } from "react";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -33,6 +35,13 @@ const InfoList = styled.div`
   margin-bottom: ${theme.spacing.md};
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: ${theme.spacing.sm};
+`;
+
 const DetailsSection = styled.details`
   margin-top: ${theme.spacing.sm};
   border-top: 1px solid ${theme.colors.grayLight};
@@ -52,6 +61,22 @@ const DetailsText = styled.p`
   color: ${theme.colors.grayDark};
 `;
 
+const ErrorText = styled.p`
+  color: ${theme.colors.red};
+  font-size: ${theme.typography.sm};
+  text-align: center;
+  margin-top: -${theme.spacing.xs};
+  margin-bottom: ${theme.spacing.xs};
+`;
+
+const SuccessText = styled.p`
+  color: ${theme.colors.green};
+  font-size: ${theme.typography.sm};
+  text-align: center;
+  margin-top: -${theme.spacing.xs};
+  margin-bottom: ${theme.spacing.xs};
+`;
+
 type Props = {
   index: number;
   route: GeoJSON.FeatureCollection;
@@ -68,6 +93,11 @@ export default function PreviewRouteCard({
   onSelect,
 }: Props) {
   const { activity } = useRouteGeneration();
+  const { saveRoute, loading } = useSaveRoute();
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusType, setStatusType] = useState<"error" | "success" | null>(
+    null
+  );
   const summary: any = route?.features?.[0]?.properties ?? {};
   const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
   const ascent: number = calculateTotalAscent(route);
@@ -77,6 +107,40 @@ export default function PreviewRouteCard({
 
   const activityText: string =
     activity.charAt(0).toUpperCase() + activity.slice(1);
+
+  const handleSave = async () => {
+    const routeName = prompt("Name your route:", `Route ${index + 1}`);
+    if (!routeName) return;
+
+    const normalizedActivity =
+      activity === "run"
+        ? "running"
+        : activity === "cycle"
+          ? "cycling"
+          : activity;
+
+    setStatusMessage(null);
+    setStatusType(null);
+
+    try {
+      await saveRoute({
+        name: routeName,
+        activity: normalizedActivity,
+        isRoundTrip: !route?.features?.[0]?.properties?.end,
+        routeData: route,
+        seed: (route as any).seed || null,
+        profileUsed: (route as any).profile || null,
+        startName: "Start point",
+        endName: "End point",
+      });
+
+      setStatusType("success");
+      setStatusMessage("Route saved successfully!");
+    } catch (err: any) {
+      setStatusType("error");
+      setStatusMessage(`${err.message || "Could not save route."}`);
+    }
+  };
 
   return (
     <Card $active={isActive}>
@@ -89,12 +153,28 @@ export default function PreviewRouteCard({
         <RouteWeatherInfo weather={weather} />
       </InfoList>
 
-      <Button
-        label={isActive ? "Active route" : "View route"}
-        color={isActive ? "orange" : "teal"}
-        fullWidth
-        onClick={onSelect}
-      />
+      <ButtonWrapper>
+        <Button
+          label={isActive ? "Active route" : "View route"}
+          color={isActive ? "orange" : "teal"}
+          fullWidth
+          onClick={onSelect}
+        />
+        <Button
+          label={loading ? "Saving..." : "Save route"}
+          color="teal"
+          fullWidth
+          disabled={loading}
+          onClick={handleSave}
+        />
+      </ButtonWrapper>
+
+      {statusMessage &&
+        (statusType === "error" ? (
+          <ErrorText>{statusMessage}</ErrorText>
+        ) : (
+          <SuccessText>{statusMessage}</SuccessText>
+        ))}
 
       <DetailsSection>
         <Summary $active={isActive}>More details</Summary>
