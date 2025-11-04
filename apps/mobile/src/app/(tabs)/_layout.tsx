@@ -3,7 +3,7 @@ import { Tabs } from "expo-router";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import MenuModal from "src/components/MenuModal/MenuModal";
+import MenuModal from "src/components/Modal/MenuModal";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { getUserInitial } from "@routly/lib/utils/user";
 
