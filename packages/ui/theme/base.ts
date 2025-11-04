@@ -4,6 +4,7 @@ export const baseTheme = {
     tealLight: "#85c5d2",
     orange: "#ff7c36",
     red: "#e84a4a",
+    green: "#41da56",
     greenLight: "#d5ed85",
     gray: "#e5e7eB",
     grayLight: "#f5f5f5",
