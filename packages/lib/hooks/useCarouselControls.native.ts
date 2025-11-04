@@ -29,11 +29,11 @@ export function useCarouselControls<T>(items: T[]) {
   };
 
   const handleNext = () => {
-    if (visibleIndex < items.length - 1) setVisibleIndex((p) => p + 1);
+    if (visibleIndex < items.length - 1) setVisibleIndex((prev) => prev + 1);
   };
 
   const handlePrev = () => {
-    if (visibleIndex > 0) setVisibleIndex((p) => p - 1);
+    if (visibleIndex > 0) setVisibleIndex((prev) => prev - 1);
   };
 
   return {

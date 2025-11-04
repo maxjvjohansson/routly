@@ -33,6 +33,14 @@ const InfoList = styled(View)`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
+const ButtonWrapper = styled(View)`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: ${theme.spacing.xxs};
+`;
+
 const DetailsSection = styled(View)`
   border-top: 1px solid ${theme.colors.grayLight};
 `;
@@ -56,6 +64,7 @@ export default function PreviewRouteCard({
   weather,
   isActive,
   onSelect,
+  onSaveRequest,
   width,
 }: {
   index: number;
@@ -63,10 +72,12 @@ export default function PreviewRouteCard({
   weather?: any;
   isActive: boolean;
   onSelect: () => void;
+  onSaveRequest: (index: number, route: GeoJSON.FeatureCollection) => void;
   width?: number;
 }) {
   const [showDetails, setShowDetails] = useState(false);
   const { activity } = useRouteGeneration();
+
   const summary: any = route?.features?.[0]?.properties ?? {};
   const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
   const ascent: number = calculateTotalAscent(route);
@@ -88,12 +99,18 @@ export default function PreviewRouteCard({
         <RouteWeatherInfo weather={weather} />
       </InfoList>
 
-      <Button
-        label={isActive ? "Active route" : "View route"}
-        color={isActive ? "orange" : "teal"}
-        fullWidth
-        onPress={onSelect}
-      />
+      <ButtonWrapper>
+        <Button
+          label={isActive ? "Active route" : "View route"}
+          color={isActive ? "orange" : "teal"}
+          onPress={onSelect}
+        />
+        <Button
+          label="Save route"
+          color="teal"
+          onPress={() => onSaveRequest(index, route)}
+        />
+      </ButtonWrapper>
 
       <DetailsSection>
         <DetailsToggle
