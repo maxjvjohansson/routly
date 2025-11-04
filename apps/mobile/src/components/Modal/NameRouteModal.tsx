@@ -38,11 +38,12 @@ const Title = styled.Text`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const ButtonRow = styled.View`
+const ButtonWrapper = styled.View`
+  width: 100%;
+  display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: ${theme.spacing.sm}px;
-  margin-top: ${theme.spacing.md}px;
+  justify-content: center;
+  gap: ${theme.spacing.xxs};
 `;
 
 export default function NameRouteModal({
@@ -85,21 +86,15 @@ export default function NameRouteModal({
             fullWidth
           />
 
-          <ButtonRow>
-            <Button
-              label="Cancel"
-              color="grayDark"
-              onPress={onCancel}
-              fullWidth
-            />
+          <ButtonWrapper>
+            <Button label="Cancel" color="grayDark" onPress={onCancel} />
             <Button
               label={loading ? "Saving..." : "Save"}
               color="teal"
               onPress={handleConfirm}
               disabled={loading}
-              fullWidth
             />
-          </ButtonRow>
+          </ButtonWrapper>
         </ModalBox>
       </Overlay>
     </Modal>
