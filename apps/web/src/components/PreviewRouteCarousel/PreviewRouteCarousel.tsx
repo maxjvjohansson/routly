@@ -1,12 +1,15 @@
 "use client";
 
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
 import { CarouselDots } from "./CarouselDots";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
+import NameRouteModal from "../Modal/NameRouteModal";
+import { useSaveRouteWithFeedback } from "@routly/lib/hooks/useSaveRouteWithFeedback";
+import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls";
 
 const CarouselWrapper = styled.div`
   display: flex;
@@ -14,7 +17,6 @@ const CarouselWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
   gap: ${theme.spacing.sm};
   position: relative;
 `;
@@ -23,7 +25,6 @@ const CardContainer = styled.div`
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,7 +46,6 @@ const ArrowButton = styled.button`
   border-radius: ${theme.radius.full};
   color: ${theme.colors.white};
   font-size: ${theme.typography.sm};
-  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,6 +89,14 @@ const BackButton = styled.div`
   margin-bottom: ${theme.spacing.md};
 `;
 
+const StatusText = styled.p<{ $type: "success" | "error" }>`
+  color: ${({ $type }) =>
+    $type === "success" ? theme.colors.green : theme.colors.red};
+  font-size: ${theme.typography.sm};
+  margin-top: ${theme.spacing.xs};
+  text-align: center;
+`;
+
 export default function PreviewRouteCarousel() {
   const {
     routes,
@@ -96,42 +104,66 @@ export default function PreviewRouteCarousel() {
     activeRouteIndex,
     setActiveRouteIndex,
     reset,
+    activity,
+    isRoundTrip,
+    startPoint,
+    endPoint,
   } = useRouteGeneration();
 
-  const [visibleIndex, setVisibleIndex] = useState(0);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
+  const { handleSaveRoute, loading, statusMessage, statusType } =
+    useSaveRouteWithFeedback();
+
+  const {
+    visibleIndex,
+    offset,
+    handleNext,
+    handlePrev,
+    handleDotClick,
+    handleMouseDown,
+    handleMouseUp,
+  } = useCarouselControls(routes);
+
+  const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
+  const [selectedRoute, setSelectedRoute] =
+    useState<GeoJSON.FeatureCollection | null>(null);
 
   if (!routes?.length) return null;
 
-  const handleNext = () => {
-    if (visibleIndex < routes.length - 1) setVisibleIndex((prev) => prev + 1);
+  const handleSaveRequest = (
+    index: number,
+    route: GeoJSON.FeatureCollection
+  ) => {
+    setActiveModalIndex(index);
+    setSelectedRoute(route);
   };
 
-  const handlePrev = () => {
-    if (visibleIndex > 0) setVisibleIndex((prev) => prev - 1);
+  const handleCancelModal = () => {
+    setActiveModalIndex(null);
+    setSelectedRoute(null);
   };
 
-  const handleDotClick = (i: number) => setVisibleIndex(i);
+  const handleConfirmSave = async (name: string) => {
+    if (!selectedRoute) return;
 
-  const handleStartOver = () => {
-    if (typeof reset === "function") reset();
+    const normalizedActivity =
+      activity === "run"
+        ? "running"
+        : activity === "cycle"
+          ? "cycling"
+          : activity;
+
+    await handleSaveRoute({
+      name,
+      activity: normalizedActivity,
+      isRoundTrip,
+      routeData: selectedRoute,
+      startName: startPoint ? "Start point" : null,
+      endName: endPoint ? "End point" : null,
+    });
+
+    setActiveModalIndex(null);
+    setSelectedRoute(null);
   };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    isDragging.current = true;
-    startX.current = e.clientX;
-  };
-
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (!isDragging.current) return;
-    const diff = e.clientX - startX.current;
-    if (diff > 50) handlePrev();
-    if (diff < -50) handleNext();
-    isDragging.current = false;
-  };
-
-  const offset = -visibleIndex * 100;
 
   return (
     <CarouselWrapper>
@@ -158,6 +190,7 @@ export default function PreviewRouteCarousel() {
                 weather={weatherByRoute?.[i]?.weather}
                 isActive={i === activeRouteIndex}
                 onSelect={() => setActiveRouteIndex(i)}
+                onSaveRequest={handleSaveRequest}
               />
             </div>
           ))}
@@ -173,15 +206,28 @@ export default function PreviewRouteCarousel() {
       )}
       <BottomBar>
         <BackButton>
-          <Button label="Go Back" color="teal" onClick={handleStartOver} />
+          <Button label="Go Back" color="teal" onClick={() => reset?.()} />
         </BackButton>
-
         <CarouselDots
           count={routes.length}
           activeIndex={visibleIndex}
           onDotClick={handleDotClick}
         />
       </BottomBar>
+
+      {statusMessage && (
+        <StatusText $type={statusType ?? "success"}>{statusMessage}</StatusText>
+      )}
+
+      <NameRouteModal
+        isOpen={activeModalIndex !== null}
+        defaultValue={
+          activeModalIndex !== null ? `Route ${activeModalIndex + 1}` : ""
+        }
+        loading={loading}
+        onCancel={handleCancelModal}
+        onConfirm={handleConfirmSave}
+      />
     </CarouselWrapper>
   );
 }
