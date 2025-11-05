@@ -20,3 +20,25 @@ export function getUserInitial(user?: SupabaseUser | null): string {
 
   return "R";
 }
+
+export function getUserFullName(user?: SupabaseUser | null): string {
+  if (!user) return "User";
+
+  return (
+    user.user_metadata?.full_name ||
+    user.full_name ||
+    user.user_metadata?.name ||
+    "User"
+  );
+}
+
+export function getUserEmail(user?: SupabaseUser | null): string {
+  if (!user) return "—";
+
+  return (
+    user.user_metadata?.email ||
+    user.email ||
+    user.user_metadata?.contact ||
+    "—"
+  );
+}
