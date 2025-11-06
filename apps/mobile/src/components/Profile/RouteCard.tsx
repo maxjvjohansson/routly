@@ -38,8 +38,8 @@ const InfoText = styled.Text`
 const Actions = styled.View`
   width: 100%;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  gap: ${theme.spacing.xxs};
 `;
 
 export default function RouteCard({ route, onViewOnMap, onDelete }: Props) {
@@ -60,7 +60,7 @@ export default function RouteCard({ route, onViewOnMap, onDelete }: Props) {
           onPress={() => onViewOnMap(route)}
         />
         <Button
-          label="Delete"
+          label="Delete Route"
           color="red"
           onPress={() => onDelete?.(route.id)}
         />
