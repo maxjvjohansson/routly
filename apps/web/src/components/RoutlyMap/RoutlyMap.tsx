@@ -7,6 +7,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
+type RoutlyMapProps = {
+  routeData?: GeoJSON.FeatureCollection | null;
+  isRoundTrip?: boolean;
+};
+
 const MapContainer = styled.div`
   width: 100%;
   min-height: 400px;
@@ -26,7 +31,7 @@ const MapContainer = styled.div`
   }
 `;
 
-export default function RoutlyMap() {
+export default function RoutlyMap({ routeData, isRoundTrip }: RoutlyMapProps) {
   const container = useRef<HTMLDivElement | null>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const startMarker = useRef<maplibregl.Marker | null>(null);
@@ -43,14 +48,15 @@ export default function RoutlyMap() {
     activeRouteIndex,
   } = useRouteGeneration();
 
-  const mapLocked = routes.length > 0; // Lock map interactions when routes exist
+  const isReadOnly = !!routeData;
+  const mapLocked = isReadOnly || routes.length > 0; // Lock map interactions when routes exist
 
   // Keep track of last click-interaction without triggering re-init of map
   const clickHandlerRef = useRef<
     ((e: maplibregl.MapMouseEvent) => void) | null
   >(null);
   clickHandlerRef.current = (e: maplibregl.MapMouseEvent) => {
-    if (mapLocked) return; // Ignore clicks if map is locked
+    if (mapLocked || isReadOnly) return; // Ignore clicks if map is locked or read-only
 
     const coords: [number, number] = [e.lngLat.lng, e.lngLat.lat];
     const m = map.current;
@@ -96,8 +102,10 @@ export default function RoutlyMap() {
     return () => mapInstance.remove();
   }, []);
 
-  // Handle start and end markers
+  // Handle start and end markers (interactive mode)
   useEffect(() => {
+    if (isReadOnly) return; // Skip in read-only mode
+
     const m = map.current;
     if (!m) return;
 
@@ -140,15 +148,15 @@ export default function RoutlyMap() {
         endMarker.current = marker;
       }
     });
-  }, [startPoint, endPoint, setStartPoint, setEndPoint, mapLocked]);
+  }, [startPoint, endPoint, setStartPoint, setEndPoint, mapLocked, isReadOnly]);
 
   // Draw the currently active route on map
   useEffect(() => {
     const m = map.current;
-    if (!m || !isMapReady || !routes.length) return;
+    if (!m || !isMapReady) return;
 
-    const route = routes[activeRouteIndex];
-    if (!route) return;
+    const routeToShow = routeData || routes[activeRouteIndex];
+    if (!routeToShow) return;
 
     const id = "route-line";
 
@@ -157,7 +165,7 @@ export default function RoutlyMap() {
     if (m.getSource(id)) m.removeSource(id);
 
     // Add the new active route
-    m.addSource(id, { type: "geojson", data: route });
+    m.addSource(id, { type: "geojson", data: routeToShow });
     m.addLayer({
       id,
       type: "line",
@@ -171,7 +179,7 @@ export default function RoutlyMap() {
 
     // Fit map to the route bounds
     const bounds = new maplibregl.LngLatBounds();
-    route.features.forEach((feature) => {
+    routeToShow.features.forEach((feature) => {
       const coords = (feature.geometry as any).coordinates;
       coords.forEach(([lng, lat]: [number, number]) =>
         bounds.extend([lng, lat])
@@ -181,10 +189,40 @@ export default function RoutlyMap() {
     if (!bounds.isEmpty()) {
       m.fitBounds(bounds, { padding: 60, animate: true, duration: 1000 });
     }
-  }, [routes, activeRouteIndex, isMapReady]);
+
+    // Add static markers in read-only mode (from DB data)
+    if (routeData) {
+      const feature = routeData.features[0];
+      const coords = (feature.geometry as any).coordinates;
+      const [startLng, startLat] = coords[0];
+      const [endLng, endLat] = coords[coords.length - 1];
+
+      // Remove existing markers
+      if (startMarker.current) startMarker.current.remove();
+      if (endMarker.current) endMarker.current.remove();
+
+      // Add teal start marker
+      startMarker.current = new maplibregl.Marker({
+        color: theme.colors.teal,
+      })
+        .setLngLat([startLng, startLat])
+        .addTo(m);
+
+      // Add orange end marker if not roundtrip
+      if (!isRoundTrip) {
+        endMarker.current = new maplibregl.Marker({
+          color: theme.colors.orange,
+        })
+          .setLngLat([endLng, endLat])
+          .addTo(m);
+      }
+    }
+  }, [routes, routeData, activeRouteIndex, isMapReady, isRoundTrip]);
 
   // Cleanup route when points are cleared or switched
   useEffect(() => {
+    if (isReadOnly) return; // Don't touch in read-only mode
+
     const m = map.current;
     if (!m) return;
 
@@ -210,7 +248,7 @@ export default function RoutlyMap() {
     if (startPoint && endPoint && routes.length > 0) {
       removeRoute();
     }
-  }, [startPoint, endPoint]);
+  }, [startPoint, endPoint, isReadOnly]);
 
   return (
     <MapContainer
