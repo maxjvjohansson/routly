@@ -5,6 +5,7 @@ import { useAuth } from "@routly/lib/context/AuthContext";
 import ProfileHeader from "src/components/Profile/ProfileHeader";
 import { FlatList } from "react-native";
 import RouteCard from "src/components/Profile/RouteCard";
+import { useRouter } from "expo-router";
 
 const Container = styled.View`
   flex: 1;
@@ -23,6 +24,7 @@ export default function ProfileScreen() {
   const { supabase, user } = useAuth();
   const [routes, setRoutes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -40,7 +42,7 @@ export default function ProfileScreen() {
   }, [supabase, user]);
 
   const handleViewOnMap = (route: any) => {
-    console.log("Open map for:", route.name);
+    router.push(`/route/${route.id}`);
   };
 
   return (
