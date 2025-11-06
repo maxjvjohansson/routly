@@ -7,6 +7,7 @@ import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import { formatActivityLabel } from "@routly/lib/utils/activityText";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -83,9 +84,7 @@ export default function PreviewRouteCard({
   const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
   const averageRunSpeedKmH = 10;
   const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
-
-  const activityText =
-    summary?.profile === "cycling-regular" ? "Cycling" : "Running";
+  const activityText = formatActivityLabel(activity);
 
   return (
     <Card $active={isActive}>
