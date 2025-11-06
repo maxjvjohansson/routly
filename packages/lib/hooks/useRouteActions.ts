@@ -4,7 +4,14 @@ import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotal
 
 type LineCoordinates = [number, number, number?];
 
-export const useSaveRoute = () => {
+type SavePayload = {
+  name: string;
+  activity: string;
+  isRoundTrip: boolean;
+  routeData: GeoJSON.FeatureCollection;
+};
+
+export const useRouteActions = () => {
   const { supabase, user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -14,12 +21,7 @@ export const useSaveRoute = () => {
     activity,
     isRoundTrip,
     routeData,
-  }: {
-    name: string;
-    activity: string;
-    isRoundTrip: boolean;
-    routeData: GeoJSON.FeatureCollection;
-  }) => {
+  }: SavePayload) => {
     if (!user) throw new Error("User not logged in");
     setLoading(true);
     setError(null);
@@ -39,7 +41,6 @@ export const useSaveRoute = () => {
         elevation: elevation ?? 0,
       }));
 
-      // start = first point, end = last (or same if roundtrip)
       const [startLng, startLat] = coords[0];
       const [endLng, endLat] = isRoundTrip
         ? coords[0]
@@ -73,5 +74,46 @@ export const useSaveRoute = () => {
     }
   };
 
-  return { saveRoute, loading, error };
+  const renameRoute = async (id: string, newName: string) => {
+    if (!user) throw new Error("User not logged in");
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase
+        .from("routes")
+        .update({ name: newName, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+      return { success: true };
+    } catch (err) {
+      console.error("Error renaming route:", err);
+      setError(err as Error);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteRoute = async (id: string) => {
+    if (!user) throw new Error("User not logged in");
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { error } = await supabase.from("routes").delete().eq("id", id);
+      if (error) throw error;
+      return { success: true };
+    } catch (err) {
+      console.error("Error deleting route:", err);
+      setError(err as Error);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { saveRoute, renameRoute, deleteRoute, loading, error };
 };
