@@ -13,7 +13,7 @@ import { useState } from "react";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls.native";
-import { useSaveRouteWithFeedback } from "@routly/lib/hooks/useSaveRouteWithFeedback";
+import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWithFeedback";
 import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
 import { CarouselDots } from "./CarouselDots";
 import NameRouteModal from "../Modal/NameRouteModal";
@@ -81,7 +81,7 @@ export default function PreviewRouteCarousel() {
   } = useRouteGeneration();
 
   const { handleSaveRoute, loading, statusMessage, statusType } =
-    useSaveRouteWithFeedback();
+    useRouteActionsWithFeedback();
 
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [selectedRoute, setSelectedRoute] =

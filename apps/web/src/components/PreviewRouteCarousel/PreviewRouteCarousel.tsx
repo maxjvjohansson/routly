@@ -8,7 +8,7 @@ import { CarouselDots } from "./CarouselDots";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import NameRouteModal from "../Modal/NameRouteModal";
-import { useSaveRouteWithFeedback } from "@routly/lib/hooks/useSaveRouteWithFeedback";
+import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWithFeedback";
 import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls";
 
 const CarouselWrapper = styled.div`
@@ -111,7 +111,7 @@ export default function PreviewRouteCarousel() {
   } = useRouteGeneration();
 
   const { handleSaveRoute, loading, statusMessage, statusType } =
-    useSaveRouteWithFeedback();
+    useRouteActionsWithFeedback();
 
   const {
     visibleIndex,
