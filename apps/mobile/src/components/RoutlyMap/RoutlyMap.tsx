@@ -43,7 +43,7 @@ export default function RoutlyMap({
   // Select route data source (from props or context)
   const activeRoute = routeData || routes?.[activeRouteIndex ?? 0];
 
-  // Convert GeoJSON → React Native Maps coordinates
+  // Convert GeoJSON to React Native Maps coordinates
   const routeCoords = useMemo(() => {
     const feature = activeRoute?.features?.[0];
     const geometry = feature?.geometry;
@@ -115,9 +115,9 @@ export default function RoutlyMap({
         onPress={handleMapPress}
         customMapStyle={mapStyle}
         zoomEnabled={true}
-        scrollEnabled={!isReadOnly}
-        pitchEnabled={!isReadOnly}
-        rotateEnabled={!isReadOnly}
+        scrollEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
       >
         {routeCoords && (
           <>
