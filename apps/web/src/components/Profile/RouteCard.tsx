@@ -2,6 +2,11 @@ import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 
+type Props = {
+  route: any;
+  onViewOnMap: (route: any) => void;
+};
+
 const Card = styled.div`
   background: ${theme.colors.white};
   border: 1px solid ${theme.colors.gray};
@@ -31,12 +36,7 @@ const Actions = styled.div`
   margin-top: ${theme.spacing.sm};
 `;
 
-export default function RouteCard({ route }: { route: any }) {
-  const handleWeatherCheck = async () => {
-    // TODO: fetch weather by midpoint or start_lat/lng
-    console.log("Check weather for", route.name);
-  };
-
+export default function RouteCard({ route, onViewOnMap }: Props) {
   return (
     <Card>
       <Title>{route.name}</Title>
@@ -48,13 +48,13 @@ export default function RouteCard({ route }: { route: any }) {
       </InfoRow>
 
       <Actions>
-        <Button label="View Map" color="teal" fullWidth onClick={() => {}} />
         <Button
-          label="Check Weather"
-          color="gray"
+          label="View Details"
+          color="teal"
           fullWidth
-          onClick={handleWeatherCheck}
+          onClick={() => onViewOnMap(route)}
         />
+        <Button label="Delete Route" color="red" fullWidth onClick={() => {}} />
       </Actions>
     </Card>
   );

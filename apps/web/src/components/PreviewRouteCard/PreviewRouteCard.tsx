@@ -82,7 +82,7 @@ export default function PreviewRouteCard({
   const ascent: number = calculateTotalAscent(route);
   const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
   const averageRunSpeedKmH = 10;
-  const adjustedRunTimeMin = (distance / averageRunSpeedKmH) * 60;
+  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
 
   const activityText =
     summary?.profile === "cycling-regular" ? "Cycling" : "Running";
