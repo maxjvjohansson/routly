@@ -1,23 +1,59 @@
+import { useRouter } from "expo-router";
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
+import { ScrollView } from "react-native";
+import ProfileSettingsForm from "src/components/Settings/ProfileSettingsForm";
 
-const Container = styled.View`
+const Container = styled(ScrollView)`
   flex: 1;
-  justify-content: center;
-  align-items: center;
   background-color: ${theme.colors.white};
+  padding: ${theme.spacing.md}px;
+`;
+
+const HeaderRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: ${theme.spacing.lg}px;
 `;
 
 const Title = styled.Text`
   font-size: ${theme.typography.lg}px;
-  font-weight: 600;
+  font-weight: 700;
   color: ${theme.colors.black};
 `;
 
+const BackButton = styled.TouchableOpacity`
+  width: ${theme.spacing.xl}px;
+  height: ${theme.spacing.xl}px;
+  border-radius: ${theme.radius.full}px;
+  background-color: ${theme.colors.teal};
+  align-items: center;
+  justify-content: center;
+`;
+
+const BackButtonLabel = styled.Text`
+  color: ${theme.colors.white};
+  font-size: ${theme.typography.md}px;
+  font-weight: 600;
+`;
+
 export default function SettingsScreen() {
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.replace("/profile");
+  };
+
   return (
     <Container>
-      <Title>Settings</Title>
+      <HeaderRow>
+        <Title>Profile Settings</Title>
+        <BackButton onPress={handleBack}>
+          <BackButtonLabel>←</BackButtonLabel>
+        </BackButton>
+      </HeaderRow>
+      <ProfileSettingsForm />
     </Container>
   );
 }
