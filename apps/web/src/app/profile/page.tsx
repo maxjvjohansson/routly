@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { webTheme as theme } from "@routly/ui/theme/web";
@@ -27,35 +27,39 @@ export default function ProfilePage() {
   const [routes, setRoutes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      if (!user || !supabase) return;
+  const fetchRoutes = useCallback(async () => {
+    if (!user || !supabase) return;
 
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from("routes")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false });
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("routes")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
-        if (error) throw error;
-        setRoutes(data || []);
-      } catch (err) {
-        console.error("Failed to fetch routes:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoutes();
+      if (error) throw error;
+      setRoutes(data || []);
+    } catch (err) {
+      console.error("Failed to fetch routes:", err);
+    } finally {
+      setLoading(false);
+    }
   }, [user, supabase]);
+
+  useEffect(() => {
+    fetchRoutes();
+  }, [fetchRoutes]);
 
   return (
     <Container>
       <ProfileHeader user={user} />
       <Title>Saved Routes</Title>
-      <SavedRoutesList routes={routes} loading={loading} />
+      <SavedRoutesList
+        routes={routes}
+        loading={loading}
+        refetch={fetchRoutes}
+      />
     </Container>
   );
 }
