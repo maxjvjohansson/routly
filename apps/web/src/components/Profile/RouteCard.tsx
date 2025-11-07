@@ -5,6 +5,8 @@ import { Button } from "../Button/Button";
 type Props = {
   route: any;
   onViewOnMap: (route: any) => void;
+  onRename: (route: any) => void;
+  onDelete: (route: any) => void;
 };
 
 const Card = styled.div`
@@ -17,10 +19,29 @@ const Card = styled.div`
   gap: ${theme.spacing.sm};
 `;
 
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const Title = styled.h4`
   font-size: ${theme.typography.md};
   font-weight: 600;
   color: ${theme.colors.black};
+`;
+
+const EditButton = styled.button`
+  background: transparent;
+  border: none;
+  color: ${theme.colors.teal};
+  font-size: ${theme.typography.lg};
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const InfoRow = styled.div`
@@ -36,10 +57,18 @@ const Actions = styled.div`
   margin-top: ${theme.spacing.sm};
 `;
 
-export default function RouteCard({ route, onViewOnMap }: Props) {
+export default function RouteCard({
+  route,
+  onViewOnMap,
+  onRename,
+  onDelete,
+}: Props) {
   return (
     <Card>
-      <Title>{route.name}</Title>
+      <TitleRow>
+        <Title>{route.name}</Title>
+        <EditButton onClick={() => onRename(route)}>✎</EditButton>
+      </TitleRow>
 
       <InfoRow>
         <span>{route.distance_km?.toFixed(1)} km</span>
@@ -54,7 +83,12 @@ export default function RouteCard({ route, onViewOnMap }: Props) {
           fullWidth
           onClick={() => onViewOnMap(route)}
         />
-        <Button label="Delete Route" color="red" fullWidth onClick={() => {}} />
+        <Button
+          label="Delete Route"
+          color="red"
+          fullWidth
+          onClick={() => onDelete(route)}
+        />
       </Actions>
     </Card>
   );
