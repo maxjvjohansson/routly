@@ -5,7 +5,8 @@ import { Button } from "../Button/Button";
 type Props = {
   route: any;
   onViewOnMap: (route: any) => void;
-  onDelete?: (routeId: string) => void;
+  onRename: (route: any) => void;
+  onDelete: (route: any) => void;
 };
 
 const Card = styled.View`
@@ -16,11 +17,21 @@ const Card = styled.View`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
+const TitleRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${theme.spacing.xs}px;
+`;
+
 const Title = styled.Text`
   font-size: ${theme.typography.md}px;
   font-weight: 600;
   color: ${theme.colors.black};
-  margin-bottom: ${theme.spacing.xs}px;
+`;
+
+const EditButton = styled.TouchableOpacity`
+  padding: ${theme.spacing.xxs}px;
 `;
 
 const InfoRow = styled.View`
@@ -42,10 +53,20 @@ const Actions = styled.View`
   gap: ${theme.spacing.xxs}px;
 `;
 
-export default function RouteCard({ route, onViewOnMap, onDelete }: Props) {
+export default function RouteCard({
+  route,
+  onViewOnMap,
+  onRename,
+  onDelete,
+}: Props) {
   return (
     <Card>
-      <Title>{route.name}</Title>
+      <TitleRow>
+        <Title>{route.name}</Title>
+        <EditButton onPress={() => onRename(route)}>
+          <Title>✎</Title>
+        </EditButton>
+      </TitleRow>
 
       <InfoRow>
         <InfoText>{route.distance_km?.toFixed(1)} km</InfoText>
@@ -54,16 +75,8 @@ export default function RouteCard({ route, onViewOnMap, onDelete }: Props) {
       </InfoRow>
 
       <Actions>
-        <Button
-          label="View Details"
-          color="teal"
-          onPress={() => onViewOnMap(route)}
-        />
-        <Button
-          label="Delete Route"
-          color="red"
-          onPress={() => onDelete?.(route.id)}
-        />
+        <Button label="View" color="teal" onPress={() => onViewOnMap(route)} />
+        <Button label="Delete" color="red" onPress={() => onDelete(route)} />
       </Actions>
     </Card>
   );
