@@ -43,7 +43,7 @@ const ButtonWrapper = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: ${theme.spacing.xxs};
+  gap: ${theme.spacing.xxs}px;
 `;
 
 export default function NameRouteModal({
