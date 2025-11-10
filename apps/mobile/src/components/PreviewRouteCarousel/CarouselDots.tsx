@@ -8,7 +8,7 @@ const DotsContainer = styled(View)`
   align-items: center;
   gap: ${theme.spacing.xs}px;
   background-color: ${theme.colors.white};
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md}px;
 `;
 
 const Dot = styled(View)<{ $active?: boolean }>`
