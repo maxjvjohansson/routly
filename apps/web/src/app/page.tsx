@@ -5,6 +5,7 @@ import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRo
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import HowItWorksSection from "src/components/HowItWorksSection/HowItWorksSection";
+import LifestyleSection from "src/components/LifestyleSection/LifestyleSection";
 
 const TryItSection = styled.section`
   width: 100%;
@@ -13,7 +14,8 @@ const TryItSection = styled.section`
   align-items: center;
   text-align: center;
   background: ${theme.colors.white};
-  padding: ${theme.spacing.xxl} ${theme.spacing.md};
+  padding: 0 ${theme.spacing.md};
+  margin-top: ${theme.spacing.xxl};
   gap: ${theme.spacing.xl};
 `;
 
@@ -41,6 +43,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <LifestyleSection />
       <HowItWorksSection />
 
       <TryItSection>
