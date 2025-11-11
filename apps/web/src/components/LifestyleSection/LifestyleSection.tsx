@@ -18,12 +18,12 @@ const Container = styled.section`
   margin: ${theme.spacing.xxl} 0;
 `;
 
-const BackgroundWrapper = styled.div`
+const ImageWrapper = styled.div`
   position: absolute;
   inset: 0;
 `;
 
-const BackgroundImage = styled(Image)<{ $visible: boolean }>`
+const FadingImage = styled(Image)<{ $visible: boolean }>`
   object-fit: cover;
   transition: opacity 1.6s ease-in-out;
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
@@ -70,22 +70,22 @@ export default function LifestyleSection() {
 
   return (
     <Container>
-      <BackgroundWrapper>
-        <BackgroundImage
+      <ImageWrapper>
+        <FadingImage
           src={cycleImage}
           alt="Cyclist exploring a scenic route"
           fill
           priority
           $visible={activeImage === "cycle"}
         />
-        <BackgroundImage
+        <FadingImage
           src={runImage}
           alt="Runner exploring a new path"
           fill
           priority
           $visible={activeImage === "run"}
         />
-      </BackgroundWrapper>
+      </ImageWrapper>
 
       <TextOverlay>
         <Quote>Explore your surroundings with every stride.</Quote>
