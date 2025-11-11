@@ -18,6 +18,7 @@ const Row = styled.div`
   display: flex;
   gap: ${theme.spacing.xs};
   align-items: flex-end;
+  text-align: left;
 `;
 
 export default function LocationInputs() {

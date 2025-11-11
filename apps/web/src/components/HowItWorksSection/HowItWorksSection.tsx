@@ -8,7 +8,7 @@ const Container = styled.section`
   display: flex;
   justify-content: center;
   background: ${theme.colors.white};
-  padding: ${theme.spacing.xxl} ${theme.spacing.md};
+  padding: 0 ${theme.spacing.md};
 `;
 
 const Content = styled.div`
