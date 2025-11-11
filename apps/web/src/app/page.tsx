@@ -14,8 +14,7 @@ const TryItSection = styled.section`
   align-items: center;
   text-align: center;
   background: ${theme.colors.white};
-  padding: 0 ${theme.spacing.md};
-  margin-top: ${theme.spacing.xxl};
+  padding: ${theme.spacing.xxl} ${theme.spacing.md};
   gap: ${theme.spacing.xl};
 `;
 
@@ -49,7 +48,7 @@ export default function HomePage() {
       <TryItSection>
         <Heading>Try it yourself</Heading>
         <Subtext>
-          Generate your own route in seconds — test the same engine that powers
+          Generate your own route in seconds, test the same engine that powers
           Routly’s smart route suggestions.
         </Subtext>
         <GenerateRouteSection />
