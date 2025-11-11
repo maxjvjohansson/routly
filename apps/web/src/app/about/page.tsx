@@ -184,7 +184,7 @@ export default function AboutPage() {
           <TextBlock>
             <h2>Our mission</h2>
             <p>
-              Our goal is simple — to make discovering new routes effortless and
+              Our goal is simple, to make discovering new routes effortless and
               exciting. Whether you’re training for a marathon, cycling to
               explore new paths, or just want a scenic jog after work, Routly
               helps you find your way.
