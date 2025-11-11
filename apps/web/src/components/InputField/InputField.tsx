@@ -18,6 +18,7 @@ type InputFieldProps = {
 export const InputWrapper = styled.div<{ $fullWidth?: boolean }>`
   display: flex;
   flex-direction: column;
+  text-align: left;
   gap: ${theme.spacing.xxs};
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
 `;

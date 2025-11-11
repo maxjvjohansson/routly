@@ -11,17 +11,18 @@ const RouteGenerationWrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: ${theme.spacing.sm};
+  gap: ${theme.spacing.md};
   width: 100%;
-  padding: ${theme.spacing.lg};
+  padding: ${theme.spacing.md};
+  background: ${theme.colors.white};
+  border: 1px solid ${theme.colors.gray};
   border-radius: ${theme.radius.xl};
-  box-shadow:
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 10px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
 
   ${theme.media.md} {
     flex-direction: row;
     gap: ${theme.spacing.lg};
+    padding: ${theme.spacing.xxl} ${theme.spacing.lg};
   }
 `;
 

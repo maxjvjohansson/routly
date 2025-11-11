@@ -12,6 +12,7 @@ const Section = styled.div`
 `;
 
 const Label = styled.label`
+  text-align: left;
   font-size: ${theme.typography.sm};
   font-weight: 500;
   color: ${theme.colors.black};
