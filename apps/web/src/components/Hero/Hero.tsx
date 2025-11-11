@@ -39,7 +39,7 @@ const Content = styled.div`
 `;
 
 const TextBlock = styled.div`
-  max-width: 520px;
+  max-width: 500px;
   z-index: 2;
 `;
 
@@ -79,7 +79,7 @@ const CTAGroup = styled.div`
 const MockupCluster = styled.div`
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 500px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -93,7 +93,6 @@ const MockupCluster = styled.div`
 const PhoneLeft = styled.div`
   transform: rotate(-10deg) translateX(6%);
   z-index: 1;
-
   ${theme.media.md} {
     transform: rotate(-12deg) translateX(12%);
   }
@@ -102,17 +101,13 @@ const PhoneLeft = styled.div`
 const PhoneRight = styled.div`
   transform: rotate(8deg) translateX(-6%) translateY(8%);
   ${theme.media.md} {
-    transform: rotate(10deg) translateX(-10%) translateY(12%);
+    transform: rotate(10deg) translateX(-10%) translateY(5%);
   }
 `;
 
 const MockupImage = styled(Image)`
   width: 240px;
   height: auto;
-
-  ${theme.media.md} {
-    width: 280px;
-  }
 `;
 
 export default function Hero() {
@@ -131,7 +126,6 @@ export default function Hero() {
           <CTAGroup>
             <Button
               label="Generate a Route"
-              variant="solid"
               color="orange"
               onClick={() => router.push("/generate")}
             />
@@ -149,7 +143,7 @@ export default function Hero() {
           <PhoneRight>
             <MockupImage
               src={generateMockup}
-              alt="Routly generate screen"
+              alt="Routly route generate screen"
               priority
             />
           </PhoneRight>
