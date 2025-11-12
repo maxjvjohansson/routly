@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { router } from "expo-router";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
@@ -9,7 +8,7 @@ import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "../components/AuthForm/AuthForm";
 import RoutlySplashScreen from "src/components/SplashScreen/SplashScreen";
 
-const Container = styled(SafeAreaView)`
+const Container = styled.SafeAreaView`
   justify-content: center;
   align-items: center;
   background-color: ${theme.colors.grayLight};
@@ -31,13 +30,14 @@ const Logo = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.black};
   margin-top: ${theme.spacing.sm}px;
 `;
 
 const Subtitle = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
   text-align: center;

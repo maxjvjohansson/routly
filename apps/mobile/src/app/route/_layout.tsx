@@ -9,7 +9,16 @@ export default function RouteLayout() {
         options={{
           title: "Route Details",
           headerTintColor: theme.colors.teal,
-          headerStyle: { backgroundColor: theme.colors.white },
+          headerStyle: {
+            backgroundColor: theme.colors.white,
+          },
+          headerTitleStyle: {
+            fontFamily: theme.typography.fontBold,
+            fontSize: theme.typography.lg,
+          },
+          headerBackTitleStyle: {
+            fontFamily: theme.typography.fontMedium,
+          },
           headerShadowVisible: false,
         }}
       />

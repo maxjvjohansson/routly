@@ -59,7 +59,7 @@ export default function TabsLayout() {
             borderTopColor: theme.colors.gray,
           },
           tabBarLabelStyle: {
-            fontFamily: theme.typography.fontMedium, // För tab labels
+            fontFamily: theme.typography.fontMedium,
           },
         }}
       >
