@@ -1,10 +1,9 @@
 import { useRouter } from "expo-router";
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import { ScrollView } from "react-native";
 import ProfileSettingsForm from "src/components/Settings/ProfileSettingsForm";
 
-const Container = styled(ScrollView)`
+const Container = styled.ScrollView`
   flex: 1;
   background-color: ${theme.colors.white};
   padding: ${theme.spacing.md}px;
@@ -18,8 +17,8 @@ const HeaderRow = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.lg}px;
-  font-weight: 700;
   color: ${theme.colors.black};
 `;
 
@@ -34,8 +33,8 @@ const BackButton = styled.TouchableOpacity`
 
 const BackButtonLabel = styled.Text`
   color: ${theme.colors.white};
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
 `;
 
 export default function SettingsScreen() {
