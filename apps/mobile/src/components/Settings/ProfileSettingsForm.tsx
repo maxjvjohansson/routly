@@ -20,8 +20,8 @@ const Card = styled.View`
 `;
 
 const SectionTitle = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.sm}px;
 `;
@@ -34,6 +34,7 @@ const Row = styled.View`
 const StatusText = styled.Text<{ $type: "success" | "error" }>`
   color: ${({ $type }: { $type: any }) =>
     $type === "success" ? theme.colors.green : theme.colors.red};
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   text-align: center;
   margin-top: ${theme.spacing.xs}px;
