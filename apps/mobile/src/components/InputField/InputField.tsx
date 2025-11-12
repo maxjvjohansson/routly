@@ -21,8 +21,8 @@ const Wrapper = styled(View)<{ $fullWidth?: boolean }>`
 `;
 
 const Label = styled(Text)`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.xs}px;
-  font-weight: 500;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
 `;
@@ -41,12 +41,14 @@ const InputContainer = styled(View)<{ $hasError?: boolean }>`
 const StyledInput = styled(TextInput)`
   flex: 1;
   color: ${theme.colors.black};
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   padding: 0;
 `;
 
 const ErrorText = styled(Text)`
   color: ${theme.colors.red};
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.xs}px;
   margin-top: ${theme.spacing.xxs}px;
 `;
