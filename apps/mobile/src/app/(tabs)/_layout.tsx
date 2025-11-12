@@ -8,8 +8,8 @@ import { useAuth } from "@routly/lib/context/AuthContext";
 import { getUserInitial } from "@routly/lib/utils/user";
 
 const LogoText = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.teal};
 `;
 
@@ -24,8 +24,8 @@ const Avatar = styled.TouchableOpacity`
 `;
 
 const AvatarText = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   color: ${theme.colors.white};
-  font-weight: 600;
   font-size: ${theme.typography.sm}px;
 `;
 
@@ -57,6 +57,9 @@ export default function TabsLayout() {
             backgroundColor: theme.colors.white,
             borderTopWidth: 0.5,
             borderTopColor: theme.colors.gray,
+          },
+          tabBarLabelStyle: {
+            fontFamily: theme.typography.fontMedium, // För tab labels
           },
         }}
       >

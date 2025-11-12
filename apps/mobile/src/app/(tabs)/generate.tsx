@@ -15,15 +15,15 @@ const Wrapper = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
 `;
 
 const Subtitle = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
-  font-weight: 400;
   color: ${theme.colors.grayDark};
 `;
 
