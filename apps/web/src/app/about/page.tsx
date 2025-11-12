@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import Image from "next/image";
 import cycleImage from "src/assets/images/routly_cycle_2_stock_photo.jpg";
 import runImage from "src/assets/images/routly_run_2_stock_photo.jpg";
+import { useEffect, useState } from "react";
 
 const Container = styled.section`
   width: 100%;
@@ -79,6 +79,11 @@ const ImageWrapper = styled.div`
   width: 100%;
   height: 400px;
   overflow: hidden;
+  display: none;
+
+  ${theme.media.md} {
+    display: block;
+  }
 `;
 
 const FadingImage = styled(Image)<{ $visible: boolean }>`
@@ -113,22 +118,13 @@ const HighlightList = styled.ul`
 
 export default function AboutPage() {
   const [activeImage, setActiveImage] = useState<"cycle" | "run">("cycle");
-  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    const checkSize = () => setIsDesktop(window.innerWidth >= 768);
-    checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
-  }, []);
-
-  useEffect(() => {
-    if (!isDesktop) return;
     const interval = setInterval(() => {
       setActiveImage((prev) => (prev === "cycle" ? "run" : "cycle"));
     }, 7000);
     return () => clearInterval(interval);
-  }, [isDesktop]);
+  }, []);
 
   return (
     <Container>
@@ -160,24 +156,24 @@ export default function AboutPage() {
             </HighlightList>
           </TextBlock>
 
-          {isDesktop && (
-            <ImageWrapper>
-              <FadingImage
-                src={cycleImage}
-                alt="Cyclist exploring a new route"
-                fill
-                priority
-                $visible={activeImage === "cycle"}
-              />
-              <FadingImage
-                src={runImage}
-                alt="Runner exploring a new route"
-                fill
-                priority
-                $visible={activeImage === "run"}
-              />
-            </ImageWrapper>
-          )}
+          <ImageWrapper>
+            <FadingImage
+              src={cycleImage}
+              alt="Cyclist exploring a new route"
+              fill
+              priority
+              $visible={activeImage === "cycle"}
+              sizes="(min-width: 768px) 50vw, 0vw"
+            />
+            <FadingImage
+              src={runImage}
+              alt="Runner exploring a new route"
+              fill
+              priority
+              $visible={activeImage === "run"}
+              sizes="(min-width: 768px) 50vw, 0vw"
+            />
+          </ImageWrapper>
         </Section>
 
         <Section>
