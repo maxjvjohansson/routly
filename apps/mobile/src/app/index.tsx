@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing } from "react-native";
 import styled from "styled-components/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useAuth } from "@routly/lib/context/AuthContext";
@@ -8,7 +9,7 @@ import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "../components/AuthForm/AuthForm";
 import RoutlySplashScreen from "src/components/SplashScreen/SplashScreen";
 
-const Container = styled.SafeAreaView`
+const Container = styled(SafeAreaView)`
   justify-content: center;
   align-items: center;
   background-color: ${theme.colors.grayLight};
