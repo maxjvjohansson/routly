@@ -25,8 +25,8 @@ const InfoPanel = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.lg}px;
-  font-weight: 600;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.sm}px;
 `;
