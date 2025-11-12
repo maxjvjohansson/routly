@@ -164,6 +164,7 @@ export default function AuthForm({
           loading ? "Loading..." : mode === "login" ? "Sign in" : "Sign up"
         }
         disabled={loading}
+        color="teal"
         fullWidth
         type="submit"
       />
