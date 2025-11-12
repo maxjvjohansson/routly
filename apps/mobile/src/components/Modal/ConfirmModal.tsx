@@ -31,14 +31,15 @@ const ModalBox = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
   text-align: center;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.sm}px;
 `;
 
 const Message = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   text-align: center;
   color: ${theme.colors.grayDark};
