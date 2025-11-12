@@ -1,5 +1,7 @@
 "use client";
 
+import AuthLayout from "src/components/AuthLayout/AuthLayout";
+import signupImage from "src/assets/images/routly_cycle_3_stock_photo.jpg";
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "src/components/AuthForm/AuthForm";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -14,9 +16,7 @@ export default function SignupPage() {
   const nextUrl = searchParams.get("next") || "/";
 
   useEffect(() => {
-    if (user) {
-      router.replace(nextUrl);
-    }
+    if (user) router.replace(nextUrl);
   }, [user, nextUrl, router]);
 
   const onSubmit = async (
@@ -25,17 +25,21 @@ export default function SignupPage() {
     fullName: string
   ) => {
     const user = await signup(email, password, fullName);
-    if (user) {
-      router.replace(nextUrl);
-    }
+    if (user) router.replace(nextUrl);
   };
 
   return (
-    <AuthForm
-      mode="signup"
-      onSubmit={onSubmit}
-      loading={loading}
-      error={error || undefined}
-    />
+    <AuthLayout
+      image={signupImage}
+      title="Join Routly"
+      subtitle="Start discovering new routes tailored to you."
+    >
+      <AuthForm
+        mode="signup"
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error || undefined}
+      />
+    </AuthLayout>
   );
 }
