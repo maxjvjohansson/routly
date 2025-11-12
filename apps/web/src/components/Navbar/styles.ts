@@ -48,10 +48,11 @@ export const NavLinks = styled.div`
 
 export const NavLink = styled(Link)`
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 400;
   color: ${theme.colors.black};
   &:hover {
     color: ${theme.colors.teal};
+    text-decoration: underline;
   }
 `;
 
