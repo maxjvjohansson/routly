@@ -33,8 +33,8 @@ const Avatar = styled.View`
 
 const AvatarText = styled.Text`
   color: ${theme.colors.white};
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
 `;
 
 const UserTextBlock = styled.View`
@@ -43,12 +43,13 @@ const UserTextBlock = styled.View`
 `;
 
 const Name = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
   color: ${theme.colors.black};
 `;
 
 const Email = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
 `;

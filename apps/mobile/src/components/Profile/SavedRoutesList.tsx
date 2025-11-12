@@ -17,6 +17,7 @@ const ListContainer = styled.View`
 const EmptyText = styled.Text`
   text-align: center;
   color: ${theme.colors.grayDark};
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   margin-top: ${theme.spacing.lg}px;
 `;

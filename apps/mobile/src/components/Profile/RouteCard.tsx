@@ -25,8 +25,8 @@ const TitleRow = styled.View`
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
   color: ${theme.colors.black};
 `;
 
@@ -42,6 +42,7 @@ const InfoRow = styled.View`
 `;
 
 const InfoText = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
 `;
