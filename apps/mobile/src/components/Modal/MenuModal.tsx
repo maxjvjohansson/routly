@@ -37,8 +37,8 @@ const MenuButton = styled.TouchableOpacity`
 `;
 
 const MenuText = styled.Text`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
-  font-weight: 500;
   color: ${theme.colors.black};
 `;
 
