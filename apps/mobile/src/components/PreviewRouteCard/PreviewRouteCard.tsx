@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components/native";
-import { Text, View } from "react-native";
 import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import RouteInfoItem from "./RouteInfoItem";
@@ -8,7 +7,7 @@ import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
-const Card = styled(View)<{ $active?: boolean; $width?: number }>`
+const Card = styled.View<{ $active?: boolean; $width?: number }>`
   width: ${({ $width }: { $width: any }) => ($width ? `${$width}px` : "auto")};
   border-width: ${({ $active }: { $active: any }) => ($active ? 2 : 1)}px;
   border-color: ${({ $active }: { $active: any }) =>
@@ -19,21 +18,21 @@ const Card = styled(View)<{ $active?: boolean; $width?: number }>`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 `;
 
-const Title = styled(Text)`
+const Title = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.md}px;
-  font-weight: 600;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.sm}px;
 `;
 
-const InfoList = styled(View)`
+const InfoList = styled.View`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.sm}px;
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const ButtonWrapper = styled(View)`
+const ButtonWrapper = styled.View`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -41,19 +40,20 @@ const ButtonWrapper = styled(View)`
   gap: ${theme.spacing.xxs}px;
 `;
 
-const DetailsSection = styled(View)`
+const DetailsSection = styled.View`
   border-top: 1px solid ${theme.colors.grayLight};
 `;
 
-const DetailsToggle = styled(Text)<{ $active?: boolean }>`
+const DetailsToggle = styled.Text<{ $active?: boolean }>`
   color: ${({ $active }: { $active: any }) =>
     $active ? theme.colors.orange : theme.colors.teal};
-  font-weight: 500;
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   margin-top: ${theme.spacing.xs}px;
 `;
 
-const DetailsText = styled(Text)`
+const DetailsText = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   margin-top: ${theme.spacing.xs}px;
   color: ${theme.colors.grayDark};
 `;

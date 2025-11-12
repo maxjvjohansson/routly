@@ -5,8 +5,6 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
-  View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -18,7 +16,7 @@ import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
 import { CarouselDots } from "./CarouselDots";
 import NameRouteModal from "../Modal/NameRouteModal";
 
-const Wrapper = styled(View)`
+const Wrapper = styled.View`
   flex: 1;
   background-color: ${theme.colors.white};
 `;
@@ -38,7 +36,7 @@ const BackButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const CarouselScroll = styled(ScrollView).attrs({
+const CarouselScroll = styled.ScrollView.attrs({
   horizontal: true,
   pagingEnabled: true,
   showsHorizontalScrollIndicator: false,
@@ -46,13 +44,13 @@ const CarouselScroll = styled(ScrollView).attrs({
   width: 100%;
 `;
 
-const CardWrapper = styled(View)<{ $width: number }>`
+const CardWrapper = styled.View<{ $width: number }>`
   width: ${({ $width }: { $width: any }) => $width}px;
   justify-content: center;
   align-items: center;
 `;
 
-const BottomBar = styled(View)`
+const BottomBar = styled.View`
   justify-content: center;
   align-items: center;
   margin-top: ${theme.spacing.md}px;
@@ -61,8 +59,8 @@ const BottomBar = styled(View)`
 const StatusText = styled.Text<{ $type: "success" | "error" }>`
   color: ${({ $type }: { $type: any }) =>
     $type === "success" ? theme.colors.green : theme.colors.red};
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.sm}px;
-  font-weight: 600;
   text-align: center;
   margin-bottom: ${theme.spacing.sm}px;
 `;

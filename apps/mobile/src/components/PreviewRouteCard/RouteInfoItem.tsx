@@ -1,23 +1,22 @@
 import styled from "styled-components/native";
-import { Text, View } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 
-const Row = styled(View)`
+const Row = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `;
 
-const Label = styled(Text)`
+const Label = styled.Text`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
-  font-weight: 500;
 `;
 
-const Value = styled(Text)`
+const Value = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.black};
-  font-weight: 600;
 `;
 
 export default function RouteInfoItem({
