@@ -6,26 +6,25 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useEffect, useState } from "react";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 
-const Section = styled(View)`
+const Section = styled.View`
   flex-direction: column;
   gap: ${theme.spacing.sm}px;
-  margin-bottom: ${theme.spacing.sm}px;
 `;
 
-const Row = styled(View)`
+const Row = styled.View`
   flex-direction: row;
   align-items: flex-end;
   gap: ${theme.spacing.xs}px;
 `;
 
-const Label = styled(Text)`
+const Label = styled.Text`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
-  font-weight: 500;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
 `;
 
-const InputContainer = styled(View)`
+const InputContainer = styled.View`
   flex: 1;
 `;
 
@@ -35,6 +34,7 @@ const StyledInput = styled(TextInput)`
   border-color: ${theme.colors.gray};
   border-radius: ${theme.radius.md}px;
   padding: ${theme.spacing.xs}px ${theme.spacing.sm}px;
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.black};
 `;

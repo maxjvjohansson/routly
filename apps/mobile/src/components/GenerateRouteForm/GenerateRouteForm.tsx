@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import styled from "styled-components/native";
 import { Button } from "../Button/Button";
 import ActivitySelect from "./ActivitySelect";
@@ -9,7 +8,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { roundTripSeeds } from "@routly/lib/data/roundTripSeeds";
 import { useState, useEffect } from "react";
 
-const FormContainer = styled(View)`
+const FormContainer = styled.View`
   padding: ${theme.spacing.lg}px;
   background-color: ${theme.colors.white};
   border: 1px solid ${theme.colors.gray};
@@ -17,8 +16,9 @@ const FormContainer = styled(View)`
   gap: ${theme.spacing.md}px;
 `;
 
-const ErrorText = styled(Text)`
+const ErrorText = styled.Text`
   color: ${theme.colors.red};
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   text-align: center;
   margin-top: -${theme.spacing.xs}px;
