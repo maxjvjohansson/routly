@@ -21,6 +21,10 @@ export const nativeTheme = {
   },
 
   typography: {
+    fontRegular: "Outfit_400Regular",
+    fontMedium: "Outfit_500Medium",
+    fontSemiBold: "Outfit_600SemiBold",
+    fontBold: "Outfit_700Bold",
     xxs: 12,
     xs: 14,
     sm: 16,
