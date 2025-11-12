@@ -6,12 +6,11 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 const Section = styled.View`
   width: 100%;
   flex-direction: column;
-  margin-bottom: ${theme.spacing.sm}px;
 `;
 
 const Label = styled.Text`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
-  font-weight: 500;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xs}px;
 `;
