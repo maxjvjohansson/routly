@@ -1,13 +1,15 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
+import { useAuth } from "@routly/lib/context/AuthContext";
 import { webTheme as theme } from "@routly/ui/theme/web";
+import ExploreRoutesList from "src/components/Explore/ExploreRoutesList";
 
 const Container = styled.section`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding: ${theme.spacing.xl} ${theme.spacing.md};
   background-color: ${theme.colors.white};
@@ -15,7 +17,7 @@ const Container = styled.section`
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.xl};
 `;
 
 const Heading = styled.h1`
@@ -35,6 +37,34 @@ const Intro = styled.p`
 `;
 
 export default function ExplorePage() {
+  const { supabase } = useAuth();
+  const [routes, setRoutes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRoutes = useCallback(async () => {
+    if (!supabase) return;
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("routes")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      setRoutes(data || []);
+    } catch (err) {
+      console.error("Failed to fetch routes:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchRoutes();
+  }, [fetchRoutes]);
+
   return (
     <Container>
       <Header>
@@ -44,6 +74,8 @@ export default function ExplorePage() {
           you.
         </Intro>
       </Header>
+
+      <ExploreRoutesList routes={routes} loading={loading} />
     </Container>
   );
 }
