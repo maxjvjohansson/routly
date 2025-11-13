@@ -10,6 +10,8 @@ type Props = {
   setRoundtrip: (value: "all" | "roundtrip" | "p2p") => void;
   sort: string;
   setSort: (value: string) => void;
+  isLiked: boolean;
+  setIsLiked: (value: boolean) => void;
 };
 
 const Wrapper = styled.div`
@@ -22,8 +24,8 @@ const Wrapper = styled.div`
 
   ${theme.media.md} {
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -40,13 +42,12 @@ const FilterButton = styled.button<{ $active: boolean }>`
     $active ? theme.colors.orange : theme.colors.white};
   color: ${({ $active }) =>
     $active ? theme.colors.white : theme.colors.black};
-  font-size: ${theme.typography.sm};
   font-weight: ${({ $active }) => ($active ? 600 : 400)};
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.25s ease;
 
   &:hover {
-    opacity: 0.9;
+    opacity: 0.85;
   }
 `;
 
@@ -64,6 +65,8 @@ export default function FilterBar({
   setRoundtrip,
   sort,
   setSort,
+  isLiked,
+  setIsLiked,
 }: Props) {
   return (
     <Wrapper>
@@ -88,6 +91,10 @@ export default function FilterBar({
         >
           Cycling
         </FilterButton>
+
+        <FilterButton $active={isLiked} onClick={() => setIsLiked(!isLiked)}>
+          Liked
+        </FilterButton>
       </FilterGroup>
 
       <FilterGroup>
@@ -102,7 +109,7 @@ export default function FilterBar({
           $active={roundtrip === "roundtrip"}
           onClick={() => setRoundtrip("roundtrip")}
         >
-          Round Trip
+          Round Trips
         </FilterButton>
 
         <FilterButton

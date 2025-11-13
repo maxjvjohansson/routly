@@ -38,11 +38,12 @@ const Intro = styled.p`
 `;
 
 export default function ExplorePage() {
-  const { supabase } = useAuth();
+  const { supabase, user } = useAuth();
+
   const [routes, setRoutes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter state
+  // Filters
   const [activity, setActivity] = useState<"all" | "running" | "cycling">(
     "all"
   );
@@ -50,12 +51,68 @@ export default function ExplorePage() {
     "all"
   );
   const [sort, setSort] = useState("newest");
+  const [isLiked, setIsLiked] = useState(false);
+
+  // Likes
+  const [likedRouteIds, setLikedRouteIds] = useState<string[]>([]);
+
+  // Fetch user likes
+  const fetchLikes = useCallback(async () => {
+    if (!supabase || !user) return;
+
+    const { data, error } = await supabase
+      .from("route_likes")
+      .select("route_id")
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Failed to fetch likes:", error);
+      return;
+    }
+
+    if (data) {
+      setLikedRouteIds(data.map((item: { route_id: any }) => item.route_id));
+    }
+  }, [supabase, user]);
+
+  // Toggle like/unlike
+  const toggleLike = async (route: any) => {
+    if (!supabase || !user) return;
+
+    const alreadyLiked = likedRouteIds.includes(route.id);
+
+    if (alreadyLiked) {
+      const { error } = await supabase
+        .from("route_likes")
+        .delete()
+        .eq("route_id", route.id)
+        .eq("user_id", user.id);
+
+      if (!error) {
+        setLikedRouteIds((prev) => prev.filter((id) => id !== route.id));
+      }
+    } else {
+      const { error } = await supabase.from("route_likes").insert({
+        route_id: route.id,
+        user_id: user.id,
+      });
+
+      if (!error) {
+        setLikedRouteIds((prev) => [...prev, route.id]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchLikes();
+  }, [fetchLikes]);
 
   // Fetch routes
   const fetchRoutes = useCallback(async () => {
     if (!supabase) return;
 
     setLoading(true);
+
     try {
       const { data, error } = await supabase
         .from("routes")
@@ -63,6 +120,7 @@ export default function ExplorePage() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+
       setRoutes(data || []);
     } catch (err) {
       console.error("Failed to fetch routes:", err);
@@ -75,7 +133,7 @@ export default function ExplorePage() {
     fetchRoutes();
   }, [fetchRoutes]);
 
-  // Filter Logic
+  // Filtering logic
   const filteredRoutes = useMemo(() => {
     let list = [...routes];
 
@@ -89,23 +147,23 @@ export default function ExplorePage() {
       );
     }
 
-    if (sort === "distance_asc") {
+    if (isLiked) {
+      list = list.filter((r) => likedRouteIds.includes(r.id));
+    }
+
+    if (sort === "distance_asc")
       list.sort((a, b) => a.distance_km - b.distance_km);
-    }
-
-    if (sort === "distance_desc") {
+    if (sort === "distance_desc")
       list.sort((a, b) => b.distance_km - a.distance_km);
-    }
 
-    if (sort === "newest") {
+    if (sort === "newest")
       list.sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
-    }
 
     return list;
-  }, [routes, activity, roundtrip, sort]);
+  }, [routes, activity, roundtrip, isLiked, sort, likedRouteIds]);
 
   return (
     <Container>
@@ -124,9 +182,16 @@ export default function ExplorePage() {
         setRoundtrip={setRoundtrip}
         sort={sort}
         setSort={setSort}
+        isLiked={isLiked}
+        setIsLiked={setIsLiked}
       />
 
-      <ExploreRoutesList routes={filteredRoutes} loading={loading} />
+      <ExploreRoutesList
+        routes={filteredRoutes}
+        loading={loading}
+        onToggleLike={toggleLike}
+        likedRouteIds={likedRouteIds}
+      />
     </Container>
   );
 }
