@@ -24,6 +24,13 @@ const Content = styled.div`
   text-align: center;
 `;
 
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
 const Heading = styled.h1`
   font-size: ${theme.typography["2xl"]};
   font-weight: 700;
@@ -59,18 +66,39 @@ const Section = styled.section`
 const TextBlock = styled.div`
   flex: 1;
   text-align: left;
+`;
 
-  h2 {
-    font-size: ${theme.typography["2xl"]};
-    font-weight: 600;
-    margin-bottom: ${theme.spacing.sm};
-  }
+const SubHeading = styled.h2`
+  font-size: ${theme.typography["2xl"]};
+  font-weight: 600;
+  color: ${theme.colors.black};
+  margin-bottom: ${theme.spacing.sm};
+`;
 
-  p {
-    font-size: ${theme.typography.md};
-    color: ${theme.colors.grayDark};
-    line-height: 1.7;
+const Paragraph = styled.p`
+  font-size: ${theme.typography.md};
+  color: ${theme.colors.grayDark};
+  line-height: 1.7;
+`;
+
+const HighlightList = styled.ul`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${theme.spacing.md};
+  margin-top: ${theme.spacing.lg};
+  list-style: none;
+
+  ${theme.media.md} {
+    grid-template-columns: 1fr 1fr;
   }
+`;
+
+const HighlightItem = styled.li`
+  background: ${theme.colors.grayLight};
+  padding: ${theme.spacing.md};
+  border-radius: ${theme.radius.lg};
+  color: ${theme.colors.black};
+  line-height: 1.6;
 `;
 
 const ImageWrapper = styled.div`
@@ -96,26 +124,6 @@ const FadingImage = styled(Image)<{ $visible: boolean }>`
   height: 100%;
 `;
 
-const HighlightList = styled.ul`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: ${theme.spacing.md};
-  margin-top: ${theme.spacing.lg};
-  list-style: none;
-
-  ${theme.media.md} {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  li {
-    background: ${theme.colors.grayLight};
-    padding: ${theme.spacing.md};
-    border-radius: ${theme.radius.lg};
-    color: ${theme.colors.black};
-    line-height: 1.6;
-  }
-`;
-
 export default function AboutPage() {
   const [activeImage, setActiveImage] = useState<"cycle" | "run">("cycle");
 
@@ -129,30 +137,36 @@ export default function AboutPage() {
   return (
     <Container>
       <Content>
-        <header>
+        <Header>
           <Heading>About Routly</Heading>
           <Intro>
             Routly was built out of a love for movement and exploration. We
             wanted to make it easier to find the perfect route, not just the
             shortest one.
           </Intro>
-        </header>
+        </Header>
 
         <Section>
           <TextBlock>
-            <h2>The idea behind Routly</h2>
-            <p>
+            <SubHeading>The idea behind Routly</SubHeading>
+            <Paragraph>
               We’ve all been there, wanting to head out for a run or a ride, but
               spending more time scrolling maps than actually moving. Routly
               changes that. It helps you instantly generate routes based on
               distance, terrain, and even weather, so you can just go.
-            </p>
+            </Paragraph>
 
             <HighlightList>
-              <li>Smart route generation for running and cycling</li>
-              <li>Optimized for distance, terrain, and wind</li>
-              <li>Round-trip or destination-based routes</li>
-              <li>Works on both mobile and web</li>
+              <HighlightItem>
+                Smart route generation for running and cycling
+              </HighlightItem>
+              <HighlightItem>
+                Optimized for distance, terrain, and wind
+              </HighlightItem>
+              <HighlightItem>
+                Round-trip or destination-based routes
+              </HighlightItem>
+              <HighlightItem>Works on both mobile and web</HighlightItem>
             </HighlightList>
           </TextBlock>
 
@@ -178,13 +192,13 @@ export default function AboutPage() {
 
         <Section>
           <TextBlock>
-            <h2>Our mission</h2>
-            <p>
+            <SubHeading>Our mission</SubHeading>
+            <Paragraph>
               Our goal is simple, to make discovering new routes effortless and
               exciting. Whether you’re training for a marathon, cycling to
               explore new paths, or just want a scenic jog after work, Routly
               helps you find your way.
-            </p>
+            </Paragraph>
           </TextBlock>
         </Section>
       </Content>
