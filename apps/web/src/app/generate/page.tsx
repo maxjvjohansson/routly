@@ -17,33 +17,32 @@ const Container = styled.section`
 const Header = styled.div`
   text-align: center;
   margin-bottom: ${theme.spacing.md};
-  h1 {
-    font-size: ${theme.typography["2xl"]};
-    font-weight: 700;
-    margin-bottom: ${theme.spacing.sm};
-    color: ${theme.colors.black};
-  }
+`;
 
-  p {
-    color: ${theme.colors.grayDark};
-    font-size: ${theme.typography.md};
-  }
+const Heading = styled.h1`
+  font-size: ${theme.typography["2xl"]};
+  font-weight: 700;
+  margin-bottom: ${theme.spacing.sm};
+  color: ${theme.colors.black};
 
   ${theme.media.md} {
-    h1 {
-      font-size: ${theme.typography["3xl"]};
-    }
+    font-size: ${theme.typography["3xl"]};
   }
+`;
+
+const Intro = styled.p`
+  color: ${theme.colors.grayDark};
+  font-size: ${theme.typography.md};
 `;
 
 export default function GeneratePage() {
   return (
     <Container>
       <Header>
-        <h1>Generate your route</h1>
-        <p>
+        <Heading>Generate your route</Heading>
+        <Intro>
           Choose your activity and let Routly find the perfect path for you.
-        </p>
+        </Intro>
       </Header>
       <GenerateRouteSection />
     </Container>
