@@ -9,8 +9,8 @@ export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   width: 100%;
   height: ${theme.spacing.xxl};
   padding: ${theme.spacing.lg};
-  border-bottom: 1px solid ${theme.colors.gray};
-  background-color: ${theme.colors.white};
+  border-bottom: 1px solid ${theme.colors.black};
+  background-color: ${theme.colors.black};
   position: sticky;
   top: 0;
   z-index: 999;
@@ -29,7 +29,7 @@ export const LogoLink = styled(Link)`
 export const Logo = styled.div`
   font-weight: 700;
   font-size: ${theme.typography.xl};
-  color: ${theme.colors.teal};
+  color: ${theme.colors.white};
   cursor: pointer;
   &:hover {
     opacity: 0.8;
@@ -49,9 +49,10 @@ export const NavLinks = styled.div`
 export const NavLink = styled(Link)`
   text-decoration: none;
   font-weight: 400;
-  color: ${theme.colors.black};
+  color: ${theme.colors.white};
   &:hover {
-    color: ${theme.colors.teal};
+    font-weight: 500;
+    color: ${theme.colors.tealLight};
     text-decoration: underline;
   }
 `;
