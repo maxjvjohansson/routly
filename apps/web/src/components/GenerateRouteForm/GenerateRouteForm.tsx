@@ -18,7 +18,6 @@ const FormContainer = styled.form`
   justify-content: space-between;
   gap: ${theme.spacing.sm};
   width: 100%;
-  min-height: 438.5px;
   max-width: 800px;
   background-color: ${theme.colors.white};
 `;
