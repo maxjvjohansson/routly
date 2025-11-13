@@ -142,7 +142,7 @@ export const HamburgerButton = styled.button<{ $open: boolean }>`
     display: block;
     height: 3px;
     width: 100%;
-    background-color: ${theme.colors.black};
+    background-color: ${theme.colors.white};
     border-radius: ${theme.radius.sm};
     transition: all 0.3s ease-out;
     transform-origin: center;
