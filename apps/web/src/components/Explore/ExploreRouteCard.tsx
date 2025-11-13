@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 type Props = {
   route: any;
@@ -45,12 +46,23 @@ const LikeButton = styled.button<{ $active: boolean }>`
   border: none;
   cursor: pointer;
   padding: ${theme.spacing.xs};
+  display: flex;
+  align-items: center;
+
   color: ${({ $active }) =>
-    $active ? theme.colors.teal : theme.colors.grayDark};
-  transition: color 0.2s;
+    $active ? theme.colors.orange : theme.colors.grayDark};
+
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
 
   &:hover {
-    color: ${theme.colors.teal};
+    color: ${theme.colors.orange};
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 `;
 
@@ -74,7 +86,14 @@ export default function ExploreRouteCard({
         <Button label="View route" color="teal" onClick={() => onView(route)} />
 
         {onToggleLike && (
-          <LikeButton onClick={() => onToggleLike(route)} $active={isLiked} />
+          <LikeButton
+            onClick={() => onToggleLike(route)}
+            $active={isLiked}
+            aria-label="Toggle like"
+            title={isLiked ? "Unlike" : "Like"}
+          >
+            {isLiked ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+          </LikeButton>
         )}
       </Actions>
     </Card>
