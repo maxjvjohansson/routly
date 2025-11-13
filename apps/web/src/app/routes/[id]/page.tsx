@@ -126,9 +126,15 @@ export default function RouteDetailPage() {
 
         <BackButtonWrapper>
           <Button
-            label="Back to Profile"
+            label="Go Back"
             color="teal"
-            onClick={() => router.push("/profile")}
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push("/explore");
+              }
+            }}
           />
         </BackButtonWrapper>
       </InfoPanel>
