@@ -6,6 +6,7 @@ import { useAuth } from "@routly/lib/context/AuthContext";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import ExploreRoutesList from "src/components/Explore/ExploreRoutesList";
 import FilterBar from "src/components/Explore/FilterBar";
+import { Button } from "src/components/Button/Button";
 
 const Container = styled.section`
   width: 100%;
@@ -37,11 +38,18 @@ const Intro = styled.p`
   font-size: ${theme.typography.md};
 `;
 
+const ButtonWrapper = styled.div`
+  margin-top: ${theme.spacing.xl};
+`;
+
 export default function ExplorePage() {
   const { supabase, user } = useAuth();
 
   const [routes, setRoutes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const PAGE_SIZE = 6;
+  const [page, setPage] = useState(1);
 
   // Filters
   const [activity, setActivity] = useState<"all" | "running" | "cycling">(
@@ -113,21 +121,18 @@ export default function ExplorePage() {
 
     setLoading(true);
 
-    try {
-      const { data, error } = await supabase
-        .from("routes")
-        .select("*")
-        .order("created_at", { ascending: false });
+    const from = 0;
+    const to = PAGE_SIZE * page - 1;
 
-      if (error) throw error;
+    const { data, error } = await supabase
+      .from("routes")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-      setRoutes(data || []);
-    } catch (err) {
-      console.error("Failed to fetch routes:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [supabase]);
+    if (!error && data) setRoutes(data);
+    setLoading(false);
+  }, [supabase, page]);
 
   useEffect(() => {
     fetchRoutes();
@@ -192,6 +197,13 @@ export default function ExplorePage() {
         onToggleLike={toggleLike}
         likedRouteIds={likedRouteIds}
       />
+      <ButtonWrapper>
+        <Button
+          label="Load more"
+          color="orange"
+          onClick={() => setPage((prev) => prev + 1)}
+        />
+      </ButtonWrapper>
     </Container>
   );
 }
