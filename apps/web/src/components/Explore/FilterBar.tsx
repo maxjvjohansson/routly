@@ -8,8 +8,8 @@ type Props = {
   setActivity: (value: "all" | "running" | "cycling") => void;
   roundtrip: "all" | "roundtrip" | "p2p";
   setRoundtrip: (value: "all" | "roundtrip" | "p2p") => void;
-  sort: string;
-  setSort: (value: string) => void;
+  setSort: (value: "newest" | "distance_asc" | "distance_desc") => void;
+  sort: "newest" | "distance_asc" | "distance_desc";
   isLiked: boolean;
   setIsLiked: (value: boolean) => void;
 };
@@ -120,7 +120,12 @@ export default function FilterBar({
         </FilterButton>
       </FilterGroup>
 
-      <SortSelect value={sort} onChange={(e) => setSort(e.target.value)}>
+      <SortSelect
+        value={sort}
+        onChange={(e) =>
+          setSort(e.target.value as "newest" | "distance_asc" | "distance_desc")
+        }
+      >
         <option value="newest">Most recent</option>
         <option value="distance_asc">Shortest first</option>
         <option value="distance_desc">Longest first</option>
