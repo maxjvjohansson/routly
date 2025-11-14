@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import { InputField } from "../InputField/InputField";
+import { MdOutlineCancel, MdOutlineSaveAlt } from "react-icons/md";
 
 type Props = {
   isOpen: boolean;
@@ -97,6 +98,7 @@ export default function NameRouteModal({
             color="grayDark"
             onClick={onCancel}
             fullWidth
+            iconRight={<MdOutlineCancel size={20} />}
           />
           <Button
             label={loading ? "Saving..." : "Save"}
@@ -104,6 +106,7 @@ export default function NameRouteModal({
             onClick={handleConfirm}
             fullWidth
             disabled={loading}
+            iconRight={<MdOutlineSaveAlt size={20} />}
           />
         </ButtonRow>
       </ModalBox>

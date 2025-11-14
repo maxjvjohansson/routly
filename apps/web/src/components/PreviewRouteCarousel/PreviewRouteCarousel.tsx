@@ -10,6 +10,7 @@ import { Button } from "../Button/Button";
 import NameRouteModal from "../Modal/NameRouteModal";
 import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWithFeedback";
 import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls";
+import { FiArrowLeft } from "react-icons/fi";
 
 const CarouselWrapper = styled.div`
   display: flex;
@@ -206,7 +207,12 @@ export default function PreviewRouteCarousel() {
       )}
       <BottomBar>
         <BackButton>
-          <Button label="Go Back" color="teal" onClick={() => reset?.()} />
+          <Button
+            label="Go Back"
+            color="teal"
+            onClick={() => reset?.()}
+            iconLeft={<FiArrowLeft size={20} />}
+          />
         </BackButton>
         <CarouselDots
           count={routes.length}
