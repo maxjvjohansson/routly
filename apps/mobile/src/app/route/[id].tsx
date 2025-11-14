@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { Button } from "src/components/Button/Button";
@@ -46,6 +46,7 @@ export default function RouteDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { supabase } = useAuth();
   const router = useRouter();
+  const navigation = useNavigation();
   const [route, setRoute] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -93,6 +94,14 @@ export default function RouteDetailScreen() {
   const activity =
     route.activity.charAt(0).toUpperCase() + route.activity.slice(1);
 
+  const handleGoBack = (): void => {
+    if (navigation.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/explore");
+    }
+  };
+
   return (
     <Wrapper>
       <InfoPanel>
@@ -106,11 +115,7 @@ export default function RouteDetailScreen() {
         </InfoList>
 
         <BackButtonWrapper>
-          <Button
-            label="Back to Profile"
-            color="teal"
-            onPress={() => router.push("/profile")}
-          />
+          <Button label="Go Back" color="teal" onPress={handleGoBack} />
         </BackButtonWrapper>
       </InfoPanel>
       <RoutlyMap routeData={geojson} isRoundTrip={route.is_roundtrip} />

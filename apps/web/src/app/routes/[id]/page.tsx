@@ -112,6 +112,14 @@ export default function RouteDetailPage() {
   const activity =
     route.activity.charAt(0).toUpperCase() + route.activity.slice(1);
 
+  const handleGoBack = (): void => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/explore");
+    }
+  };
+
   return (
     <Wrapper>
       <InfoPanel>
@@ -125,17 +133,7 @@ export default function RouteDetailPage() {
         </InfoList>
 
         <BackButtonWrapper>
-          <Button
-            label="Go Back"
-            color="teal"
-            onClick={() => {
-              if (typeof window !== "undefined" && window.history.length > 1) {
-                router.back();
-              } else {
-                router.push("/explore");
-              }
-            }}
-          />
+          <Button label="Go Back" color="teal" onClick={handleGoBack} />
         </BackButtonWrapper>
       </InfoPanel>
 
