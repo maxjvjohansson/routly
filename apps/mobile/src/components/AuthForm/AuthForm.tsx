@@ -4,6 +4,7 @@ import { InputField } from "../InputField/InputField";
 import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { validateAuthFields } from "@routly/lib/validation/auth";
+import { Feather } from "@expo/vector-icons";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -113,6 +114,9 @@ export default function AuthForm({
             }}
             fullWidth
             error={fieldErrors.fullName}
+            iconLeft={
+              <Feather name="user" size={18} color={theme.colors.black} />
+            }
           />
         )}
 
@@ -127,6 +131,9 @@ export default function AuthForm({
           }}
           fullWidth
           error={fieldErrors.email}
+          iconLeft={
+            <Feather name="mail" size={18} color={theme.colors.black} />
+          }
         />
 
         <InputField
@@ -140,6 +147,9 @@ export default function AuthForm({
           }}
           fullWidth
           error={fieldErrors.password}
+          iconLeft={
+            <Feather name="lock" size={18} color={theme.colors.black} />
+          }
         />
 
         {mode === "signup" && (
@@ -154,6 +164,9 @@ export default function AuthForm({
             }}
             fullWidth
             error={fieldErrors.confirm}
+            iconLeft={
+              <Feather name="lock" size={18} color={theme.colors.black} />
+            }
           />
         )}
 
