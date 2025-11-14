@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import ExploreRouteCard from "./ExploreRouteCard";
+import { useRouter } from "expo-router";
 
 type Props = {
   routes: any[];
@@ -32,6 +33,12 @@ export default function ExploreRoutesList({
   onToggleLike,
   likedRouteIds = [],
 }: Props) {
+  const router = useRouter();
+
+  const handleViewOnMap = (route: any) => {
+    router.push(`/route/${route.id}`);
+  };
+
   if (loading) return <LoadingText>Loading...</LoadingText>;
   if (!routes?.length) return <EmptyText>No routes found.</EmptyText>;
 
@@ -41,9 +48,7 @@ export default function ExploreRoutesList({
         <ExploreRouteCard
           key={route.id}
           route={route}
-          onView={() => {
-            // TODO: koppla expo-router här sen
-          }}
+          onView={handleViewOnMap}
           onToggleLike={onToggleLike}
           isLiked={likedRouteIds.includes(route.id)}
         />
