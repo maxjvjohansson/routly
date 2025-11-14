@@ -2,7 +2,7 @@
 
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import { useExploreRoutes } from "@routly/lib/hooks/useExploreRoutes";
+import { useExploreRoutes } from "@routly/lib/hooks/useExploreRoutes.native";
 import ExploreRoutesList from "src/components/Explore/ExploreRoutesList";
 import FilterBar from "src/components/Explore/FilterBar";
 import { Button } from "src/components/Button/Button";
