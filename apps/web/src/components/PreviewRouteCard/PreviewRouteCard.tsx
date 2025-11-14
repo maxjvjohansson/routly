@@ -10,6 +10,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { formatActivityLabel } from "@routly/lib/utils/activityText";
 import { BiRun, BiCycling } from "react-icons/bi";
 import { FaRoute, FaMountain, FaWind } from "react-icons/fa";
+import { MdOutlineSaveAlt, MdCheck } from "react-icons/md";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -119,12 +120,14 @@ export default function PreviewRouteCard({
           color={isActive ? "orange" : "teal"}
           fullWidth
           onClick={onSelect}
+          iconRight={isActive ? <MdCheck size={20} /> : undefined}
         />
         <Button
           label="Save route"
           color="teal"
           fullWidth
           onClick={() => onSaveRequest(index, route)}
+          iconRight={<MdOutlineSaveAlt size={20} />}
         />
       </ButtonWrapper>
 
