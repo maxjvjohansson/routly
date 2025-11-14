@@ -79,7 +79,15 @@ export const InputField = ({
     {label && <Label>{label}</Label>}
     <InputContainer $hasError={!!error}>
       {iconLeft && (
-        <span style={{ marginRight: theme.spacing.xxs }}>{iconLeft}</span>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginRight: theme.spacing.xxs,
+          }}
+        >
+          {iconLeft}
+        </span>
       )}
       <StyledInput
         type={type}
@@ -90,7 +98,15 @@ export const InputField = ({
         required={required}
       />
       {iconRight && (
-        <span style={{ marginLeft: theme.spacing.xxs }}>{iconRight}</span>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginRight: theme.spacing.xxs,
+          }}
+        >
+          {iconRight}
+        </span>
       )}
     </InputContainer>
     {error && <ErrorText>{error}</ErrorText>}

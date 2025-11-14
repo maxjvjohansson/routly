@@ -22,7 +22,10 @@ const Container = styled.section`
     ${theme.colors.tealLight}10 0%,
     ${theme.colors.white} 70%
   );
-  padding: ${theme.spacing.lg};
+
+  ${theme.media.md} {
+    padding: ${theme.spacing.xl};
+  }
 `;
 
 const Content = styled.div`
@@ -44,7 +47,11 @@ const FormSide = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${theme.spacing.xl};
+  padding: ${theme.spacing.md};
+
+  ${theme.media.md} {
+    padding: ${theme.spacing.xl};
+  }
 `;
 
 const FormWrapper = styled.div`
