@@ -8,6 +8,7 @@ import { useAuth } from "@routly/lib/context/AuthContext";
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "../components/AuthForm/AuthForm";
 import RoutlySplashScreen from "src/components/SplashScreen/SplashScreen";
+import routlyLogo from "../../assets/routly_logo.png";
 
 const Container = styled(SafeAreaView)`
   justify-content: center;
@@ -21,13 +22,10 @@ const Hero = styled.View`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const Logo = styled.View`
-  width: 64px;
-  height: 64px;
-  background-color: ${theme.colors.teal};
-  border-radius: ${theme.radius.lg}px;
-  align-items: center;
-  justify-content: center;
+const Logo = styled.Image`
+  width: ${theme.spacing.xl}px;
+  height: ${theme.spacing.xl}px;
+  object-fit: contain;
 `;
 
 const Title = styled.Text`
@@ -113,7 +111,7 @@ export default function IndexScreen() {
   return (
     <Container>
       <Hero>
-        <Logo />
+        <Logo source={routlyLogo} />
         <Title>Routly</Title>
         <Subtitle>Discover new running and cycling routes instantly</Subtitle>
       </Hero>
