@@ -2,6 +2,8 @@ import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Section = styled.View`
   width: 100%;
@@ -44,6 +46,15 @@ export default function ActivitySelect() {
             color="teal"
             active={activity === "run"}
             fullWidth
+            iconLeft={
+              <MaterialIcons
+                name="directions-run"
+                size={22}
+                color={
+                  activity === "run" ? theme.colors.white : theme.colors.black
+                }
+              />
+            }
           />
         </HalfWidth>
 
@@ -57,6 +68,15 @@ export default function ActivitySelect() {
             color="teal"
             active={activity === "cycle"}
             fullWidth
+            iconLeft={
+              <Ionicons
+                name="bicycle"
+                size={22}
+                color={
+                  activity === "cycle" ? theme.colors.white : theme.colors.black
+                }
+              />
+            }
           />
         </HalfWidth>
       </CapsuleGroup>
