@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import { BiRun, BiCycling } from "react-icons/bi";
 
 const Section = styled.div`
   display: flex;
@@ -38,6 +39,7 @@ export default function ActivitySelect() {
           color="teal"
           active={activity === "run"}
           fullWidth
+          iconLeft={<BiRun size={20} />}
         />
         <Button
           label="Cycling"
@@ -46,6 +48,7 @@ export default function ActivitySelect() {
           color="teal"
           active={activity === "cycle"}
           fullWidth
+          iconLeft={<BiCycling size={20} />}
         />
       </CapsuleGroup>
     </Section>
