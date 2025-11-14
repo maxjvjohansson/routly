@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
 export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
@@ -22,11 +23,25 @@ export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   `};
 `;
 
+export const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const LogoLink = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${theme.spacing.xxs};
   text-decoration: none;
 `;
 
-export const Logo = styled.div`
+export const LogoImage = styled(Image)`
+  width: ${theme.spacing.lg};
+  height: ${theme.spacing.lg};
+`;
+
+export const Logo = styled.span`
   font-weight: 700;
   font-size: ${theme.typography.xl};
   color: ${theme.colors.white};
