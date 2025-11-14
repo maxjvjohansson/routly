@@ -2,6 +2,8 @@
 
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
+import { FiSliders, FiMapPin } from "react-icons/fi";
+import { TbWand } from "react-icons/tb";
 
 const Container = styled.section`
   width: 100%;
@@ -62,18 +64,21 @@ const Step = styled.div`
   }
 `;
 
-const IconPlaceholder = styled.div`
-  width: 64px;
-  height: 64px;
+const IconBox = styled.div`
+  width: ${theme.spacing.xxl};
+  height: ${theme.spacing.xxl};
+  border-radius: ${theme.radius.xl};
+  background: ${theme.colors.teal};
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: ${theme.radius.full};
-  background-color: ${theme.colors.tealLight};
   margin-bottom: ${theme.spacing.md};
-  font-weight: 600;
-  color: ${theme.colors.teal};
-  font-size: ${theme.typography.lg};
+
+  svg {
+    color: ${theme.colors.white};
+    width: ${theme.spacing.lg};
+    height: ${theme.spacing.lg};
+  }
 `;
 
 const StepTitle = styled.h3`
@@ -93,17 +98,17 @@ const StepText = styled.p`
 export default function HowItWorksSection() {
   const steps = [
     {
-      icon: "1",
+      icon: <FiSliders />,
       title: "Select activity & distance",
       text: "Choose whether you want to run or cycle, and how far you’d like to go.",
     },
     {
-      icon: "2",
+      icon: <FiMapPin />,
       title: "Set your start or use your location",
       text: "Set your start point, add an endpoint or let Routly create a round trip.",
     },
     {
-      icon: "3",
+      icon: <TbWand />,
       title: "Routly generates your route",
       text: "Get a personalized route optimized for distance, terrain and weather.",
     },
@@ -116,7 +121,7 @@ export default function HowItWorksSection() {
         <Steps>
           {steps.map((step, index) => (
             <Step key={index}>
-              <IconPlaceholder>{step.icon}</IconPlaceholder>
+              <IconBox>{step.icon}</IconBox>
               <StepTitle>{step.title}</StepTitle>
               <StepText>{step.text}</StepText>
             </Step>

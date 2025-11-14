@@ -7,6 +7,7 @@ import { Button } from "../Button/Button";
 import splashMockup from "src/assets/images/routly_splash_screen.png";
 import generateMockup from "src/assets/images/routly_generate_screen.png";
 import { useRouter } from "next/navigation";
+import { FiArrowRight } from "react-icons/fi";
 
 const Container = styled.section`
   width: 100%;
@@ -127,6 +128,7 @@ export default function Hero() {
             <Button
               label="Generate a Route"
               color="orange"
+              iconRight={<FiArrowRight size={20} />}
               onClick={() => router.push("/generate")}
             />
           </CTAGroup>
