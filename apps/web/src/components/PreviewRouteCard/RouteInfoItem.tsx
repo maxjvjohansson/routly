@@ -11,11 +11,11 @@ const Item = styled.div`
 
 const Left = styled.div`
   display: flex;
-  align-items: center;
-  gap: ${theme.spacing.xs};
+  gap: ${theme.spacing.xxs};
 `;
 
 const Label = styled.span`
+  font-size: ${theme.typography.sm};
   font-weight: 500;
 `;
 

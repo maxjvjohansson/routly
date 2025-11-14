@@ -8,6 +8,8 @@ import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { formatActivityLabel } from "@routly/lib/utils/activityText";
+import { BiRun, BiCycling } from "react-icons/bi";
+import { FaRoute, FaMountain, FaWind } from "react-icons/fa";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -91,10 +93,24 @@ export default function PreviewRouteCard({
       <Title>Route {index + 1}</Title>
 
       <InfoList>
-        <RouteInfoItem label="Activity" value={activityText} />
-        <RouteInfoItem label="Distance" value={`${distance} km`} />
-        <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
-        <RouteWeatherInfo weather={weather} />
+        <RouteInfoItem
+          label="Activity"
+          value={activityText}
+          icon={
+            activity === "run" ? <BiRun size={22} /> : <BiCycling size={22} />
+          }
+        />
+        <RouteInfoItem
+          label="Distance"
+          value={`${distance} km`}
+          icon={<FaRoute size={18} />}
+        />
+        <RouteInfoItem
+          label="Elevation"
+          value={`+${ascent} m`}
+          icon={<FaMountain size={18} />}
+        />
+        <RouteWeatherInfo weather={weather} icon={<FaWind size={18} />} />
       </InfoList>
 
       <ButtonWrapper>
