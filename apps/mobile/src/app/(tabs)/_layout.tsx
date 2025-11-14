@@ -6,6 +6,18 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import MenuModal from "src/components/Modal/MenuModal";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { getUserInitial } from "@routly/lib/utils/user";
+import routlyLogo from "../../../assets/routly_logo_vector_teal.png";
+
+const HeaderLogoWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderLogoImage = styled.Image`
+  width: ${theme.spacing.md}px;
+  height: ${theme.spacing.md}px;
+  margin-right: ${theme.spacing.xxs}px;
+`;
 
 const LogoText = styled.Text`
   font-family: ${theme.typography.fontBold};
@@ -38,7 +50,12 @@ export default function TabsLayout() {
     <>
       <Tabs
         screenOptions={{
-          headerTitle: () => <LogoText>Routly</LogoText>,
+          headerTitle: () => (
+            <HeaderLogoWrapper>
+              <HeaderLogoImage source={routlyLogo} />
+              <LogoText>Routly</LogoText>
+            </HeaderLogoWrapper>
+          ),
           headerTitleAlign: "left",
           headerRight: () => (
             <Avatar onPress={() => setMenuVisible(true)}>
