@@ -102,6 +102,38 @@ export default function RoutlyMap({ routeData, isRoundTrip }: RoutlyMapProps) {
     return () => mapInstance.remove();
   }, []);
 
+  // Catch any missing map icon requests (styleimagemissing) and supply a tiny blank icon,
+  // preventing MapLibre from logging warnings when the style references images we don't use.
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+
+    // A transparent 1×1 PNG as RGBA bytes
+    const emptyImage = {
+      width: 1,
+      height: 1,
+      data: new Uint8Array([0, 0, 0, 0]),
+    };
+
+    const handleMissingImage = (event: any) => {
+      const id = event.id;
+
+      if (!id || m.hasImage(id)) return;
+
+      try {
+        m.addImage(id, emptyImage as any, { sdf: true });
+      } catch (err) {
+        // ignore invalid id formats
+      }
+    };
+
+    m.on("styleimagemissing", handleMissingImage);
+
+    return () => {
+      m.off("styleimagemissing", handleMissingImage);
+    };
+  }, []);
+
   // Handle start and end markers (interactive mode)
   useEffect(() => {
     if (isReadOnly) return; // Skip in read-only mode
