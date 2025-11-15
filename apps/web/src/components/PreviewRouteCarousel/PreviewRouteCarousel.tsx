@@ -11,6 +11,7 @@ import NameRouteModal from "../Modal/NameRouteModal";
 import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWithFeedback";
 import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls";
 import { FiArrowLeft } from "react-icons/fi";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 const CarouselWrapper = styled.div`
   display: flex;
@@ -20,6 +21,25 @@ const CarouselWrapper = styled.div`
   width: 100%;
   gap: ${theme.spacing.sm};
   position: relative;
+`;
+
+const TopBar = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: ${theme.spacing.md};
+
+  ${theme.media.md} {
+    display: none;
+  }
+`;
+
+const MobileBackButton = styled.div`
+  display: flex;
+
+  ${theme.media.md} {
+    display: none;
+  }
 `;
 
 const CardContainer = styled.div`
@@ -40,54 +60,58 @@ const CardTrack = styled.div<{ $offset: number }>`
 `;
 
 const ArrowButton = styled.button`
-  background-color: ${theme.colors.teal};
-  border: none;
+  position: absolute;
+  top: 50%;
   width: ${theme.spacing.lg};
   height: ${theme.spacing.lg};
   border-radius: ${theme.radius.full};
-  color: ${theme.colors.white};
-  font-size: ${theme.typography.sm};
+  background-color: ${theme.colors.teal};
   display: flex;
-  justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  justify-content: center;
+  border: none;
   cursor: pointer;
-  z-index: 5;
+  color: ${theme.colors.white};
+  z-index: 10;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   transition: all 0.2s ease;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   &:disabled {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 `;
 
 const LeftArrow = styled(ArrowButton)`
-  left: -${theme.spacing.sm};
+  left: -${theme.spacing.md};
 `;
 
 const RightArrow = styled(ArrowButton)`
-  right: -${theme.spacing.sm};
+  right: -${theme.spacing.md};
 `;
 
 const BottomBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   width: 100%;
   margin-top: ${theme.spacing.md};
+  position: relative;
 `;
 
-const BackButton = styled.div`
-  position: absolute;
-  left: 0;
-  margin-bottom: ${theme.spacing.md};
+const DesktopBackButton = styled.div`
+  display: none;
+
+  ${theme.media.md} {
+    display: block;
+    position: absolute;
+    left: 0;
+  }
 `;
 
 const StatusText = styled.p<{ $type: "success" | "error" }>`
@@ -168,9 +192,20 @@ export default function PreviewRouteCarousel() {
 
   return (
     <CarouselWrapper>
+      <TopBar>
+        <MobileBackButton>
+          <Button
+            label="Go Back"
+            color="teal"
+            onClick={() => reset?.()}
+            iconLeft={<FiArrowLeft size={20} />}
+          />
+        </MobileBackButton>
+      </TopBar>
+
       {routes.length > 1 && (
         <LeftArrow onClick={handlePrev} disabled={visibleIndex === 0}>
-          ‹
+          <IoChevronBack size={18} />
         </LeftArrow>
       )}
       <CardContainer onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
@@ -202,18 +237,18 @@ export default function PreviewRouteCarousel() {
           onClick={handleNext}
           disabled={visibleIndex === routes.length - 1}
         >
-          ›
+          <IoChevronForward size={18} />
         </RightArrow>
       )}
       <BottomBar>
-        <BackButton>
+        <DesktopBackButton>
           <Button
             label="Go Back"
             color="teal"
             onClick={() => reset?.()}
             iconLeft={<FiArrowLeft size={20} />}
           />
-        </BackButton>
+        </DesktopBackButton>
         <CarouselDots
           count={routes.length}
           activeIndex={visibleIndex}
