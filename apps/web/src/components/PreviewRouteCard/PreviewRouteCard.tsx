@@ -20,13 +20,17 @@ const Card = styled.div<{ $active?: boolean }>`
       : `1px solid ${theme.colors.gray}`};
   background: ${theme.colors.white};
   border-radius: ${theme.radius.lg};
-  padding: ${theme.spacing.lg};
+  padding: ${theme.spacing.md};
+
+  ${theme.media.md} {
+    padding: ${theme.spacing.lg};
+  }
 `;
 
 const Title = styled.h3`
-  font-size: ${theme.typography.md};
+  font-size: ${theme.typography.lg};
   font-weight: 600;
-  margin-bottom: ${theme.spacing.sm};
+  margin-bottom: ${theme.spacing.md};
   color: ${theme.colors.black};
 `;
 
@@ -39,15 +43,19 @@ const InfoList = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: ${theme.spacing.sm};
+  margin-bottom: ${theme.spacing.sm};
+
+  ${theme.media.md} {
+    flex-direction: row;
+  }
 `;
 
 const DetailsSection = styled.details`
   margin-top: ${theme.spacing.sm};
   border-top: 1px solid ${theme.colors.grayLight};
-  padding-top: ${theme.spacing.xs};
+  padding-top: ${theme.spacing.sm};
 `;
 
 const Summary = styled.summary<{ $active?: boolean }>`
@@ -56,11 +64,38 @@ const Summary = styled.summary<{ $active?: boolean }>`
     $active ? theme.colors.orange : theme.colors.teal};
   font-weight: 500;
   font-size: ${theme.typography.sm};
+  padding: ${theme.spacing.xs} 0;
+  list-style: none;
+  user-select: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::before {
+    content: "▸ ";
+    display: inline-block;
+    margin-right: ${theme.spacing.xs};
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const DetailsContent = styled.div`
+  padding-top: ${theme.spacing.xs};
 `;
 
 const DetailsText = styled.p`
-  margin-top: ${theme.spacing.xs};
   color: ${theme.colors.grayDark};
+  font-size: ${theme.typography.sm};
+  margin-bottom: ${theme.spacing.xs};
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 type Props = {
@@ -133,12 +168,14 @@ export default function PreviewRouteCard({
 
       <DetailsSection>
         <Summary $active={isActive}>More details</Summary>
-        <DetailsText>Est. duration: {duration} min</DetailsText>
-        {activity === "run" && (
-          <DetailsText>
-            Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
-          </DetailsText>
-        )}
+        <DetailsContent>
+          <DetailsText>Est. duration: {duration} min</DetailsText>
+          {activity === "run" && (
+            <DetailsText>
+              Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
+            </DetailsText>
+          )}
+        </DetailsContent>
       </DetailsSection>
     </Card>
   );

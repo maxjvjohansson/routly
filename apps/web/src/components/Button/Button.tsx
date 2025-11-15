@@ -27,9 +27,9 @@ const StyledButton = styled.button<{
   justify-content: center;
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
   gap: ${({ theme }) => theme.spacing.xxs};
-  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
-  border-radius: ${({ theme }) => theme.radius.lg};
-  font-size: ${({ theme }) => theme.typography.sm};
+  padding: ${theme.spacing.sm} ${theme.spacing.md};
+  border-radius: ${theme.radius.lg};
+  font-size: ${theme.typography.sm};
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;

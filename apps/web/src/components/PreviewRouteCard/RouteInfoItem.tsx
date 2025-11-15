@@ -3,10 +3,13 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 
 const Item = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  font-size: ${theme.typography.sm};
+  font-size: 0.875rem;
   color: ${theme.colors.grayDark};
+
+  ${theme.media.md} {
+    font-size: ${theme.typography.sm};
+  }
 `;
 
 const Left = styled.div`
@@ -15,8 +18,12 @@ const Left = styled.div`
 `;
 
 const Label = styled.span`
-  font-size: ${theme.typography.sm};
+  font-size: 0.875rem;
   font-weight: 500;
+
+  ${theme.media.md} {
+    font-size: ${theme.typography.sm};
+  }
 `;
 
 const Value = styled.span`
