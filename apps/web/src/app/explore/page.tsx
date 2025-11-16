@@ -8,6 +8,7 @@ import FilterBar from "src/components/Explore/FilterBar";
 import { Button } from "src/components/Button/Button";
 import { useRouter } from "next/navigation";
 import { useExploreRoutes } from "@routly/lib/hooks/useExploreRoutes";
+import { SlLocationPin } from "react-icons/sl";
 
 const Container = styled.section`
   width: 100%;
@@ -128,9 +129,7 @@ export default function ExplorePage() {
         <>
           <NearMeButtonWrapper>
             <Button
-              label={
-                nearMe ? "📍 Showing routes near you" : "📍 Show routes near me"
-              }
+              label={nearMe ? "Showing routes near you" : "Show routes near me"}
               color="orange"
               onClick={() => {
                 if (!nearMe) {
@@ -141,6 +140,7 @@ export default function ExplorePage() {
                   setPage(1);
                 }
               }}
+              iconLeft={<SlLocationPin size={22} />}
             />
           </NearMeButtonWrapper>
 

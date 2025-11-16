@@ -31,6 +31,7 @@ const Wrapper = styled.div`
 
 const FilterGroup = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: ${theme.spacing.sm};
 `;
 
