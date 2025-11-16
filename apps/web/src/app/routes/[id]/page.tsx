@@ -9,6 +9,8 @@ import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
 import { Button } from "src/components/Button/Button";
 import RouteInfoItem from "src/components/PreviewRouteCard/RouteInfoItem";
 import type { FeatureCollection, LineString } from "geojson";
+import { BiRun, BiCycling } from "react-icons/bi";
+import { FaRoute, FaMountain, FaClock } from "react-icons/fa";
 
 const Wrapper = styled.section`
   display: flex;
@@ -126,10 +128,32 @@ export default function RouteDetailPage() {
         <Title>{route.name}</Title>
 
         <InfoList>
-          <RouteInfoItem label="Activity" value={activity} />
-          <RouteInfoItem label="Distance" value={`${distance} km`} />
-          <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
-          <RouteInfoItem label="Estimated time" value={`${duration} min`} />
+          <RouteInfoItem
+            label="Activity"
+            value={activity}
+            icon={
+              activity === "Running" ? (
+                <BiRun size={22} />
+              ) : (
+                <BiCycling size={22} />
+              )
+            }
+          />
+          <RouteInfoItem
+            label="Distance"
+            value={`${distance} km`}
+            icon={<FaRoute size={18} />}
+          />
+          <RouteInfoItem
+            label="Elevation"
+            value={`+${ascent} m`}
+            icon={<FaMountain size={18} />}
+          />
+          <RouteInfoItem
+            label="Estimated time"
+            value={`${duration} min`}
+            icon={<FaClock size={18} />}
+          />
         </InfoList>
 
         <BackButtonWrapper>
