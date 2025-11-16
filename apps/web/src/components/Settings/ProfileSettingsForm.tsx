@@ -6,6 +6,8 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "src/components/Button/Button";
 import { InputField } from "src/components/InputField/InputField";
 import { useProfileSettings } from "@routly/lib/hooks/useProfileSettings";
+import { FiLock, FiMail, FiUser } from "react-icons/fi";
+import { MdOutlineSaveAlt } from "react-icons/md";
 
 const Wrapper = styled.div`
   display: flex;
@@ -59,7 +61,6 @@ export default function ProfileSettingsForm() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileStatus, setProfileStatus] = useState<{
     type: "success" | "error";
@@ -79,7 +80,6 @@ export default function ProfileSettingsForm() {
     if (profile) {
       setFullName(profile.full_name || "");
       setEmail(profile.email || "");
-      setAvatarUrl(profile.avatar_url || "");
     }
   }, [profile]);
 
@@ -92,7 +92,6 @@ export default function ProfileSettingsForm() {
     const { error } = await updateProfile({
       full_name: fullName,
       email,
-      avatar_url: avatarUrl,
     });
     if (error) setProfileStatus({ type: "error", msg: error });
     else
@@ -136,6 +135,7 @@ export default function ProfileSettingsForm() {
           onChange={(v: any) => setFullName(pick(v))}
           placeholder="Your full name"
           disabled={loading || savingProfile}
+          iconLeft={<FiUser size={18} color={theme.colors.black} />}
         />
         <InputField
           label="Email"
@@ -143,13 +143,7 @@ export default function ProfileSettingsForm() {
           onChange={(v: any) => setEmail(pick(v))}
           placeholder="Your email address"
           disabled={loading || savingProfile}
-        />
-        <InputField
-          label="Avatar URL"
-          value={avatarUrl}
-          onChange={(v: any) => setAvatarUrl(pick(v))}
-          placeholder="Link to your profile image"
-          disabled={loading || savingProfile}
+          iconLeft={<FiMail size={18} color={theme.colors.black} />}
         />
 
         <Button
@@ -158,6 +152,7 @@ export default function ProfileSettingsForm() {
           fullWidth
           type="submit"
           disabled={savingProfile}
+          iconRight={<MdOutlineSaveAlt size={20} />}
         />
         <StatusText $type={profileStatus?.type || "success"}>
           {profileStatus?.msg || ""}
@@ -173,6 +168,7 @@ export default function ProfileSettingsForm() {
             value={currentPassword}
             onChange={(v: any) => setCurrentPassword(pick(v))}
             disabled={savingPassword}
+            iconLeft={<FiLock size={18} color={theme.colors.black} />}
           />
           <InputField
             label="New password"
@@ -180,6 +176,7 @@ export default function ProfileSettingsForm() {
             value={newPassword}
             onChange={(v: any) => setNewPassword(pick(v))}
             disabled={savingPassword}
+            iconLeft={<FiLock size={18} color={theme.colors.black} />}
           />
         </Row>
         <InputField
@@ -188,6 +185,7 @@ export default function ProfileSettingsForm() {
           value={repeatPassword}
           onChange={(v: any) => setRepeatPassword(pick(v))}
           disabled={savingPassword}
+          iconLeft={<FiLock size={18} color={theme.colors.black} />}
         />
 
         <Button
@@ -196,6 +194,7 @@ export default function ProfileSettingsForm() {
           fullWidth
           type="submit"
           disabled={savingPassword}
+          iconRight={<MdOutlineSaveAlt size={20} />}
         />
         <StatusText $type={passwordStatus?.type || "success"}>
           {passwordStatus?.msg || ""}

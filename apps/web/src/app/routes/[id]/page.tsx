@@ -11,6 +11,7 @@ import RouteInfoItem from "src/components/PreviewRouteCard/RouteInfoItem";
 import type { FeatureCollection, LineString } from "geojson";
 import { BiRun, BiCycling } from "react-icons/bi";
 import { FaRoute, FaMountain, FaClock } from "react-icons/fa";
+import { FiArrowLeft } from "react-icons/fi";
 
 const Wrapper = styled.section`
   display: flex;
@@ -157,7 +158,12 @@ export default function RouteDetailPage() {
         </InfoList>
 
         <BackButtonWrapper>
-          <Button label="Go Back" color="teal" onClick={handleGoBack} />
+          <Button
+            label="Go Back"
+            color="teal"
+            onClick={handleGoBack}
+            iconLeft={<FiArrowLeft size={20} />}
+          />
         </BackButtonWrapper>
       </InfoPanel>
 
