@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import ProfileSettingsForm from "src/components/Settings/ProfileSettingsForm";
 import { useRouter } from "next/navigation";
+import { FiArrowLeft } from "react-icons/fi";
+import { Button } from "src/components/Button/Button";
 
 const Container = styled.div`
   display: flex;
@@ -26,26 +28,6 @@ const Title = styled.h2`
   color: ${theme.colors.black};
 `;
 
-const BackButton = styled.button`
-  background: ${theme.colors.teal};
-  color: ${theme.colors.white};
-  border: none;
-  border-radius: ${theme.radius.full};
-  width: ${theme.spacing.xl};
-  height: ${theme.spacing.xl};
-  font-size: ${theme.typography.sm};
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
 export default function SettingsPage() {
   const router = useRouter();
 
@@ -57,7 +39,12 @@ export default function SettingsPage() {
     <Container>
       <HeaderRow>
         <Title>Profile Settings</Title>
-        <BackButton onClick={handleBack}>←</BackButton>
+        <Button
+          label="Go Back"
+          color="teal"
+          onClick={handleBack}
+          iconLeft={<FiArrowLeft size={20} />}
+        />
       </HeaderRow>
       <ProfileSettingsForm />
     </Container>

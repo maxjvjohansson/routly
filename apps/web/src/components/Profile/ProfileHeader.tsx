@@ -7,6 +7,7 @@ import {
   getUserEmail,
 } from "@routly/lib/utils/user";
 import { useRouter } from "next/navigation";
+import { FaRegEdit } from "react-icons/fa";
 
 const Header = styled.div`
   display: flex;
@@ -32,16 +33,22 @@ const UserInfo = styled.div`
 `;
 
 const Avatar = styled.div`
-  width: ${theme.spacing.xxl};
-  height: ${theme.spacing.xxl};
+  width: ${theme.spacing.lg};
+  height: ${theme.spacing.lg};
   border-radius: ${theme.radius.full};
   color: ${theme.colors.white};
   background-color: ${theme.colors.teal};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: ${theme.typography.xl};
+  font-size: ${theme.typography.sm};
   font-weight: 600;
+
+  ${theme.media.md} {
+    width: ${theme.spacing.xxl};
+    height: ${theme.spacing.xxl};
+    font-size: ${theme.typography.xl};
+  }
 `;
 
 const Name = styled.h3`
@@ -85,6 +92,7 @@ export default function ProfileHeader({ user }: { user: any }) {
           color="teal"
           fullWidth
           onClick={() => router.push("/settings")}
+          iconRight={<FaRegEdit size={22} />}
         />
       </ButtonWrapper>
     </Header>
