@@ -9,8 +9,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: var(--font-outfit), sans-serif;
-    background-color: ${({ theme }) => theme.colors.white};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--font-outfit), sans-serif;
+  background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -43,5 +46,10 @@ export const GlobalStyle = createGlobalStyle`
         background-color: ${theme.colors.teal};
         color: ${theme.colors.white};
     }
+
+  }
+  main {
+    flex: 1;
+    width: 100%;
   }
 `;
