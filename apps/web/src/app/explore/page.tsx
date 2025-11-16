@@ -9,6 +9,8 @@ import { Button } from "src/components/Button/Button";
 import { useRouter } from "next/navigation";
 import { useExploreRoutes } from "@routly/lib/hooks/useExploreRoutes";
 import { SlLocationPin } from "react-icons/sl";
+import { FaUserPlus } from "react-icons/fa6";
+import { FiLogIn } from "react-icons/fi";
 
 const Container = styled.section`
   width: 100%;
@@ -109,11 +111,13 @@ export default function ExplorePage() {
                 label="Log in"
                 color="orange"
                 onClick={() => router.push("/login")}
+                iconLeft={<FiLogIn size={22} />}
               />
               <Button
                 label="Sign up"
-                color="black"
+                color="teal"
                 onClick={() => router.push("/signup")}
+                iconLeft={<FaUserPlus size={22} />}
               />
             </AuthButtons>
           </LoggedOutBox>
