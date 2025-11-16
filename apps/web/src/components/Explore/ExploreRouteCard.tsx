@@ -3,7 +3,14 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaClock,
+  FaHeart,
+  FaMountain,
+  FaRegHeart,
+  FaRoute,
+} from "react-icons/fa";
+import RouteInfoItem from "../PreviewRouteCard/RouteInfoItem";
 
 type Props = {
   route: any;
@@ -77,9 +84,21 @@ export default function ExploreRouteCard({
       <Title>{route.name}</Title>
 
       <InfoRow>
-        <span>{route.distance_km?.toFixed(1)} km</span>
-        <span>{route.elevation_gain} m</span>
-        <span>{route.duration_estimate?.toFixed(0)} min</span>
+        <RouteInfoItem
+          mode="compact"
+          value={`${route.distance_km?.toFixed(1)} km`}
+          icon={<FaRoute size={18} />}
+        />
+        <RouteInfoItem
+          mode="compact"
+          value={`${route.elevation_gain} m`}
+          icon={<FaMountain size={18} />}
+        />
+        <RouteInfoItem
+          mode="compact"
+          value={`${route.duration_estimate?.toFixed(0)} min`}
+          icon={<FaClock size={18} />}
+        />
       </InfoRow>
 
       <Actions>
