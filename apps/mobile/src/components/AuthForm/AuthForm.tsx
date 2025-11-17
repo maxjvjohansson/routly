@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { View, Text, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { InputField } from "../InputField/InputField";
 import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { validateAuthFields } from "@routly/lib/validation/auth";
+import { Feather } from "@expo/vector-icons";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -18,7 +18,7 @@ type AuthFormProps = {
   onSwitchMode: () => void;
 };
 
-const AuthFormContainer = styled(ScrollView)`
+const AuthFormContainer = styled.ScrollView`
   width: 100%;
   padding: ${theme.spacing.lg}px;
   background-color: ${theme.colors.white};
@@ -26,36 +26,44 @@ const AuthFormContainer = styled(ScrollView)`
   align-self: center;
 `;
 
-const FormWrapper = styled(View)`
+const FormWrapper = styled.View`
   width: 100%;
   background-color: ${theme.colors.white};
 `;
 
-const FormHeader = styled(Text)`
+const FormHeader = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 600;
   color: ${theme.colors.black};
   text-align: center;
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const SwitchWrapper = styled(View)`
+const SwitchWrapper = styled.View`
   margin-top: ${theme.spacing.md}px;
   align-items: center;
 `;
 
-const SwitchText = styled(Text)`
+const SwitchText = styled.Text`
   text-align: center;
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.xs}px;
   color: ${theme.colors.grayDark};
 `;
 
-const LinkText = styled(Text)`
+const LinkText = styled.Text`
   color: ${theme.colors.teal};
-  font-weight: 600;
+  font-family: ${theme.typography.fontSemiBold};
   font-size: ${theme.typography.xs}px;
   text-decoration: underline;
   text-decoration-color: ${theme.colors.teal};
+`;
+
+const ErrorText = styled.Text`
+  font-family: ${theme.typography.fontMedium};
+  color: ${theme.colors.red};
+  text-align: center;
+  margin-bottom: ${theme.spacing.xs}px;
 `;
 
 export default function AuthForm({
@@ -106,6 +114,9 @@ export default function AuthForm({
             }}
             fullWidth
             error={fieldErrors.fullName}
+            iconLeft={
+              <Feather name="user" size={18} color={theme.colors.black} />
+            }
           />
         )}
 
@@ -120,6 +131,9 @@ export default function AuthForm({
           }}
           fullWidth
           error={fieldErrors.email}
+          iconLeft={
+            <Feather name="mail" size={18} color={theme.colors.black} />
+          }
         />
 
         <InputField
@@ -133,6 +147,9 @@ export default function AuthForm({
           }}
           fullWidth
           error={fieldErrors.password}
+          iconLeft={
+            <Feather name="lock" size={18} color={theme.colors.black} />
+          }
         />
 
         {mode === "signup" && (
@@ -147,19 +164,14 @@ export default function AuthForm({
             }}
             fullWidth
             error={fieldErrors.confirm}
+            iconLeft={
+              <Feather name="lock" size={18} color={theme.colors.black} />
+            }
           />
         )}
 
         {error && !Object.keys(fieldErrors).length && (
-          <Text
-            style={{
-              color: theme.colors.red,
-              textAlign: "center",
-              marginBottom: theme.spacing.xs,
-            }}
-          >
-            {error}
-          </Text>
+          <ErrorText>{error}</ErrorText>
         )}
 
         <Button

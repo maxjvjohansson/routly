@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "../components/AuthForm/AuthForm";
 import RoutlySplashScreen from "src/components/SplashScreen/SplashScreen";
+import routlyLogo from "../../assets/routly_logo.png";
 
 const Container = styled(SafeAreaView)`
   justify-content: center;
@@ -21,23 +22,21 @@ const Hero = styled.View`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const Logo = styled.View`
-  width: 64px;
-  height: 64px;
-  background-color: ${theme.colors.teal};
-  border-radius: ${theme.radius.lg}px;
-  align-items: center;
-  justify-content: center;
+const Logo = styled.Image`
+  width: ${theme.spacing.xl}px;
+  height: ${theme.spacing.xl}px;
+  object-fit: contain;
 `;
 
 const Title = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.black};
   margin-top: ${theme.spacing.sm}px;
 `;
 
 const Subtitle = styled.Text`
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
   text-align: center;
@@ -112,7 +111,7 @@ export default function IndexScreen() {
   return (
     <Container>
       <Hero>
-        <Logo />
+        <Logo source={routlyLogo} />
         <Title>Routly</Title>
         <Subtitle>Discover new running and cycling routes instantly</Subtitle>
       </Hero>

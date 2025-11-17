@@ -5,6 +5,7 @@ import { InputField } from "../InputField/InputField";
 import { Button } from "../Button/Button";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { validateAuthFields } from "@routly/lib/validation/auth";
+import { FiUser, FiMail, FiLock } from "react-icons/fi";
 
 type AuthFormProps = {
   mode: "login" | "signup";
@@ -117,6 +118,7 @@ export default function AuthForm({
           onChange={setFullName}
           fullWidth
           error={fieldErrors.fullName}
+          iconLeft={<FiUser size={18} color={theme.colors.black} />}
         />
       )}
 
@@ -129,6 +131,8 @@ export default function AuthForm({
         fullWidth
         required
         error={fieldErrors.email}
+        iconLeft={<FiMail size={18} color={theme.colors.black} />}
+        autocomplete="email"
       />
 
       <InputField
@@ -140,6 +144,7 @@ export default function AuthForm({
         fullWidth
         required
         error={fieldErrors.password}
+        iconLeft={<FiLock size={18} color={theme.colors.black} />}
       />
 
       {mode === "signup" && (
@@ -152,6 +157,7 @@ export default function AuthForm({
           fullWidth
           required
           error={fieldErrors.confirm}
+          iconLeft={<FiLock size={18} color={theme.colors.black} />}
         />
       )}
 
@@ -164,6 +170,7 @@ export default function AuthForm({
           loading ? "Loading..." : mode === "login" ? "Sign in" : "Sign up"
         }
         disabled={loading}
+        color="teal"
         fullWidth
         type="submit"
       />

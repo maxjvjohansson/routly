@@ -11,6 +11,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { fetchCombinedRouteData } from "@routly/lib/routeAlgorithms/fetchCombinedRouteData";
 import { useEffect, useState } from "react";
+import { TbWand } from "react-icons/tb";
 
 const FormContainer = styled.form`
   display: flex;
@@ -18,7 +19,6 @@ const FormContainer = styled.form`
   justify-content: space-between;
   gap: ${theme.spacing.sm};
   width: 100%;
-  min-height: 438.5px;
   max-width: 800px;
   background-color: ${theme.colors.white};
 `;
@@ -121,6 +121,7 @@ export default function GenerateRouteForm() {
           color="orange"
           fullWidth
           disabled={isLoading}
+          iconRight={<TbWand size={20} />}
         />
       </ButtonWrapper>
     </FormContainer>

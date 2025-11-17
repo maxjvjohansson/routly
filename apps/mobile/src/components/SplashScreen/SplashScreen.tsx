@@ -9,8 +9,8 @@ const SplashContainer = styled.View`
 `;
 
 const Logo = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.white};
 `;
 

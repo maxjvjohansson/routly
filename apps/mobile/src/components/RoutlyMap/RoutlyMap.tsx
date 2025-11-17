@@ -5,6 +5,13 @@ import { StyleSheet } from "react-native";
 import { mapStyle } from "./MapStyle";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useMemo, useCallback, useRef, useEffect } from "react";
+import { WindDirectionOverlay } from "../WindDirectionOverlay/WindDirectionOverlay";
+
+type RoutlyMapProps = {
+  height?: number;
+  routeData?: GeoJSON.FeatureCollection | null;
+  isRoundTrip?: boolean;
+};
 
 const MapContainer = styled.View<{ $height: number }>`
   width: 100%;
@@ -14,7 +21,11 @@ const MapContainer = styled.View<{ $height: number }>`
   position: relative;
 `;
 
-export default function RoutlyMap({ height = 350 }: { height?: number }) {
+export default function RoutlyMap({
+  height = 350,
+  routeData,
+  isRoundTrip,
+}: RoutlyMapProps) {
   const mapRef = useRef<MapView>(null);
   const {
     startPoint,
@@ -24,14 +35,19 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
     clearPoints,
     routes,
     activeRouteIndex,
+    weatherByRoute,
   } = useRouteGeneration();
 
+  const weather = weatherByRoute?.[activeRouteIndex]?.weather ?? null;
+
   const hasRoutes = routes.length > 0;
+  const isReadOnly = !!routeData;
   const initialOverview = { latitude: 57.7072, longitude: 11.9671 };
 
-  const activeRoute = routes?.[activeRouteIndex ?? 0];
+  // Select route data source (from props or context)
+  const activeRoute = routeData || routes?.[activeRouteIndex ?? 0];
 
-  // Convert current route to coordinates
+  // Convert GeoJSON to React Native Maps coordinates
   const routeCoords = useMemo(() => {
     const feature = activeRoute?.features?.[0];
     const geometry = feature?.geometry;
@@ -40,7 +56,7 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
     return coords.map(([lng, lat]) => ({ latitude: lat, longitude: lng }));
   }, [activeRoute]);
 
-  // Fit map to route bounds when route changes
+  // Fit to route bounds when route changes
   useEffect(() => {
     if (!routeCoords?.length || !mapRef.current) return;
     mapRef.current.fitToCoordinates(routeCoords, {
@@ -49,10 +65,37 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
     });
   }, [routeCoords]);
 
-  // Handle taps for setting start/end markers
+  // Snap to location when user sets their startPoint manually or via geolocation
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Don't snap if a route is visible
+    const routeIsVisible = !!routeCoords;
+    if (routeIsVisible) return;
+
+    // No start point, nothing to snap to
+    if (!startPoint) return;
+
+    // Smooth camera animation
+    map.animateCamera(
+      {
+        center: {
+          latitude: startPoint[1],
+          longitude: startPoint[0],
+        },
+        zoom: 13,
+        heading: 0,
+        pitch: 0,
+      },
+      { duration: 1000 }
+    );
+  }, [startPoint, routeCoords]);
+
+  // Handle map press (only in editable mode)
   const handleMapPress = useCallback(
     (e: MapPressEvent) => {
-      if (hasRoutes) return; // Prevent editing when routes are active
+      if (hasRoutes || isReadOnly) return;
 
       const { latitude, longitude } = e.nativeEvent.coordinate;
 
@@ -60,29 +103,43 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
       else if (!endPoint) setEndPoint([longitude, latitude]);
       else clearPoints();
     },
-    [startPoint, endPoint, hasRoutes, setStartPoint, setEndPoint, clearPoints]
+    [
+      startPoint,
+      endPoint,
+      hasRoutes,
+      isReadOnly,
+      setStartPoint,
+      setEndPoint,
+      clearPoints,
+    ]
   );
 
   const handleStartDragEnd = useCallback(
     (e: any) => {
-      if (hasRoutes) return; // Locked
+      if (hasRoutes || isReadOnly) return;
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setStartPoint([longitude, latitude]);
     },
-    [setStartPoint, hasRoutes]
+    [setStartPoint, hasRoutes, isReadOnly]
   );
 
   const handleEndDragEnd = useCallback(
     (e: any) => {
-      if (hasRoutes) return; // Locked
+      if (hasRoutes || isReadOnly) return;
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setEndPoint([longitude, latitude]);
     },
-    [setEndPoint, hasRoutes]
+    [setEndPoint, hasRoutes, isReadOnly]
   );
 
   return (
     <MapContainer $height={height}>
+      {weather && (
+        <WindDirectionOverlay
+          windSpeed={weather.windSpeed}
+          windDirection={weather.windDirection}
+        />
+      )}
       <MapView
         ref={mapRef}
         provider="google"
@@ -95,6 +152,9 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
         onPress={handleMapPress}
         customMapStyle={mapStyle}
         zoomEnabled={true}
+        scrollEnabled={true}
+        pitchEnabled={true}
+        rotateEnabled={true}
       >
         {routeCoords && (
           <>
@@ -107,21 +167,20 @@ export default function RoutlyMap({ height = 350 }: { height?: number }) {
               coordinate={routeCoords[0]}
               title="Start"
               pinColor={theme.colors.teal}
-              draggable={!hasRoutes}
+              draggable={!isReadOnly && !hasRoutes}
               onDragEnd={handleStartDragEnd}
             />
-            {routeCoords.length > 1 && startPoint && endPoint && (
+            {!isRoundTrip && routeCoords.length > 1 && (
               <Marker
                 coordinate={routeCoords[routeCoords.length - 1]}
                 title="Finish"
                 pinColor={theme.colors.orange}
-                draggable={!hasRoutes}
+                draggable={!isReadOnly && !hasRoutes}
                 onDragEnd={handleEndDragEnd}
               />
             )}
           </>
         )}
-
         {!routeCoords && startPoint && (
           <Marker
             coordinate={{

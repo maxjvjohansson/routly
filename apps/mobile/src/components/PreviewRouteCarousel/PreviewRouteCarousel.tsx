@@ -1,47 +1,60 @@
+"use client";
+
 import styled from "styled-components/native";
 import {
-  ScrollView,
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  View,
-  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
+import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import { useCarouselControls } from "@routly/lib/hooks/useCarouselControls.native";
+import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWithFeedback";
 import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
 import { CarouselDots } from "./CarouselDots";
-import { nativeTheme as theme } from "@routly/ui/theme/native";
+import NameRouteModal from "../Modal/NameRouteModal";
+import { Button } from "../Button/Button";
 
-const CarouselContainer = styled(ScrollView).attrs({
+const Wrapper = styled.View`
+  flex: 1;
+  background-color: ${theme.colors.white};
+`;
+
+const BackButtonWrapper = styled.View`
+  padding: 0 ${theme.spacing.lg}px;
+  margin-bottom: ${theme.spacing.sm}px;
+  align-items: flex-end;
+`;
+
+const CarouselScroll = styled.ScrollView.attrs({
   horizontal: true,
   pagingEnabled: true,
   showsHorizontalScrollIndicator: false,
 })`
   width: 100%;
-  background-color: ${theme.colors.white};
-  padding: ${theme.spacing.sm}px 0;
 `;
 
-const CardWrapper = styled(View)<{ $width: number }>`
+const CardWrapper = styled.View<{ $width: number }>`
   width: ${({ $width }: { $width: any }) => $width}px;
   justify-content: center;
   align-items: center;
 `;
 
-const ButtonWrapper = styled.View`
-  padding: 0 ${theme.spacing.lg}px;
-`;
-
-const BackButton = styled(TouchableOpacity)`
-  align-self: flex-end;
-  background-color: ${theme.colors.teal};
-  border-radius: ${theme.radius.full}px;
-  width: ${theme.spacing.lg}px;
-  height: ${theme.spacing.lg}px;
+const BottomBar = styled.View`
   justify-content: center;
   align-items: center;
+  margin-top: ${theme.spacing.md}px;
+`;
+
+const StatusText = styled.Text<{ $type: "success" | "error" }>`
+  color: ${({ $type }: { $type: any }) =>
+    $type === "success" ? theme.colors.green : theme.colors.red};
+  font-family: ${theme.typography.fontSemiBold};
+  font-size: ${theme.typography.sm}px;
+  text-align: center;
+  margin-bottom: ${theme.spacing.sm}px;
 `;
 
 export default function PreviewRouteCarousel() {
@@ -51,34 +64,84 @@ export default function PreviewRouteCarousel() {
     activeRouteIndex,
     setActiveRouteIndex,
     reset,
+    activity,
+    isRoundTrip,
+    startPoint,
+    endPoint,
   } = useRouteGeneration();
 
-  const [visibleIndex, setVisibleIndex] = useState(0);
+  const { handleSaveRoute, loading, statusMessage, statusType } =
+    useRouteActionsWithFeedback();
+
+  const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
+  const [selectedRoute, setSelectedRoute] =
+    useState<GeoJSON.FeatureCollection | null>(null);
+
   const { width } = Dimensions.get("window");
+  const cardWidth = width - theme.spacing.lg * 2;
+  const { visibleIndex, handleScroll } = useCarouselControls(routes);
 
   if (!routes.length) return null;
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(offsetX / width);
-    if (newIndex !== visibleIndex) setVisibleIndex(newIndex);
-  };
 
   const handleGoBack = () => {
     if (typeof reset === "function") reset();
   };
 
-  const cardWidth = width - theme.spacing.lg * 2;
+  const handleSaveRequest = (
+    index: number,
+    route: GeoJSON.FeatureCollection
+  ) => {
+    setActiveModalIndex(index);
+    setSelectedRoute(route);
+  };
+
+  const handleCancelModal = () => {
+    setActiveModalIndex(null);
+    setSelectedRoute(null);
+  };
+
+  const handleConfirmSave = async (name: string) => {
+    if (!selectedRoute) return;
+
+    const normalizedActivity =
+      activity === "run"
+        ? "running"
+        : activity === "cycle"
+          ? "cycling"
+          : activity;
+
+    await handleSaveRoute({
+      name,
+      activity: normalizedActivity,
+      isRoundTrip,
+      routeData: selectedRoute,
+      startName: startPoint ? "Start point" : null,
+      endName: endPoint ? "End point" : null,
+    });
+
+    setActiveModalIndex(null);
+    setSelectedRoute(null);
+  };
 
   return (
-    <>
-      <ButtonWrapper>
-        <BackButton onPress={handleGoBack} accessibilityLabel="Go back">
-          <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
-        </BackButton>
-      </ButtonWrapper>
+    <Wrapper>
+      <BackButtonWrapper>
+        <Button
+          label="Go Back"
+          onPress={handleGoBack}
+          color="teal"
+          iconLeft={
+            <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
+          }
+        />
+      </BackButtonWrapper>
 
-      <CarouselContainer onScroll={handleScroll} scrollEventThrottle={16}>
+      <CarouselScroll
+        onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
+          handleScroll(e, width)
+        }
+        scrollEventThrottle={16}
+      >
         {routes.map((route, index) => (
           <CardWrapper key={index} $width={width}>
             <PreviewRouteCard
@@ -87,13 +150,30 @@ export default function PreviewRouteCarousel() {
               weather={weatherByRoute?.[index]?.weather}
               isActive={index === activeRouteIndex}
               onSelect={() => setActiveRouteIndex(index)}
+              onSaveRequest={handleSaveRequest}
               width={cardWidth}
             />
           </CardWrapper>
         ))}
-      </CarouselContainer>
+      </CarouselScroll>
 
-      <CarouselDots count={routes.length} activeIndex={visibleIndex} />
-    </>
+      <BottomBar>
+        <CarouselDots count={routes.length} activeIndex={visibleIndex} />
+      </BottomBar>
+
+      {statusMessage && (
+        <StatusText $type={statusType ?? "success"}>{statusMessage}</StatusText>
+      )}
+
+      <NameRouteModal
+        visible={activeModalIndex !== null}
+        defaultValue={
+          activeModalIndex !== null ? `Route ${activeModalIndex + 1}` : ""
+        }
+        loading={loading}
+        onCancel={handleCancelModal}
+        onConfirm={handleConfirmSave}
+      />
+    </Wrapper>
   );
 }

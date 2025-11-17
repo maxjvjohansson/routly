@@ -15,15 +15,17 @@ const Wrapper = styled.View`
 `;
 
 const Title = styled.Text`
+  text-align: center;
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
 `;
 
 const Subtitle = styled.Text`
+  text-align: center;
+  font-family: ${theme.typography.fontRegular};
   font-size: ${theme.typography.sm}px;
-  font-weight: 400;
   color: ${theme.colors.grayDark};
 `;
 
@@ -34,10 +36,9 @@ export default function GenerateScreen() {
   return (
     <ScrollWrapper>
       <Wrapper>
-        <Title>Create your next route</Title>
+        <Title>Generate your route</Title>
         <Subtitle>
-          Generate personalized running and cycling routes tailored to your
-          preferences
+          Choose your activity and let Routly find the perfect path for you.
         </Subtitle>
       </Wrapper>
       {hasRoutes ? <PreviewRouteCarousel /> : <GenerateRouteForm />}

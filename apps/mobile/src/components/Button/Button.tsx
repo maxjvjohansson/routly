@@ -5,7 +5,7 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 type ButtonColor = keyof typeof theme.colors;
 
 type ButtonProps = {
-  label: string;
+  label?: string;
   onPress?: () => void;
   variant?: "solid" | "outline" | "toggle";
   color?: ButtonColor;
@@ -26,10 +26,9 @@ interface StyledButtonProps {
 
 const StyledButton = styled(TouchableOpacity)<StyledButtonProps>`
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
-  padding: ${({ theme }) => `${theme.spacing.xs}px ${theme.spacing.lg}px`};
+  padding: ${theme.spacing.xs}px ${theme.spacing.lg}px;
   border-radius: ${theme.radius.lg}px;
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
   border-width: 1px;
@@ -61,7 +60,10 @@ const StyledButton = styled(TouchableOpacity)<StyledButtonProps>`
 
 const Label = styled(Text)<{ $variant?: string; $active?: boolean }>`
   font-size: ${theme.typography.sm}px;
-  font-weight: ${({ $variant }) => ($variant === "toggle" ? 500 : 600)};
+  font-family: ${({ $variant }) =>
+    $variant === "toggle"
+      ? theme.typography.fontMedium
+      : theme.typography.fontSemiBold};
   color: ${({ $variant, $active }) =>
     $variant === "toggle"
       ? $active
@@ -73,11 +75,11 @@ const Label = styled(Text)<{ $variant?: string; $active?: boolean }>`
 `;
 
 const IconLeft = styled(View)`
-  margin-right: ${theme.spacing.xxs}px;
+  margin-right: ${theme.spacing.xs}px;
 `;
 
 const IconRight = styled(View)`
-  margin-left: ${theme.spacing.xxs}px;
+  margin-left: ${theme.spacing.xs}px;
 `;
 
 export const Button = ({

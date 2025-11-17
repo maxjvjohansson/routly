@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
 export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
@@ -9,8 +10,8 @@ export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   width: 100%;
   height: ${theme.spacing.xxl};
   padding: ${theme.spacing.lg};
-  border-bottom: 1px solid ${theme.colors.gray};
-  background-color: ${theme.colors.white};
+  border-bottom: 1px solid ${theme.colors.black};
+  background-color: ${theme.colors.black};
   position: sticky;
   top: 0;
   z-index: 999;
@@ -22,14 +23,28 @@ export const NavbarContainer = styled.nav<{ $scrolled?: boolean }>`
   `};
 `;
 
+export const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const LogoLink = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${theme.spacing.xxs};
   text-decoration: none;
 `;
 
-export const Logo = styled.div`
+export const LogoImage = styled(Image)`
+  width: ${theme.spacing.lg};
+  height: ${theme.spacing.lg};
+`;
+
+export const Logo = styled.span`
   font-weight: 700;
   font-size: ${theme.typography.xl};
-  color: ${theme.colors.teal};
+  color: ${theme.colors.white};
   cursor: pointer;
   &:hover {
     opacity: 0.8;
@@ -47,11 +62,34 @@ export const NavLinks = styled.div`
 `;
 
 export const NavLink = styled(Link)`
+  position: relative;
   text-decoration: none;
-  font-weight: 500;
-  color: ${theme.colors.black};
+  font-weight: 400;
+  color: ${theme.colors.white};
+  padding-bottom: 2px;
+
+  transition:
+    color 0.2s ease,
+    font-weight 0.2s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0%;
+    height: 2px;
+    background-color: ${theme.colors.tealLight};
+    transition: 0.3s ease;
+  }
+
   &:hover {
-    color: ${theme.colors.teal};
+    font-weight: 500;
+    color: ${theme.colors.tealLight};
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 `;
 
@@ -140,7 +178,7 @@ export const HamburgerButton = styled.button<{ $open: boolean }>`
     display: block;
     height: 3px;
     width: 100%;
-    background-color: ${theme.colors.black};
+    background-color: ${theme.colors.white};
     border-radius: ${theme.radius.sm};
     transition: all 0.3s ease-out;
     transform-origin: center;

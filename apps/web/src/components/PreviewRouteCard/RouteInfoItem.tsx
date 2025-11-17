@@ -1,22 +1,56 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 
-const Item = styled.div`
+type Props = {
+  label?: string;
+  value: string | number;
+  icon?: React.ReactNode;
+  mode?: "default" | "compact";
+};
+
+const Item = styled.div<{ $compact?: boolean }>`
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  font-size: ${theme.typography.sm};
+  font-size: 0.875rem;
   color: ${theme.colors.grayDark};
+
+  ${({ $compact }) =>
+    $compact &&
+    css`
+      justify-content: flex-start;
+      gap: ${theme.spacing.xs};
+    `}
+
+  ${theme.media.md} {
+    font-size: ${theme.typography.sm};
+  }
 `;
 
-const Left = styled.div`
+const Left = styled.div<{ $compact?: boolean }>`
   display: flex;
+  gap: ${theme.spacing.xxs};
   align-items: center;
-  gap: ${theme.spacing.xs};
+
+  ${({ $compact }) =>
+    $compact &&
+    css`
+      gap: ${theme.spacing.xxs};
+    `}
 `;
 
-const Label = styled.span`
+const Label = styled.span<{ $compact?: boolean }>`
+  font-size: 0.875rem;
   font-weight: 500;
+
+  ${({ $compact }) =>
+    $compact &&
+    css`
+      display: none;
+    `}
+
+  ${theme.media.md} {
+    font-size: ${theme.typography.sm};
+  }
 `;
 
 const Value = styled.span`
@@ -24,20 +58,24 @@ const Value = styled.span`
   color: ${theme.colors.black};
 `;
 
-type Props = {
-  label: string;
-  value: string | number;
-  icon?: React.ReactNode;
-};
+export default function RouteInfoItem({
+  label,
+  value,
+  icon,
+  mode = "default",
+}: Props) {
+  const compact = mode === "compact";
 
-export default function RouteInfoItem({ label, value, icon }: Props) {
   return (
-    <Item>
-      <Left>
+    <Item $compact={compact}>
+      <Left $compact={compact}>
         {icon && <span>{icon}</span>}
-        <Label>{label}</Label>
+        <Label $compact={compact}>{label}</Label>
       </Left>
-      <Value>{value}</Value>
+
+      {!compact && <Value>{value}</Value>}
+
+      {compact && <Value>{value}</Value>}
     </Item>
   );
 }

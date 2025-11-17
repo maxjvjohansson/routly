@@ -1,42 +1,47 @@
 import styled from "styled-components/native";
-import { View, TextInput, Text, Alert } from "react-native";
+import { View, Alert, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
-import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useEffect, useState } from "react";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { InputField } from "../InputField/InputField";
+import FontAwesome6 from "@expo/vector-icons/build/FontAwesome6";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
-const Section = styled(View)`
+const Section = styled.View`
   flex-direction: column;
   gap: ${theme.spacing.sm}px;
-  margin-bottom: ${theme.spacing.sm}px;
 `;
 
-const Row = styled(View)`
+const Row = styled.View`
   flex-direction: row;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: ${theme.spacing.xs}px;
 `;
 
-const Label = styled(Text)`
+const LabelRow = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: ${theme.spacing.xxs}px;
+`;
+
+const Label = styled.Text`
+  font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
-  font-weight: 500;
   color: ${theme.colors.black};
   margin-bottom: ${theme.spacing.xxs}px;
 `;
 
-const InputContainer = styled(View)`
-  flex: 1;
-`;
-
-const StyledInput = styled(TextInput)`
-  width: 100%;
-  border-width: 1px;
-  border-color: ${theme.colors.gray};
+const LocationButton = styled(TouchableOpacity)`
+  width: 44px;
+  height: 44px;
   border-radius: ${theme.radius.md}px;
-  padding: ${theme.spacing.xs}px ${theme.spacing.sm}px;
-  font-size: ${theme.typography.sm}px;
-  color: ${theme.colors.black};
+  background-color: ${theme.colors.teal};
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-color: ${theme.colors.teal};
 `;
 
 export default function LocationInputs() {
@@ -46,30 +51,26 @@ export default function LocationInputs() {
   const [startText, setStartText] = useState("");
   const [endText, setEndText] = useState("");
 
-  // Sync context to textfields
+  // Sync context to text fields
   useEffect(() => {
     if (startPoint) {
       setStartText(`${startPoint[1].toFixed(5)}, ${startPoint[0].toFixed(5)}`);
-    } else {
-      setStartText("");
-    }
+    } else setStartText("");
   }, [startPoint]);
 
   useEffect(() => {
     if (endPoint) {
       setEndText(`${endPoint[1].toFixed(5)}, ${endPoint[0].toFixed(5)}`);
-    } else {
-      setEndText("");
-    }
+    } else setEndText("");
   }, [endPoint]);
 
-  // Convert text input to coordinates if valid
+  // Convert `lat, lon`
   const tryParseCoords = (val: string): [number, number] | null => {
     const [lat, lon] = val.split(",").map(Number);
     return !isNaN(lat) && !isNaN(lon) ? [lon, lat] : null;
   };
 
-  // User Location
+  // Device location
   const handleUseLocation = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -80,6 +81,7 @@ export default function LocationInputs() {
       const pos = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
+
       setStartPoint([pos.coords.longitude, pos.coords.latitude]);
     } catch (error) {
       console.error(error);
@@ -90,43 +92,63 @@ export default function LocationInputs() {
   return (
     <Section>
       <View>
-        <Label>Start point</Label>
+        <LabelRow>
+          <Label>Start point</Label>
+          <InfoTooltip text="Choose your starting location by picking a point on the map or using your current position." />
+        </LabelRow>
+
         <Row>
-          <InputContainer>
-            <StyledInput
+          <View style={{ flex: 1 }}>
+            <InputField
               placeholder="Enter starting location"
               value={startText}
-              onChangeText={(v: string) => {
+              onChange={(v: string): void => {
                 setStartText(v);
-                const parsed = tryParseCoords(v);
+                const parsed: [number, number] | null = tryParseCoords(v);
                 if (parsed) setStartPoint(parsed);
               }}
-              autoCorrect={false}
-              autoCapitalize="none"
+              fullWidth
+              iconLeft={
+                <Ionicons
+                  name="location-outline"
+                  size={24}
+                  color={theme.colors.black}
+                />
+              }
             />
-          </InputContainer>
+          </View>
 
-          <Button
-            label="Loc"
-            onPress={handleUseLocation}
-            color="teal"
-            variant="solid"
-          />
+          <LocationButton onPress={handleUseLocation}>
+            <FontAwesome6
+              name="location-crosshairs"
+              size={24}
+              color={theme.colors.white}
+            />
+          </LocationButton>
         </Row>
       </View>
 
       <View>
-        <Label>End point (optional)</Label>
-        <StyledInput
+        <LabelRow>
+          <Label>End point (optional)</Label>
+          <InfoTooltip text="Leave this empty to generate a loop. Fill it in if you want a point-to-point route." />
+        </LabelRow>
+        <InputField
           placeholder="Enter destination (leave blank for loop)"
           value={endText}
-          onChangeText={(v: string) => {
+          onChange={(v: string): void => {
             setEndText(v);
-            const parsed = tryParseCoords(v);
+            const parsed: [number, number] | null = tryParseCoords(v);
             if (parsed) setEndPoint(parsed);
           }}
-          autoCorrect={false}
-          autoCapitalize="none"
+          fullWidth
+          iconLeft={
+            <Ionicons
+              name="location-outline"
+              size={24}
+              color={theme.colors.black}
+            />
+          }
         />
       </View>
     </Section>

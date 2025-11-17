@@ -11,6 +11,7 @@ export default function DesktopNav() {
       <NavLink href="/">Home</NavLink>
       <NavLink href="/generate">Generate</NavLink>
       <NavLink href="/explore">Explore</NavLink>
+      <NavLink href="/about">About</NavLink>
 
       {!user ? <NavLink href="/login">Sign in</NavLink> : <ProfileDropdown />}
     </NavLinks>

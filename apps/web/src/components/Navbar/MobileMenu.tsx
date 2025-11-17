@@ -60,6 +60,9 @@ export default function MobileMenu() {
         <MobileLink href="/explore" onClick={closeMenu}>
           Explore
         </MobileLink>
+        <MobileLink href="/about" onClick={closeMenu}>
+          About
+        </MobileLink>
 
         {user ? (
           <>

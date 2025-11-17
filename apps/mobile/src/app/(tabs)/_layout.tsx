@@ -3,13 +3,25 @@ import { Tabs } from "expo-router";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
-import MenuModal from "src/components/MenuModal/MenuModal";
+import MenuModal from "src/components/Modal/MenuModal";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { getUserInitial } from "@routly/lib/utils/user";
+import routlyLogo from "../../../assets/routly_logo_vector_teal.png";
+
+const HeaderLogoWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderLogoImage = styled.Image`
+  width: ${theme.spacing.md}px;
+  height: ${theme.spacing.md}px;
+  margin-right: ${theme.spacing.xxs}px;
+`;
 
 const LogoText = styled.Text`
+  font-family: ${theme.typography.fontBold};
   font-size: ${theme.typography.xl}px;
-  font-weight: 700;
   color: ${theme.colors.teal};
 `;
 
@@ -24,8 +36,8 @@ const Avatar = styled.TouchableOpacity`
 `;
 
 const AvatarText = styled.Text`
+  font-family: ${theme.typography.fontSemiBold};
   color: ${theme.colors.white};
-  font-weight: 600;
   font-size: ${theme.typography.sm}px;
 `;
 
@@ -38,7 +50,12 @@ export default function TabsLayout() {
     <>
       <Tabs
         screenOptions={{
-          headerTitle: () => <LogoText>Routly</LogoText>,
+          headerTitle: () => (
+            <HeaderLogoWrapper>
+              <HeaderLogoImage source={routlyLogo} />
+              <LogoText>Routly</LogoText>
+            </HeaderLogoWrapper>
+          ),
           headerTitleAlign: "left",
           headerRight: () => (
             <Avatar onPress={() => setMenuVisible(true)}>
@@ -57,6 +74,9 @@ export default function TabsLayout() {
             backgroundColor: theme.colors.white,
             borderTopWidth: 0.5,
             borderTopColor: theme.colors.gray,
+          },
+          tabBarLabelStyle: {
+            fontFamily: theme.typography.fontMedium,
           },
         }}
       >

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { webTheme as theme } from "@routly/ui/theme/web";
 
 export const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
@@ -8,10 +9,47 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: var(--font-outfit), sans-serif;
-    background-color: ${({ theme }) => theme.colors.white};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--font-outfit), sans-serif;
+  background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+
+    /*** Works on common browsers ***/
+    ::selection {
+        background-color: ${theme.colors.teal};
+        color: ${theme.colors.white};
+    }
+
+    /*** Mozilla based browsers ***/
+    ::-moz-selection {
+        background-color: ${theme.colors.teal};
+        color: ${theme.colors.white};
+    }
+
+    /***For Other Browsers ***/
+    ::-o-selection {
+        background-color: ${theme.colors.teal};
+        color: ${theme.colors.white};
+    }
+
+    ::-ms-selection {
+        background-color: ${theme.colors.teal};
+        color: ${theme.colors.white};
+    }
+
+    /*** For Webkit ***/
+    ::-webkit-selection {
+        background-color: ${theme.colors.teal};
+        color: ${theme.colors.white};
+    }
+
   }
-  `;
+  main {
+    flex: 1;
+    width: 100%;
+  }
+`;

@@ -3,9 +3,11 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { InputField } from "../InputField/InputField";
-import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useState, useEffect } from "react";
+import { FiMapPin } from "react-icons/fi";
+import { BiCurrentLocation } from "react-icons/bi";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Section = styled.div`
   display: flex;
@@ -18,6 +20,40 @@ const Row = styled.div`
   display: flex;
   gap: ${theme.spacing.xs};
   align-items: flex-end;
+  text-align: left;
+`;
+
+const LocationButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 36.5px;
+  box-sizing: border-box;
+  background-color: ${theme.colors.teal};
+  border: none;
+  border-radius: ${theme.radius.lg};
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 1px solid ${theme.colors.teal};
+    outline-offset: 2px;
+  }
+
+  svg {
+    color: ${theme.colors.white};
+  }
 `;
 
 export default function LocationInputs() {
@@ -59,6 +95,9 @@ export default function LocationInputs() {
       <Row>
         <InputField
           label="Start point"
+          labelRightSlot={
+            <InfoTooltip text="Choose your starting location by picking a point on the map or using your current position." />
+          }
           placeholder="Enter starting location"
           value={startText}
           onChange={(v) => {
@@ -67,18 +106,18 @@ export default function LocationInputs() {
             if (parsed) setStartPoint(parsed);
           }}
           fullWidth
+          iconLeft={<FiMapPin size={18} color={theme.colors.black} />}
         />
-        <Button
-          label="Loc"
-          onClick={handleUseLocation}
-          color="teal"
-          variant="solid"
-          type="button"
-        />
+        <LocationButton type="button" onClick={handleUseLocation}>
+          <BiCurrentLocation size={24} />
+        </LocationButton>
       </Row>
 
       <InputField
         label="End point (optional)"
+        labelRightSlot={
+          <InfoTooltip text="Leave this empty to generate a loop. Fill it in if you want a point-to-point route." />
+        }
         placeholder="Enter destination (leave blank for loop)"
         value={endText}
         onChange={(v) => {
@@ -87,6 +126,7 @@ export default function LocationInputs() {
           if (parsed) setEndPoint(parsed);
         }}
         fullWidth
+        iconLeft={<FiMapPin size={18} color={theme.colors.black} />}
       />
     </Section>
   );

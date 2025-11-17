@@ -1,17 +1,16 @@
 import styled from "styled-components/native";
-import { View } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 
-const DotsContainer = styled(View)`
+const DotsContainer = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: ${theme.spacing.xs}px;
   background-color: ${theme.colors.white};
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md}px;
 `;
 
-const Dot = styled(View)<{ $active?: boolean }>`
+const Dot = styled.View<{ $active?: boolean }>`
   width: ${theme.spacing.xs}px;
   height: ${theme.spacing.xs}px;
   border-radius: ${theme.radius.full}%;
