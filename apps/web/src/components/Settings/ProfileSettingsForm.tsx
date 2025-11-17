@@ -144,6 +144,7 @@ export default function ProfileSettingsForm() {
           placeholder="Your email address"
           disabled={loading || savingProfile}
           iconLeft={<FiMail size={18} color={theme.colors.black} />}
+          autocomplete="email"
         />
 
         <Button

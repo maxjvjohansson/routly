@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
+import { useId } from "react";
 
 type InputFieldProps = {
   label?: string;
@@ -13,6 +14,8 @@ type InputFieldProps = {
   disabled?: boolean;
   fullWidth?: boolean;
   required?: boolean;
+  name?: string;
+  autocomplete?: string;
 };
 
 export const InputWrapper = styled.div<{ $fullWidth?: boolean }>`
@@ -74,41 +77,57 @@ export const InputField = ({
   disabled,
   fullWidth,
   required,
-}: InputFieldProps) => (
-  <InputWrapper $fullWidth={fullWidth}>
-    {label && <Label>{label}</Label>}
-    <InputContainer $hasError={!!error}>
-      {iconLeft && (
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: theme.spacing.xxs,
-          }}
-        >
-          {iconLeft}
-        </span>
-      )}
-      <StyledInput
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        required={required}
-      />
-      {iconRight && (
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: theme.spacing.xxs,
-          }}
-        >
-          {iconRight}
-        </span>
-      )}
-    </InputContainer>
-    {error && <ErrorText>{error}</ErrorText>}
-  </InputWrapper>
-);
+  name,
+  autocomplete,
+}: InputFieldProps) => {
+  // Generate a unique ID per instance
+  const id: string = useId();
+  const inputId: string =
+    name || label?.toLowerCase().replace(/\s+/g, "-") || id;
+
+  return (
+    <InputWrapper $fullWidth={fullWidth}>
+      {label && <Label htmlFor={inputId}>{label}</Label>}
+
+      <InputContainer $hasError={!!error}>
+        {iconLeft && (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: theme.spacing.xxs,
+            }}
+          >
+            {iconLeft}
+          </span>
+        )}
+
+        <StyledInput
+          id={inputId}
+          name={inputId}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          required={required}
+          autoComplete={autocomplete}
+        />
+
+        {iconRight && (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: theme.spacing.xxs,
+            }}
+          >
+            {iconRight}
+          </span>
+        )}
+      </InputContainer>
+
+      {error && <ErrorText>{error}</ErrorText>}
+    </InputWrapper>
+  );
+};

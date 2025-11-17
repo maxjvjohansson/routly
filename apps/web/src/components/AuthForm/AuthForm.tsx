@@ -132,6 +132,7 @@ export default function AuthForm({
         required
         error={fieldErrors.email}
         iconLeft={<FiMail size={18} color={theme.colors.black} />}
+        autocomplete="email"
       />
 
       <InputField
