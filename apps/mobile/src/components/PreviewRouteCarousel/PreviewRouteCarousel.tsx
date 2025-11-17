@@ -15,6 +15,7 @@ import { useRouteActionsWithFeedback } from "@routly/lib/hooks/useRouteActionsWi
 import PreviewRouteCard from "../PreviewRouteCard/PreviewRouteCard";
 import { CarouselDots } from "./CarouselDots";
 import NameRouteModal from "../Modal/NameRouteModal";
+import { Button } from "../Button/Button";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -25,15 +26,6 @@ const BackButtonWrapper = styled.View`
   padding: 0 ${theme.spacing.lg}px;
   margin-bottom: ${theme.spacing.sm}px;
   align-items: flex-end;
-`;
-
-const BackButton = styled.TouchableOpacity`
-  background-color: ${theme.colors.teal};
-  border-radius: ${theme.radius.full}px;
-  width: ${theme.spacing.lg}px;
-  height: ${theme.spacing.lg}px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const CarouselScroll = styled.ScrollView.attrs({
@@ -134,9 +126,14 @@ export default function PreviewRouteCarousel() {
   return (
     <Wrapper>
       <BackButtonWrapper>
-        <BackButton onPress={handleGoBack}>
-          <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
-        </BackButton>
+        <Button
+          label="Go Back"
+          onPress={handleGoBack}
+          color="teal"
+          iconLeft={
+            <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
+          }
+        />
       </BackButtonWrapper>
 
       <CarouselScroll

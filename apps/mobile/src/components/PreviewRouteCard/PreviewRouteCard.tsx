@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { act, useState } from "react";
 import styled from "styled-components/native";
 import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
@@ -6,6 +6,9 @@ import RouteInfoItem from "./RouteInfoItem";
 import RouteWeatherInfo from "./RouteWeatherInfo";
 import { calculateTotalAscent } from "@routly/lib/routeAlgorithms/calculateTotalAscent";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 const Card = styled.View<{ $active?: boolean; $width?: number }>`
   width: ${({ $width }: { $width: any }) => ($width ? `${$width}px` : "auto")};
@@ -35,7 +38,6 @@ const InfoList = styled.View`
 const ButtonWrapper = styled.View`
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   gap: ${theme.spacing.xxs}px;
 `;
@@ -93,10 +95,53 @@ export default function PreviewRouteCard({
       <Title>Route {index + 1}</Title>
 
       <InfoList>
-        <RouteInfoItem label="Activity" value={activityText} />
-        <RouteInfoItem label="Distance" value={`${distance} km`} />
-        <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
-        <RouteWeatherInfo weather={weather} />
+        <RouteInfoItem
+          label="Activity"
+          value={activityText}
+          icon={
+            activity === "run" ? (
+              <MaterialIcons
+                name="directions-run"
+                size={22}
+                color={theme.colors.grayDark}
+              />
+            ) : (
+              <Ionicons
+                name="bicycle"
+                size={22}
+                color={theme.colors.grayDark}
+              />
+            )
+          }
+        />
+        <RouteInfoItem
+          label="Distance"
+          value={`${distance} km`}
+          icon={
+            <FontAwesome5
+              name="route"
+              size={18}
+              color={theme.colors.grayDark}
+            />
+          }
+        />
+        <RouteInfoItem
+          label="Elevation"
+          value={`+${ascent} m`}
+          icon={
+            <FontAwesome5
+              name="mountain"
+              size={16}
+              color={theme.colors.grayDark}
+            />
+          }
+        />
+        <RouteWeatherInfo
+          weather={weather}
+          icon={
+            <FontAwesome5 name="wind" size={18} color={theme.colors.grayDark} />
+          }
+        />
       </InfoList>
 
       <ButtonWrapper>
@@ -104,11 +149,27 @@ export default function PreviewRouteCard({
           label={isActive ? "Active route" : "View route"}
           color={isActive ? "orange" : "teal"}
           onPress={onSelect}
+          iconRight={
+            isActive ? (
+              <MaterialIcons
+                name="check"
+                size={22}
+                color={theme.colors.white}
+              />
+            ) : undefined
+          }
         />
         <Button
           label="Save route"
           color="teal"
           onPress={() => onSaveRequest(index, route)}
+          iconRight={
+            <MaterialIcons
+              name="save-alt"
+              size={22}
+              color={theme.colors.white}
+            />
+          }
         />
       </ButtonWrapper>
 

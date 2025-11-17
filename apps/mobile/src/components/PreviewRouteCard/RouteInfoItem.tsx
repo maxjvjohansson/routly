@@ -1,16 +1,48 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
+import React from "react";
 
-const Row = styled.View`
+type Props = {
+  label?: string;
+  value: string | number;
+  icon?: React.ReactNode;
+  mode?: "default" | "compact";
+};
+
+const Item = styled.View<{ $compact?: boolean }>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  ${({ $compact }: { $compact: any }) =>
+    $compact &&
+    css`
+      justify-content: flex-start;
+    `}
 `;
 
-const Label = styled.Text`
+const Left = styled.View<{ $compact?: boolean }>`
+  flex-direction: row;
+  align-items: center;
+  gap: ${theme.spacing.xxs}px;
+
+  ${({ $compact }: { $compact: any }) =>
+    $compact &&
+    css`
+      gap: ${theme.spacing.xxs}px;
+    `}
+`;
+
+const Label = styled.Text<{ $compact?: boolean }>`
   font-family: ${theme.typography.fontMedium};
   font-size: ${theme.typography.sm}px;
   color: ${theme.colors.grayDark};
+
+  ${({ $compact }: { $compact: any }) =>
+    $compact &&
+    css`
+      display: none;
+    `}
 `;
 
 const Value = styled.Text`
@@ -22,14 +54,19 @@ const Value = styled.Text`
 export default function RouteInfoItem({
   label,
   value,
-}: {
-  label: string;
-  value: string | number;
-}) {
+  icon,
+  mode = "default",
+}: Props) {
+  const compact = mode === "compact";
+
   return (
-    <Row>
-      <Label>{label}</Label>
+    <Item $compact={compact}>
+      <Left $compact={compact}>
+        {icon && <>{icon}</>}
+        <Label $compact={compact}>{label}</Label>
+      </Left>
+
       <Value>{value}</Value>
-    </Row>
+    </Item>
   );
 }
