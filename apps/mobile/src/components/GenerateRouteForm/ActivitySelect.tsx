@@ -4,10 +4,17 @@ import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Section = styled.View`
   width: 100%;
   flex-direction: column;
+`;
+
+const LabelRow = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: ${theme.spacing.xxs}px;
 `;
 
 const Label = styled.Text`
@@ -36,7 +43,10 @@ export default function ActivitySelect() {
 
   return (
     <Section>
-      <Label>Activity Type</Label>
+      <LabelRow>
+        <Label>Activity Type</Label>
+        <InfoTooltip text="Select the type of activity to tailor the route for running or cycling." />
+      </LabelRow>
       <CapsuleGroup>
         <HalfWidth>
           <Button

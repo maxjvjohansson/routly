@@ -5,7 +5,7 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { BiRun, BiCycling } from "react-icons/bi";
-import InfoTooltip from "../InfoToolTip/InfoToolTip";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Section = styled.div`
   display: flex;
