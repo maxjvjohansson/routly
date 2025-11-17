@@ -65,6 +65,33 @@ export default function RoutlyMap({
     });
   }, [routeCoords]);
 
+  // Snap to location when user sets their startPoint manually or via geolocation
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // Don't snap if a route is visible
+    const routeIsVisible = !!routeCoords;
+    if (routeIsVisible) return;
+
+    // No start point, nothing to snap to
+    if (!startPoint) return;
+
+    // Smooth camera animation
+    map.animateCamera(
+      {
+        center: {
+          latitude: startPoint[1],
+          longitude: startPoint[0],
+        },
+        zoom: 13,
+        heading: 0,
+        pitch: 0,
+      },
+      { duration: 1000 }
+    );
+  }, [startPoint, routeCoords]);
+
   // Handle map press (only in editable mode)
   const handleMapPress = useCallback(
     (e: MapPressEvent) => {

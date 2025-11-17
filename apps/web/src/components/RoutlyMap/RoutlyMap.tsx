@@ -282,6 +282,27 @@ export default function RoutlyMap({ routeData, isRoundTrip }: RoutlyMapProps) {
     }
   }, [startPoint, endPoint, isReadOnly]);
 
+  // Snap to location when user sets their startPoint manually or via geolocation
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+
+    // Don't snap while a route is displayed
+    const routeIsVisible = routes.length > 0 || routeData != null;
+    if (routeIsVisible) return;
+
+    // If there is no start point, do nothing
+    if (!startPoint) return;
+
+    // Smooth fly animation
+    m.flyTo({
+      center: startPoint,
+      speed: 1.5,
+      curve: 1.4,
+      essential: true,
+    });
+  }, [startPoint, routes.length, routeData]);
+
   return (
     <MapContainer
       ref={container}
