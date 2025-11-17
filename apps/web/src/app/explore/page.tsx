@@ -171,7 +171,7 @@ export default function ExplorePage() {
           {!nearMe && (
             <ButtonWrapper>
               <Button
-                label="Load more"
+                label="Load More"
                 color="orange"
                 onClick={() => setPage((prev) => prev + 1)}
               />

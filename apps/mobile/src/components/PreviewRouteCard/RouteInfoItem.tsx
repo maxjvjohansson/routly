@@ -18,6 +18,7 @@ const Item = styled.View<{ $compact?: boolean }>`
     $compact &&
     css`
       justify-content: flex-start;
+      gap: ${theme.spacing.xxs}px;
     `}
 `;
 
