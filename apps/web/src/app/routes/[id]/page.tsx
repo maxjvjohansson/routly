@@ -13,6 +13,7 @@ import { BiRun, BiCycling } from "react-icons/bi";
 import { FaRoute, FaMountain, FaClock } from "react-icons/fa";
 import { FiArrowLeft, FiDownload } from "react-icons/fi";
 import { exportRouteToGpx } from "@routly/lib/gpx/exportGpx";
+import { sanitizeFilename } from "@routly/lib/utils/sanitizeFilename";
 
 const Wrapper = styled.section`
   display: flex;
@@ -127,6 +128,8 @@ export default function RouteDetailPage() {
   const activity =
     route.activity.charAt(0).toUpperCase() + route.activity.slice(1);
 
+  const filename: string = sanitizeFilename(route.name);
+
   const handleGoBack = (): void => {
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
@@ -175,9 +178,9 @@ export default function RouteDetailPage() {
             color="orange"
             onClick={() => {
               if (!geojson) return;
-              exportRouteToGpx(geojson, `${route.name || "route"}.gpx`);
+              exportRouteToGpx(geojson, filename);
             }}
-            iconRight={<FiDownload size={20} />}
+            iconLeft={<FiDownload size={20} />}
           />
 
           <Button

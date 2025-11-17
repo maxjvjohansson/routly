@@ -13,6 +13,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { exportRouteToGpxNative } from "@routly/lib/gpx/exportGpx.native";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -41,8 +42,11 @@ const InfoList = styled.View`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const BackButtonWrapper = styled.View`
-  margin-top: ${theme.spacing.md}px;
+const ActionButtons = styled.View`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.sm}px;
+  margin-top: ${theme.spacing.xxs}px;
   align-items: flex-end;
 `;
 
@@ -84,7 +88,11 @@ export default function RouteDetailScreen() {
               type: "Feature",
               geometry: {
                 type: "LineString",
-                coordinates: route.coordinates.map((p: any) => [p.lng, p.lat]),
+                coordinates: route.coordinates.map((p: any) => [
+                  p.lng,
+                  p.lat,
+                  p.elevation ?? 0,
+                ]),
               },
               properties: {},
             },
@@ -166,10 +174,29 @@ export default function RouteDetailScreen() {
           />
         </InfoList>
 
-        <BackButtonWrapper>
+        <ActionButtons>
+          <Button
+            label="Export GPX"
+            color="orange"
+            fullWidth
+            iconLeft={
+              <Ionicons
+                name="download-outline"
+                size={18}
+                color={theme.colors.white}
+              />
+            }
+            onPress={() => {
+              if (geojson) {
+                exportRouteToGpxNative(geojson, route.name);
+              }
+            }}
+          />
+
           <Button
             label="Go Back"
             color="teal"
+            fullWidth
             onPress={handleGoBack}
             iconLeft={
               <Ionicons
@@ -179,7 +206,7 @@ export default function RouteDetailScreen() {
               />
             }
           />
-        </BackButtonWrapper>
+        </ActionButtons>
       </InfoPanel>
       <RoutlyMap routeData={geojson} isRoundTrip={route.is_roundtrip} />
     </Wrapper>
