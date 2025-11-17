@@ -5,6 +5,7 @@ export function exportRouteToGpx(
   filename: string = "route.gpx"
 ) {
   try {
+    // Convert GeoJSON to GPX string
     const gpx: string = togpx(featureCollection);
 
     const blob = new Blob([gpx], { type: "application/gpx+xml" });
