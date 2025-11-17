@@ -6,6 +6,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import GenerateRouteForm from "../GenerateRouteForm/GenerateRouteForm";
 import RoutlyMap from "../RoutlyMap/RoutlyMap";
 import PreviewRouteCarousel from "../PreviewRouteCarousel/PreviewRouteCarousel";
+import { WindDirectionOverlay } from "../WindDirectionOverlay/WindDirectionOverlay";
 
 const RouteGenerationWrapper = styled.section`
   display: flex;
@@ -37,10 +38,13 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
   flex: 1;
   min-width: 0;
+  position: relative;
 `;
 
 export default function GenerateRouteSection() {
-  const { routes } = useRouteGeneration();
+  const { routes, weatherByRoute, activeRouteIndex } = useRouteGeneration();
+  const full = weatherByRoute?.[activeRouteIndex] ?? null;
+  const weather = full?.weather ?? null;
 
   return (
     <RouteGenerationWrapper>
@@ -49,6 +53,12 @@ export default function GenerateRouteSection() {
       </LeftContainer>
 
       <RightContainer>
+        {weather && (
+          <WindDirectionOverlay
+            windSpeed={weather.windSpeed}
+            windDirection={weather.windDirection}
+          />
+        )}
         <RoutlyMap />
       </RightContainer>
     </RouteGenerationWrapper>

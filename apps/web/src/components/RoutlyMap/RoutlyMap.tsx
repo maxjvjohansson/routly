@@ -48,8 +48,8 @@ export default function RoutlyMap({ routeData, isRoundTrip }: RoutlyMapProps) {
     activeRouteIndex,
   } = useRouteGeneration();
 
-  const isReadOnly = !!routeData;
-  const mapLocked = isReadOnly || routes.length > 0; // Lock map interactions when routes exist
+  const isReadOnly: boolean = !!routeData;
+  const mapLocked: boolean = isReadOnly || routes.length > 0; // Lock map interactions when routes exist
 
   // Keep track of last click-interaction without triggering re-init of map
   const clickHandlerRef = useRef<
