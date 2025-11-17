@@ -26,6 +26,7 @@ const Card = styled.div`
   padding: ${theme.spacing.lg};
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: ${theme.spacing.md};
 `;
 
@@ -102,7 +103,11 @@ export default function ExploreRouteCard({
       </InfoRow>
 
       <Actions>
-        <Button label="View route" color="teal" onClick={() => onView(route)} />
+        <Button
+          label="View Details"
+          color="teal"
+          onClick={() => onView(route)}
+        />
 
         {onToggleLike && (
           <LikeButton
