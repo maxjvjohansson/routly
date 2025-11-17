@@ -1,7 +1,7 @@
 import { buildGpx } from "./buildGpx";
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import { sanitizeFilename } from "../utils/sanitizeFileName";
+import { sanitizeFilename } from "../utils/sanitizeFilename";
 
 export async function exportRouteToGpxNative(
   featureCollection: GeoJSON.FeatureCollection,
