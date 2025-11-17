@@ -5,6 +5,11 @@ import { Ionicons } from "@expo/vector-icons";
 import RouteInfoItem from "../PreviewRouteCard/RouteInfoItem";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import {
+  formatDuration,
+  formatAscent,
+  formatDistance,
+} from "@routly/lib/utils/routeFormatters";
 
 type Props = {
   route: any;
@@ -50,9 +55,9 @@ export default function ExploreRouteCard({
   onToggleLike,
   isLiked = false,
 }: Props) {
-  const distance = route.distance_km?.toFixed(1);
-  const ascent = route.elevation_gain ?? 0;
-  const duration = route.duration_estimate?.toFixed(0);
+  const distance: string = formatDistance(route.distance_km);
+  const ascent: number = formatAscent(route.elevation_gain);
+  const duration: string = formatDuration(route.duration_estimate);
 
   return (
     <Card>

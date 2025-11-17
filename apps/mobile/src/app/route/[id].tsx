@@ -14,6 +14,12 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { exportRouteToGpxNative } from "@routly/lib/gpx/exportGpx.native";
+import {
+  formatDistance,
+  formatAscent,
+  formatDuration,
+  formatActivity,
+} from "@routly/lib/utils/routeFormatters";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -100,11 +106,10 @@ export default function RouteDetailScreen() {
         }
       : null;
 
-  const distance = route.distance_km?.toFixed(1);
-  const ascent = route.elevation_gain ?? 0;
-  const duration = route.duration_estimate?.toFixed(0);
-  const activity =
-    route.activity.charAt(0).toUpperCase() + route.activity.slice(1);
+  const distance: string = formatDistance(route.distance_km);
+  const ascent: number = formatAscent(route.elevation_gain);
+  const duration: string = formatDuration(route.duration_estimate);
+  const activity: string = formatActivity(route.activity);
 
   const handleGoBack = (): void => {
     if (navigation.canGoBack()) {
