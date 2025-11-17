@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import { Modal } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type Props = {
   visible: boolean;
@@ -81,6 +82,13 @@ export default function ConfirmModal({
               color="red"
               onPress={onConfirm}
               disabled={loading}
+              iconRight={
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={22}
+                  color={theme.colors.white}
+                />
+              }
             />
           </ButtonRow>
         </ModalBox>

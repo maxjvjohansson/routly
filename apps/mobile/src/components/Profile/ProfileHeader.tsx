@@ -7,6 +7,7 @@ import {
   getUserEmail,
 } from "@routly/lib/utils/user";
 import { useRouter } from "expo-router";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 const Header = styled.View`
   background-color: ${theme.colors.white};
@@ -83,6 +84,9 @@ export default function ProfileHeader({ user }: { user: any }) {
           color="teal"
           fullWidth
           onPress={() => router.push("/settings")}
+          iconRight={
+            <FontAwesome5 name="edit" size={18} color={theme.colors.white} />
+          }
         />
       </ButtonWrapper>
     </Header>

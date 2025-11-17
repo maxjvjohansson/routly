@@ -34,12 +34,6 @@ const InfoRow = styled.View`
   margin-bottom: ${theme.spacing.md}px;
 `;
 
-const InfoText = styled.Text`
-  font-family: ${theme.typography.fontRegular};
-  font-size: ${theme.typography.sm}px;
-  color: ${theme.colors.grayDark};
-`;
-
 const Actions = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -59,6 +53,7 @@ export default function ExploreRouteCard({
   const distance = route.distance_km?.toFixed(1);
   const ascent = route.elevation_gain ?? 0;
   const duration = route.duration_estimate?.toFixed(0);
+
   return (
     <Card>
       <Title>{route.name}</Title>

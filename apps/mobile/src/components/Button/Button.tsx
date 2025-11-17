@@ -5,7 +5,7 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 type ButtonColor = keyof typeof theme.colors;
 
 type ButtonProps = {
-  label: string;
+  label?: string;
   onPress?: () => void;
   variant?: "solid" | "outline" | "toggle";
   color?: ButtonColor;
@@ -26,7 +26,6 @@ interface StyledButtonProps {
 
 const StyledButton = styled(TouchableOpacity)<StyledButtonProps>`
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
   padding: ${theme.spacing.xs}px ${theme.spacing.lg}px;
@@ -76,11 +75,11 @@ const Label = styled(Text)<{ $variant?: string; $active?: boolean }>`
 `;
 
 const IconLeft = styled(View)`
-  margin-right: ${theme.spacing.xxs}px;
+  margin-right: ${theme.spacing.xs}px;
 `;
 
 const IconRight = styled(View)`
-  margin-left: ${theme.spacing.xxs}px;
+  margin-left: ${theme.spacing.xs}px;
 `;
 
 export const Button = ({
