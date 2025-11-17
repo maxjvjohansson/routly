@@ -2,6 +2,8 @@ import { useRouter } from "expo-router";
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import ProfileSettingsForm from "src/components/Settings/ProfileSettingsForm";
+import { Button } from "src/components/Button/Button";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -22,25 +24,10 @@ const Title = styled.Text`
   color: ${theme.colors.black};
 `;
 
-const BackButton = styled.TouchableOpacity`
-  width: ${theme.spacing.xl}px;
-  height: ${theme.spacing.xl}px;
-  border-radius: ${theme.radius.full}px;
-  background-color: ${theme.colors.teal};
-  align-items: center;
-  justify-content: center;
-`;
-
-const BackButtonLabel = styled.Text`
-  color: ${theme.colors.white};
-  font-family: ${theme.typography.fontSemiBold};
-  font-size: ${theme.typography.md}px;
-`;
-
 export default function SettingsScreen() {
   const router = useRouter();
 
-  const handleBack = () => {
+  const handleGoBack = () => {
     router.replace("/profile");
   };
 
@@ -48,9 +35,14 @@ export default function SettingsScreen() {
     <Container>
       <HeaderRow>
         <Title>Profile Settings</Title>
-        <BackButton onPress={handleBack}>
-          <BackButtonLabel>←</BackButtonLabel>
-        </BackButton>
+        <Button
+          label="Go Back"
+          color="teal"
+          onPress={handleGoBack}
+          iconLeft={
+            <Ionicons name="arrow-back" size={18} color={theme.colors.white} />
+          }
+        />
       </HeaderRow>
       <ProfileSettingsForm />
     </Container>
