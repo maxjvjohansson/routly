@@ -82,7 +82,7 @@ core flow.
 
 - Supabase email/password authentication.
 
-## Storing Routes
+## Storing Routes and Route Operations
 
 Users can save generated routes (GeoJSON + metadata). Supported actions:
 
@@ -94,7 +94,7 @@ Users can save generated routes (GeoJSON + metadata). Supported actions:
 - Browse and filter routes from other users on the Explore page (filter by activity, distance, and proximity)
 - View or download routes created by others
 
-# Running Locally
+## Running Locally
 
 ### Requirements
 
@@ -103,22 +103,22 @@ Users can save generated routes (GeoJSON + metadata). Supported actions:
 - ORS API key, Google Weather API key, Supabase project/API keys, Maptiler API key (not included in
   repo),
 
-# 1. Clone repository
+### 1. Clone repository
 
     git clone https://github.com/maxjvjohansson/routly
     cd routly
 
-# 2. Install dependencies
+### 2. Install dependencies
 
     npm install
 
-# 3. Environment Variables
+### 3. Environment Variables
 
 Routly uses **different env files** for Web and Mobile.
 
 ---
 
-## Web --- `apps/web/.env.local`
+#### Web --- `apps/web/.env.local`
 
     NEXT_PUBLIC_API_BASE_URL=
     NEXT_PUBLIC_SUPABASE_URL=
@@ -133,7 +133,7 @@ Routly uses **different env files** for Web and Mobile.
 
 ---
 
-## Mobile --- `apps/mobile/.env`
+#### Mobile --- `apps/mobile/.env`
 
     EXPO_PUBLIC_API_BASE_URL=http://localhost:3000
 
@@ -145,7 +145,7 @@ Routly uses **different env files** for Web and Mobile.
 
 ---
 
-# 4. Start development servers from project root
+### 4. Start development servers from project root
 
     npm run dev
 
@@ -153,13 +153,13 @@ Starts both Web (Next.js) and Mobile (Expo).
 
 ---
 
-# 5. Using the App
+### 5. Using the App
 
 To explore the full functionality, you need to create an account in the app/or on the website.
 
 ---
 
-# Roadmap/Future Development
+## Roadmap/Future Development
 
 - Smart mode: background fetching and ranking to present the most optimal route based on wind and elevation.
 - Preferred-surface and preferred-light routing improvements (e.g. gravel, asphalt or roads with street lamps).
