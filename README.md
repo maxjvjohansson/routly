@@ -118,7 +118,7 @@ Routly uses **different env files** for Web and Mobile.
 
 ---
 
-#### Web --- `apps/web/.env.local`
+#### Web: `apps/web/.env.local`
 
     NEXT_PUBLIC_API_BASE_URL=
     NEXT_PUBLIC_SUPABASE_URL=
@@ -133,7 +133,7 @@ Routly uses **different env files** for Web and Mobile.
 
 ---
 
-#### Mobile --- `apps/mobile/.env`
+#### Mobile: `apps/mobile/.env`
 
     EXPO_PUBLIC_API_BASE_URL=http://localhost:3000
 
