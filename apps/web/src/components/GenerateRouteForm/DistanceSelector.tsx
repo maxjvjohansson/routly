@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import InfoTooltip from "../InfoToolTip/InfoToolTip";
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +15,19 @@ const LabelRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: ${theme.typography.sm};
+  font-weight: 500;
+  color: ${theme.colors.black};
+`;
+
+const LabelLeftWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: ${theme.spacing.xxs};
+  white-space: nowrap;
+`;
+
+const Label = styled.span`
   font-size: ${theme.typography.sm};
   font-weight: 500;
   color: ${theme.colors.black};
@@ -74,7 +88,10 @@ export default function DistanceSelector() {
   return (
     <Container>
       <LabelRow>
-        <span>Distance (km)</span>
+        <LabelLeftWrapper>
+          <Label>Distance (km)</Label>
+          <InfoTooltip text="Set your preferred distance for the loop. The final route may vary slightly." />
+        </LabelLeftWrapper>
         <ManualInput
           id="number-input"
           type="number"

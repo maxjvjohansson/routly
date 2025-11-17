@@ -7,6 +7,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useState, useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
 import { BiCurrentLocation } from "react-icons/bi";
+import InfoTooltip from "../InfoToolTip/InfoToolTip";
 
 const Section = styled.div`
   display: flex;
@@ -94,6 +95,9 @@ export default function LocationInputs() {
       <Row>
         <InputField
           label="Start point"
+          labelRightSlot={
+            <InfoTooltip text="Choose your starting location by picking a point on the map or using your current position." />
+          }
           placeholder="Enter starting location"
           value={startText}
           onChange={(v) => {
@@ -111,6 +115,9 @@ export default function LocationInputs() {
 
       <InputField
         label="End point (optional)"
+        labelRightSlot={
+          <InfoTooltip text="Leave this empty to generate a loop. Fill it in if you want a point-to-point route." />
+        }
         placeholder="Enter destination (leave blank for loop)"
         value={endText}
         onChange={(v) => {
