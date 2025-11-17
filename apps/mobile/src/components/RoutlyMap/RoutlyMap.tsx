@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native";
 import { mapStyle } from "./MapStyle";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useMemo, useCallback, useRef, useEffect } from "react";
+import { WindDirectionOverlay } from "../WindDirectionOverlay/WindDirectionOverlay";
 
 type RoutlyMapProps = {
   height?: number;
@@ -34,7 +35,10 @@ export default function RoutlyMap({
     clearPoints,
     routes,
     activeRouteIndex,
+    weatherByRoute,
   } = useRouteGeneration();
+
+  const weather = weatherByRoute?.[activeRouteIndex]?.weather ?? null;
 
   const hasRoutes = routes.length > 0;
   const isReadOnly = !!routeData;
@@ -103,6 +107,12 @@ export default function RoutlyMap({
 
   return (
     <MapContainer $height={height}>
+      {weather && (
+        <WindDirectionOverlay
+          windSpeed={weather.windSpeed}
+          windDirection={weather.windDirection}
+        />
+      )}
       <MapView
         ref={mapRef}
         provider="google"

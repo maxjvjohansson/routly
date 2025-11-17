@@ -43,7 +43,8 @@ export function WindDirectionOverlay({
   // Convert degrees to UI arrow rotation
   // Google gives METEOROLOGICAL degrees: 0° = North, clockwise.
   // FaLocationArrow icon points "North-East" by default (45° offset).
-  const iconRotation: number = windDirection + 45;
+  const baseRotation: number = windDirection;
+  const iconRotation: number = baseRotation - 45;
 
   return (
     <Wrapper>
