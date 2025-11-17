@@ -146,7 +146,7 @@ export default function PreviewRouteCard({
           value={`+${ascent} m`}
           icon={<FaMountain size={18} />}
         />
-        <RouteWeatherInfo weather={weather} icon={<FaWind size={18} />} />
+        <RouteWeatherInfo weather={weather} />
       </InfoList>
 
       <ButtonWrapper>

@@ -76,6 +76,7 @@ export default function DistanceSelector() {
       <LabelRow>
         <span>Distance (km)</span>
         <ManualInput
+          id="number-input"
           type="number"
           min={1}
           value={distance}
