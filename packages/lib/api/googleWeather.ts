@@ -33,15 +33,23 @@ export async function fetchWeather(
   const res = await fetch(url);
 
   if (!res.ok) {
-    const txt = await res.text();
+    const txt: string = await res.text();
     throw new Error(`Weather API failed ${res.status}: ${txt}`);
   }
 
   const data = await res.json();
   const current = data;
+
+  // Google Weather: wind.speed.value is in km/h, convert to m/s for the app
+  const windSpeedKmh: number | null =
+    current?.wind?.speed?.value != null ? current.wind.speed.value : null;
+
+  const windSpeedMs: number | null =
+    windSpeedKmh != null ? Number((windSpeedKmh / 3.6).toFixed(1)) : null;
+
   return {
     temperature: current?.temperature?.degrees ?? null,
-    windSpeed: current?.wind?.speed?.value ?? null,
+    windSpeed: windSpeedMs,
     windDirection: current?.wind?.direction?.degrees ?? null,
     windCardinal: current?.wind?.direction?.cardinal ?? null,
     humidity: current?.relativeHumidity ?? null,

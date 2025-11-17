@@ -135,12 +135,7 @@ export default function PreviewRouteCard({
             />
           }
         />
-        <RouteWeatherInfo
-          weather={weather}
-          icon={
-            <FontAwesome5 name="wind" size={18} color={theme.colors.grayDark} />
-          }
-        />
+        <RouteWeatherInfo weather={weather} />
       </InfoList>
 
       <ButtonWrapper>
