@@ -7,7 +7,7 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { roundTripSeeds } from "@routly/lib/data/roundTripSeeds";
 import { useState, useEffect } from "react";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { IconWand } from "@tabler/icons-react-native";
 
 const FormContainer = styled.View`
   padding: ${theme.spacing.lg}px;
@@ -143,9 +143,7 @@ export default function GenerateRouteForm() {
         fullWidth
         onPress={handleSubmit}
         disabled={isLoading}
-        iconRight={
-          <FontAwesome5 name="magic" size={24} color={theme.colors.white} />
-        }
+        iconRight={<IconWand size={22} color={theme.colors.white} />}
       />
     </FormContainer>
   );
