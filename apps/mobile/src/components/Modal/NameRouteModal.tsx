@@ -6,6 +6,7 @@ import { Modal } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
 import { InputField } from "../InputField/InputField";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type Props = {
   visible: boolean;
@@ -93,6 +94,13 @@ export default function NameRouteModal({
               color="teal"
               onPress={handleConfirm}
               disabled={loading}
+              iconRight={
+                <MaterialIcons
+                  name="save-alt"
+                  size={22}
+                  color={theme.colors.white}
+                />
+              }
             />
           </ButtonWrapper>
         </ModalBox>
