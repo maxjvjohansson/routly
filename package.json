@@ -33,6 +33,7 @@
   ],
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
-    "@supabase/supabase-js": "^2.75.0"
+    "@supabase/supabase-js": "^2.75.0",
+    "togpx": "^0.5.4"
   }
 }
