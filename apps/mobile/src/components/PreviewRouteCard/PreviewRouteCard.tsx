@@ -9,6 +9,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { formatActivityLabel } from "@routly/lib/utils/activityText";
 
 const Card = styled.View<{ $active?: boolean; $width?: number }>`
   width: ${({ $width }: { $width: any }) => ($width ? `${$width}px` : "auto")};
@@ -85,10 +86,8 @@ export default function PreviewRouteCard({
   const ascent: number = calculateTotalAscent(route);
   const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
   const averageRunSpeedKmH = 10;
-  const adjustedRunTimeMin = (distance / averageRunSpeedKmH) * 60;
-
-  const activityText: string =
-    activity.charAt(0).toUpperCase() + activity.slice(1);
+  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
+  const activityText: string = formatActivityLabel(activity);
 
   return (
     <Card $active={isActive} $width={width}>
