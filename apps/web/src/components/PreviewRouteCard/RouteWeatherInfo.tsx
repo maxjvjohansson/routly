@@ -1,6 +1,15 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { formatWindDirection } from "@routly/lib/routeAlgorithms/formatWindDirection";
+import {
+  FaWind,
+  FaSun,
+  FaCloud,
+  FaCloudSun,
+  FaCloudRain,
+  FaSnowflake,
+  FaSmog,
+} from "react-icons/fa";
 
 const Row = styled.div`
   display: flex;
@@ -16,15 +25,12 @@ const Row = styled.div`
 const Left = styled.div`
   display: flex;
   gap: ${theme.spacing.xxs};
+  align-items: center;
 `;
 
 const Label = styled.span`
-  font-size: 0.875rem;
   font-weight: 500;
-
-  ${theme.media.md} {
-    font-size: ${theme.typography.sm};
-  }
+  color: ${theme.colors.grayDark};
 `;
 
 const Value = styled.span`
@@ -39,26 +45,55 @@ type Props = {
     temperature?: number;
     condition?: string;
   } | null;
-  icon?: React.ReactNode;
 };
 
-export default function RouteWeatherInfo({ weather, icon }: Props) {
+function getConditionIcon(condition?: string) {
+  if (!condition) return <FaCloud size={18} />;
+  const c = condition.toLowerCase();
+
+  if (c.includes("sun") || c.includes("clear")) return <FaSun size={18} />;
+  if (c.includes("cloud") && c.includes("part"))
+    return <FaCloudSun size={18} />;
+  if (c.includes("cloud")) return <FaCloud size={18} />;
+  if (c.includes("rain")) return <FaCloudRain size={18} />;
+  if (c.includes("snow")) return <FaSnowflake size={18} />;
+  if (c.includes("fog")) return <FaSmog size={18} />;
+
+  return <FaCloud size={18} />;
+}
+
+export default function RouteWeatherInfo({ weather }: Props) {
   if (!weather) return null;
 
-  const { windCardinal, windSpeed } = weather;
+  const { windCardinal, windSpeed, temperature, condition } = weather;
 
   const windLabel: string =
     windCardinal && windSpeed != null
       ? `${formatWindDirection(windCardinal)} (${windSpeed} m/s)`
-      : (windCardinal ?? "—");
+      : "—";
+
+  const icon = getConditionIcon(condition);
 
   return (
-    <Row>
-      <Left>
-        {icon && <span>{icon}</span>}
-        <Label>Wind</Label>
-      </Left>
-      <Value>{windLabel}</Value>
-    </Row>
+    <>
+      <Row>
+        <Left>
+          {icon}
+          <Label>Weather</Label>
+        </Left>
+        <Value>
+          {condition || "—"}
+          {temperature != null ? ` · ${temperature}°C` : ""}
+        </Value>
+      </Row>
+
+      <Row>
+        <Left>
+          <FaWind size={18} />
+          <Label>Wind</Label>
+        </Left>
+        <Value>{windLabel}</Value>
+      </Row>
+    </>
   );
 }
