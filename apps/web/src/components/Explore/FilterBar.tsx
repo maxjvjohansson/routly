@@ -122,6 +122,8 @@ export default function FilterBar({
       </FilterGroup>
 
       <SortSelect
+        id="sort-select"
+        name="sort"
         value={sort}
         onChange={(e) =>
           setSort(e.target.value as "newest" | "distance_asc" | "distance_desc")

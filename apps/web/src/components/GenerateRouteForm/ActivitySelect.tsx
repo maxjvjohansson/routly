@@ -12,7 +12,7 @@ const Section = styled.div`
   gap: ${theme.spacing.xxs};
 `;
 
-const Label = styled.label`
+const Label = styled.span`
   text-align: left;
   font-size: ${theme.typography.sm};
   font-weight: 500;
