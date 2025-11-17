@@ -1,4 +1,4 @@
-import { act, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
 import { Button } from "../Button/Button";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
@@ -10,6 +10,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { formatActivityLabel } from "@routly/lib/utils/activityText";
+import {
+  formatDistance,
+  formatAscent,
+  formatDuration,
+} from "@routly/lib/utils/routeFormatters";
 
 const Card = styled.View<{ $active?: boolean; $width?: number }>`
   width: ${({ $width }: { $width: any }) => ($width ? `${$width}px` : "auto")};
@@ -82,12 +87,17 @@ export default function PreviewRouteCard({
   const { activity } = useRouteGeneration();
 
   const summary: any = route?.features?.[0]?.properties ?? {};
-  const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
-  const ascent: number = calculateTotalAscent(route);
-  const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
-  const averageRunSpeedKmH = 10;
-  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
+  const distance: string = formatDistance(summary?.distanceKm);
+  const ascent: number = formatAscent(calculateTotalAscent(route));
+  const duration: string = formatDuration(summary?.durationMin);
   const activityText: string = formatActivityLabel(activity);
+
+  const numericDistance: number = parseFloat(distance);
+  const averageRunSpeedKmH = 10;
+
+  const adjustedRunTimeMin: number | null = !isNaN(numericDistance)
+    ? (numericDistance / averageRunSpeedKmH) * 60
+    : null;
 
   return (
     <Card $active={isActive} $width={width}>
@@ -178,7 +188,7 @@ export default function PreviewRouteCard({
         {showDetails && (
           <DetailsText>Est. duration: {duration} min</DetailsText>
         )}
-        {showDetails && activity === "run" && (
+        {showDetails && activity === "run" && adjustedRunTimeMin && (
           <DetailsText>
             Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
           </DetailsText>
