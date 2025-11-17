@@ -11,7 +11,8 @@ import RouteInfoItem from "src/components/PreviewRouteCard/RouteInfoItem";
 import type { FeatureCollection, LineString } from "geojson";
 import { BiRun, BiCycling } from "react-icons/bi";
 import { FaRoute, FaMountain, FaClock } from "react-icons/fa";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiDownload } from "react-icons/fi";
+import { exportRouteToGpx } from "@routly/lib/gpx/exportGpx";
 
 const Wrapper = styled.section`
   display: flex;
@@ -39,6 +40,7 @@ const InfoPanel = styled.div`
   padding: ${theme.spacing.lg};
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: ${theme.spacing.md};
 `;
 
@@ -60,9 +62,15 @@ const InfoList = styled.div`
   gap: ${theme.spacing.xs};
 `;
 
-const BackButtonWrapper = styled.div`
+const ActionButtons = styled.div`
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: ${theme.spacing.sm};
+
+  ${theme.media.md} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 export default function RouteDetailPage() {
@@ -101,7 +109,11 @@ export default function RouteDetailPage() {
               type: "Feature",
               geometry: {
                 type: "LineString",
-                coordinates: route.coordinates.map((p: any) => [p.lng, p.lat]),
+                coordinates: route.coordinates.map((p: any) =>
+                  p.elevation != null
+                    ? [p.lng, p.lat, p.elevation]
+                    : [p.lng, p.lat]
+                ),
               },
               properties: {},
             },
@@ -157,14 +169,24 @@ export default function RouteDetailPage() {
           />
         </InfoList>
 
-        <BackButtonWrapper>
+        <ActionButtons>
+          <Button
+            label="Export GPX"
+            color="orange"
+            onClick={() => {
+              if (!geojson) return;
+              exportRouteToGpx(geojson, `${route.name || "route"}.gpx`);
+            }}
+            iconRight={<FiDownload size={20} />}
+          />
+
           <Button
             label="Go Back"
             color="teal"
             onClick={handleGoBack}
             iconLeft={<FiArrowLeft size={20} />}
           />
-        </BackButtonWrapper>
+        </ActionButtons>
       </InfoPanel>
 
       <MapContainer>
