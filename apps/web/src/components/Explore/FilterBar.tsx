@@ -18,14 +18,15 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: ${theme.spacing.md};
   margin-bottom: ${theme.spacing.xl};
+  align-items: center;
 
   ${theme.media.md} {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-start;
+    gap: ${theme.spacing.lg};
   }
 `;
 

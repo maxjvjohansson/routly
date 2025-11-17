@@ -20,6 +20,7 @@ type Props = {
 };
 
 const Card = styled.div`
+  width: 100%;
   background: ${theme.colors.white};
   border: 1px solid ${theme.colors.gray};
   border-radius: ${theme.radius.lg};

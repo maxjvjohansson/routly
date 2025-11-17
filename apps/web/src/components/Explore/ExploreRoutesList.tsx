@@ -5,24 +5,24 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import ExploreRouteCard from "./ExploreRouteCard";
 import { useRouter } from "next/navigation";
 
-const Grid = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: ${theme.spacing.lg};
-
-  ${theme.media.md} {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
-
 type Props = {
   routes: any[];
   loading: boolean;
   onToggleLike?: (route: any) => void;
   likedRouteIds?: string[];
 };
+
+const Grid = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: ${theme.spacing.lg};
+
+  ${theme.media.lg} {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
 
 export default function ExploreRoutesList({
   routes,
