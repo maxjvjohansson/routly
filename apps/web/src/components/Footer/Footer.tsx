@@ -53,15 +53,34 @@ const NavLinks = styled.nav`
     flex-direction: row;
     gap: ${theme.spacing.lg};
   }
+`;
 
-  a {
+const FooterLink = styled(Link)`
+  position: relative;
+  text-decoration: none;
+  color: ${theme.colors.white};
+  font-size: ${theme.typography.md};
+  padding-bottom: 2px;
+
+  transition: color 0.25s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0%;
+    height: 2px;
+    background-color: ${theme.colors.white};
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
     color: ${theme.colors.white};
-    text-decoration: none;
-    font-size: ${theme.typography.md};
+  }
 
-    &:hover {
-      text-decoration: underline;
-    }
+  &:hover::after {
+    width: 100%;
   }
 `;
 
@@ -90,10 +109,10 @@ export default function Footer() {
       <TopRow>
         <LogoText>Routly</LogoText>
         <NavLinks>
-          <Link href="/">Home</Link>
-          <Link href="/generate">Generate</Link>
-          <Link href="/explore">Explore</Link>
-          <Link href="/about">About</Link>
+          <FooterLink href="/">Home</FooterLink>
+          <FooterLink href="/generate">Generate</FooterLink>
+          <FooterLink href="/explore">Explore</FooterLink>
+          <FooterLink href="/about">About</FooterLink>
         </NavLinks>
       </TopRow>
 

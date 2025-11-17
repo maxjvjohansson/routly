@@ -62,13 +62,34 @@ export const NavLinks = styled.div`
 `;
 
 export const NavLink = styled(Link)`
+  position: relative;
   text-decoration: none;
   font-weight: 400;
   color: ${theme.colors.white};
+  padding-bottom: 2px;
+
+  transition:
+    color 0.2s ease,
+    font-weight 0.2s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0%;
+    height: 2px;
+    background-color: ${theme.colors.tealLight};
+    transition: 0.3s ease;
+  }
+
   &:hover {
     font-weight: 500;
     color: ${theme.colors.tealLight};
-    text-decoration: underline;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 `;
 
