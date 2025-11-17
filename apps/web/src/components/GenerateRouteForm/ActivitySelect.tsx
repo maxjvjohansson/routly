@@ -5,11 +5,18 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { BiRun, BiCycling } from "react-icons/bi";
+import InfoTooltip from "../InfoToolTip/InfoToolTip";
 
 const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xxs};
+`;
+
+const LabelWrapper = styled.div`
+  display: flex;
+  gap: ${theme.spacing.xxs};
+  white-space: nowrap;
 `;
 
 const Label = styled.span`
@@ -30,7 +37,10 @@ export default function ActivitySelect() {
 
   return (
     <Section>
-      <Label>Activity Type</Label>
+      <LabelWrapper>
+        <Label>Activity Type</Label>
+        <InfoTooltip text="Select the type of activity to tailor the route for running or cycling." />
+      </LabelWrapper>
       <CapsuleGroup>
         <Button
           label="Running"

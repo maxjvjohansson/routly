@@ -16,6 +16,7 @@ type InputFieldProps = {
   required?: boolean;
   name?: string;
   autocomplete?: string;
+  labelRightSlot?: React.ReactNode;
 };
 
 export const InputWrapper = styled.div<{ $fullWidth?: boolean }>`
@@ -24,6 +25,13 @@ export const InputWrapper = styled.div<{ $fullWidth?: boolean }>`
   text-align: left;
   gap: ${theme.spacing.xxs};
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
+`;
+
+const LabelRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing.xxs};
+  white-space: nowrap;
 `;
 
 export const Label = styled.label`
@@ -79,6 +87,7 @@ export const InputField = ({
   required,
   name,
   autocomplete,
+  labelRightSlot,
 }: InputFieldProps) => {
   // Generate a unique ID per instance
   const id: string = useId();
@@ -87,7 +96,12 @@ export const InputField = ({
 
   return (
     <InputWrapper $fullWidth={fullWidth}>
-      {label && <Label htmlFor={inputId}>{label}</Label>}
+      {label && (
+        <LabelRow>
+          <Label htmlFor={inputId}>{label}</Label>
+          {labelRightSlot}
+        </LabelRow>
+      )}
 
       <InputContainer $hasError={!!error}>
         {iconLeft && (
