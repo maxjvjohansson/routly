@@ -3,7 +3,7 @@ import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
 import RouteInfoItem from "../PreviewRouteCard/RouteInfoItem";
 import { FaClock, FaMountain, FaRoute, FaRegEdit } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 type Props = {
   route: any;
@@ -55,6 +55,7 @@ const InfoRow = styled.div`
 
 const Actions = styled.div`
   display: flex;
+  flex-direction: column;
   gap: ${theme.spacing.sm};
   margin-top: ${theme.spacing.sm};
 `;
@@ -104,7 +105,7 @@ export default function RouteCard({
           color="red"
           fullWidth
           onClick={() => onDelete(route)}
-          iconRight={<MdOutlineCancel size={20} />}
+          iconRight={<MdDelete size={20} />}
         />
       </Actions>
     </Card>

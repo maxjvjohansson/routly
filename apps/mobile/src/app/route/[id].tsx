@@ -9,6 +9,10 @@ import { Button } from "src/components/Button/Button";
 import RoutlyMap from "src/components/RoutlyMap/RoutlyMap";
 import RouteInfoItem from "src/components/PreviewRouteCard/RouteInfoItem";
 import type { FeatureCollection, LineString } from "geojson";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const Wrapper = styled.View`
   flex: 1;
@@ -108,14 +112,73 @@ export default function RouteDetailScreen() {
         <Title>{route.name}</Title>
 
         <InfoList>
-          <RouteInfoItem label="Activity" value={activity} />
-          <RouteInfoItem label="Distance" value={`${distance} km`} />
-          <RouteInfoItem label="Elevation" value={`+${ascent} m`} />
-          <RouteInfoItem label="Estimated time" value={`${duration} min`} />
+          <RouteInfoItem
+            label="Activity"
+            value={activity}
+            icon={
+              activity === "Running" ? (
+                <MaterialIcons
+                  name="directions-run"
+                  size={22}
+                  color={theme.colors.grayDark}
+                />
+              ) : (
+                <Ionicons
+                  name="bicycle"
+                  size={22}
+                  color={theme.colors.grayDark}
+                />
+              )
+            }
+          />
+          <RouteInfoItem
+            label="Distance"
+            value={` ${distance} km`}
+            icon={
+              <FontAwesome5
+                name="route"
+                size={18}
+                color={theme.colors.grayDark}
+              />
+            }
+          />
+          <RouteInfoItem
+            label="Elevation"
+            value={` +${ascent} m`}
+            icon={
+              <FontAwesome5
+                name="mountain"
+                size={16}
+                color={theme.colors.grayDark}
+              />
+            }
+          />
+          <RouteInfoItem
+            label="Estimated Time"
+            value={` ${duration} min`}
+            icon={
+              <MaterialCommunityIcons
+                name="clock-time-five"
+                size={20}
+                color={theme.colors.grayDark}
+              />
+            }
+          />
         </InfoList>
 
         <BackButtonWrapper>
-          <Button label="Go Back" color="teal" onPress={handleGoBack} />
+          <Button
+            label="Go Back"
+            color="teal"
+            onPress={handleGoBack}
+            iconLeft={
+              <Ionicons
+                name="arrow-back"
+                size={18}
+                color={theme.colors.white}
+              />
+            }
+          />
         </BackButtonWrapper>
       </InfoPanel>
       <RoutlyMap routeData={geojson} isRoundTrip={route.is_roundtrip} />

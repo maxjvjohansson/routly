@@ -1,6 +1,9 @@
 import styled from "styled-components/native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import RouteInfoItem from "../PreviewRouteCard/RouteInfoItem";
 
 type Props = {
   route: any;
@@ -41,15 +44,9 @@ const InfoRow = styled.View`
   margin-bottom: ${theme.spacing.sm}px;
 `;
 
-const InfoText = styled.Text`
-  font-family: ${theme.typography.fontRegular};
-  font-size: ${theme.typography.sm}px;
-  color: ${theme.colors.grayDark};
-`;
-
 const Actions = styled.View`
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   gap: ${theme.spacing.xxs}px;
 `;
@@ -60,24 +57,76 @@ export default function RouteCard({
   onRename,
   onDelete,
 }: Props) {
+  const distance = route.distance_km?.toFixed(1);
+  const ascent = route.elevation_gain ?? 0;
+  const duration = route.duration_estimate?.toFixed(0);
+
   return (
     <Card>
       <TitleRow>
         <Title>{route.name}</Title>
         <EditButton onPress={() => onRename(route)}>
-          <Title>✎</Title>
+          <FontAwesome5 name="edit" size={20} color={theme.colors.black} />
         </EditButton>
       </TitleRow>
 
       <InfoRow>
-        <InfoText>{route.distance_km?.toFixed(1)} km</InfoText>
-        <InfoText>+{route.elevation_gain} m</InfoText>
-        <InfoText>{route.duration_estimate?.toFixed(0)} min</InfoText>
+        <RouteInfoItem
+          label="Distance"
+          value={` ${distance} km`}
+          mode="compact"
+          icon={
+            <FontAwesome5
+              name="route"
+              size={18}
+              color={theme.colors.grayDark}
+            />
+          }
+        />
+        <RouteInfoItem
+          label="Elevation"
+          value={` ${ascent} m`}
+          mode="compact"
+          icon={
+            <FontAwesome5
+              name="mountain"
+              size={16}
+              color={theme.colors.grayDark}
+            />
+          }
+        />
+        <RouteInfoItem
+          label="Elevation"
+          value={` ${duration} min`}
+          mode="compact"
+          icon={
+            <MaterialCommunityIcons
+              name="clock-time-five"
+              size={20}
+              color={theme.colors.grayDark}
+            />
+          }
+        />
       </InfoRow>
 
       <Actions>
-        <Button label="View" color="teal" onPress={() => onViewOnMap(route)} />
-        <Button label="Delete" color="red" onPress={() => onDelete(route)} />
+        <Button
+          label="View Details"
+          color="teal"
+          onPress={() => onViewOnMap(route)}
+        />
+        <Button
+          label="Delete Route"
+          color="red"
+          onPress={() => onDelete(route)}
+          iconRight={
+            <MaterialCommunityIcons
+              name="delete"
+              size={22}
+              color={theme.colors.white}
+            />
+          }
+        />
       </Actions>
     </Card>
   );

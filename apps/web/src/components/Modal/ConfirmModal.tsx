@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
-import { MdOutlineCancel } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 type Props = {
   isOpen: boolean;
@@ -81,7 +81,7 @@ export default function ConfirmModal({
             onClick={onConfirm}
             disabled={loading}
             fullWidth
-            iconRight={<MdOutlineCancel size={20} />}
+            iconRight={<MdDelete size={20} />}
           />
         </ButtonRow>
       </ModalBox>
