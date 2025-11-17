@@ -6,6 +6,7 @@ import { useExploreRoutes } from "@routly/lib/hooks/useExploreRoutes.native";
 import ExploreRoutesList from "src/components/Explore/ExploreRoutesList";
 import FilterBar from "src/components/Explore/FilterBar";
 import { Button } from "src/components/Button/Button";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const ScrollWrapper = styled.ScrollView`
   flex: 1;
@@ -13,8 +14,7 @@ const ScrollWrapper = styled.ScrollView`
 `;
 
 const Wrapper = styled.View`
-  margin-top: ${theme.spacing.lg}px;
-  padding: 0 ${theme.spacing.lg}px;
+  padding: ${theme.spacing.lg}px;
 `;
 
 const Title = styled.Text`
@@ -71,9 +71,7 @@ export default function ExploreScreen() {
 
       <NearMeWrapper>
         <Button
-          label={
-            nearMe ? "📍 Showing routes near you" : "📍 Show routes near me"
-          }
+          label={nearMe ? "Showing routes near you" : "Show routes near me"}
           color="orange"
           onPress={() => {
             if (!nearMe) {
@@ -84,6 +82,13 @@ export default function ExploreScreen() {
               setPage(1);
             }
           }}
+          iconLeft={
+            <Ionicons
+              name="location-outline"
+              size={24}
+              color={theme.colors.white}
+            />
+          }
         />
       </NearMeWrapper>
 
@@ -110,7 +115,7 @@ export default function ExploreScreen() {
       {!nearMe && (
         <Wrapper>
           <Button
-            label="Load more"
+            label="Load More"
             color="orange"
             onPress={() => setPage((prev) => prev + 1)}
           />

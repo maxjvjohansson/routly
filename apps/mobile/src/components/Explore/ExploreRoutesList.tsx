@@ -11,7 +11,10 @@ type Props = {
 };
 
 const Wrapper = styled.View`
-  padding: ${theme.spacing.md}px;
+  display: flex;
+  gap: ${theme.spacing.lg}px;
+  margin-top: ${theme.spacing.md}px;
+  padding: 0 ${theme.spacing.md}px;
 `;
 
 const LoadingText = styled.Text`
