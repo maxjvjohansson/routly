@@ -81,10 +81,7 @@ export default function RouteWeatherInfo({ weather }: Props) {
           {icon}
           <Label>Weather</Label>
         </Left>
-        <Value>
-          {condition || "—"}
-          {temperature != null ? ` · ${temperature}°C` : ""}
-        </Value>
+        <Value>{temperature != null ? ` ${temperature}°C` : ""}</Value>
       </Row>
 
       <Row>
