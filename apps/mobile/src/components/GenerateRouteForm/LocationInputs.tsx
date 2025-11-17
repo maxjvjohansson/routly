@@ -7,6 +7,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { InputField } from "../InputField/InputField";
 import FontAwesome6 from "@expo/vector-icons/build/FontAwesome6";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Section = styled.View`
   flex-direction: column;
@@ -17,6 +18,12 @@ const Row = styled.View`
   flex-direction: row;
   align-items: flex-start;
   gap: ${theme.spacing.xs}px;
+`;
+
+const LabelRow = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: ${theme.spacing.xxs}px;
 `;
 
 const Label = styled.Text`
@@ -85,7 +92,10 @@ export default function LocationInputs() {
   return (
     <Section>
       <View>
-        <Label>Start point</Label>
+        <LabelRow>
+          <Label>Start point</Label>
+          <InfoTooltip text="Choose your starting location by picking a point on the map or using your current position." />
+        </LabelRow>
 
         <Row>
           <View style={{ flex: 1 }}>
@@ -119,7 +129,10 @@ export default function LocationInputs() {
       </View>
 
       <View>
-        <Label>End point (optional)</Label>
+        <LabelRow>
+          <Label>End point (optional)</Label>
+          <InfoTooltip text="Leave this empty to generate a loop. Fill it in if you want a point-to-point route." />
+        </LabelRow>
         <InputField
           placeholder="Enter destination (leave blank for loop)"
           value={endText}

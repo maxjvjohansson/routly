@@ -1,8 +1,9 @@
 import styled from "styled-components/native";
 import Slider from "@react-native-community/slider";
-import { TextInput } from "react-native";
+import { TextInput, View } from "react-native";
 import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Container = styled.View`
   flex-direction: column;
@@ -11,8 +12,17 @@ const Container = styled.View`
 
 const LabelRow = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const LabelLeftWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Spacer = styled.View`
+  width: ${theme.spacing.xxs}px;
 `;
 
 const LabelText = styled.Text`
@@ -44,12 +54,17 @@ export default function DistanceSelector() {
   return (
     <Container>
       <LabelRow>
-        <LabelText>Distance (km)</LabelText>
+        <LabelLeftWrapper>
+          <LabelText>Distance (km)</LabelText>
+          <Spacer />
+          <InfoTooltip text="Set your preferred distance for the loop. The final route may vary slightly." />
+        </LabelLeftWrapper>
+
         <ManualInput
           keyboardType="numeric"
           value={String(distance)}
           onChangeText={(text: string) => {
-            const num = Number(text);
+            const num: number = Number(text);
             if (!isNaN(num)) setDistance(num);
           }}
         />

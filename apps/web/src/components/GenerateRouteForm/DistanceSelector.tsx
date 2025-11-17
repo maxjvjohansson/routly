@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
-import InfoTooltip from "../InfoToolTip/InfoToolTip";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Container = styled.div`
   display: flex;

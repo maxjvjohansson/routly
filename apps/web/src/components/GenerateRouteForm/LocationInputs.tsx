@@ -7,7 +7,7 @@ import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { useState, useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
 import { BiCurrentLocation } from "react-icons/bi";
-import InfoTooltip from "../InfoToolTip/InfoToolTip";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const Section = styled.div`
   display: flex;
