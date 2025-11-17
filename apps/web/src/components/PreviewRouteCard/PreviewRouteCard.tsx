@@ -11,6 +11,11 @@ import { formatActivityLabel } from "@routly/lib/utils/activityText";
 import { BiRun, BiCycling } from "react-icons/bi";
 import { FaRoute, FaMountain, FaWind } from "react-icons/fa";
 import { MdOutlineSaveAlt, MdCheck } from "react-icons/md";
+import {
+  formatDistance,
+  formatAscent,
+  formatDuration,
+} from "@routly/lib/utils/routeFormatters";
 
 const Card = styled.div<{ $active?: boolean }>`
   width: 100%;
@@ -117,12 +122,17 @@ export default function PreviewRouteCard({
 }: Props) {
   const { activity } = useRouteGeneration();
   const summary: any = route?.features?.[0]?.properties ?? {};
-  const distance: any = summary?.distanceKm?.toFixed(1) ?? "—";
-  const ascent: number = calculateTotalAscent(route);
-  const duration: any = summary?.durationMin?.toFixed(0) ?? "—";
-  const averageRunSpeedKmH = 10;
-  const adjustedRunTimeMin: number = (distance / averageRunSpeedKmH) * 60;
+  const distance: string = formatDistance(summary?.distanceKm);
+  const ascent: number = formatAscent(calculateTotalAscent(route));
+  const duration: string = formatDuration(summary?.durationMin);
   const activityText: string = formatActivityLabel(activity);
+
+  const numericDistance: number = parseFloat(distance);
+  const averageRunSpeedKmH = 10;
+
+  const adjustedRunTimeMin: number | null = !isNaN(numericDistance)
+    ? (numericDistance / averageRunSpeedKmH) * 60
+    : null;
 
   return (
     <Card $active={isActive}>
@@ -170,7 +180,7 @@ export default function PreviewRouteCard({
         <Summary $active={isActive}>More details</Summary>
         <DetailsContent>
           <DetailsText>Est. duration: {duration} min</DetailsText>
-          {activity === "run" && (
+          {activity === "run" && adjustedRunTimeMin && (
             <DetailsText>
               Est. (running pace): {adjustedRunTimeMin.toFixed(0)} min
             </DetailsText>

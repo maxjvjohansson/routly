@@ -4,6 +4,11 @@ import { Button } from "../Button/Button";
 import RouteInfoItem from "../PreviewRouteCard/RouteInfoItem";
 import { FaClock, FaMountain, FaRoute, FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import {
+  formatDuration,
+  formatAscent,
+  formatDistance,
+} from "@routly/lib/utils/routeFormatters";
 
 type Props = {
   route: any;
@@ -66,6 +71,10 @@ export default function RouteCard({
   onRename,
   onDelete,
 }: Props) {
+  const distance: string = formatDistance(route.distance_km);
+  const ascent: number = formatAscent(route.elevation_gain);
+  const duration: string = formatDuration(route.duration_estimate);
+
   return (
     <Card>
       <TitleRow>
@@ -78,17 +87,17 @@ export default function RouteCard({
       <InfoRow>
         <RouteInfoItem
           mode="compact"
-          value={`${route.distance_km?.toFixed(1)} km`}
+          value={`${distance} km`}
           icon={<FaRoute size={18} />}
         />
         <RouteInfoItem
           mode="compact"
-          value={`${route.elevation_gain} m`}
+          value={`${ascent} m`}
           icon={<FaMountain size={18} />}
         />
         <RouteInfoItem
           mode="compact"
-          value={`${route.duration_estimate?.toFixed(0)} min`}
+          value={`${duration} min`}
           icon={<FaClock size={18} />}
         />
       </InfoRow>
