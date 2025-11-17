@@ -6,10 +6,12 @@ import { nativeTheme as theme } from "@routly/ui/theme/native";
 import { Button } from "../Button/Button";
 import { InputField } from "../InputField/InputField";
 import { useProfileSettings } from "@routly/lib/hooks/useProfileSettings";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Feather } from "@expo/vector-icons";
 
 const Wrapper = styled.View`
   flex-direction: column;
-  gap: ${theme.spacing.lg}px;
+  gap: ${theme.spacing.md}px;
 `;
 
 const Card = styled.View`
@@ -46,7 +48,6 @@ export default function ProfileSettingsForm() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileStatus, setProfileStatus] = useState<{
     type: "success" | "error";
@@ -66,7 +67,6 @@ export default function ProfileSettingsForm() {
     if (profile) {
       setFullName(profile.full_name || "");
       setEmail(profile.email || "");
-      setAvatarUrl(profile.avatar_url || "");
     }
   }, [profile]);
 
@@ -77,7 +77,6 @@ export default function ProfileSettingsForm() {
     const { error } = await updateProfile({
       full_name: fullName,
       email,
-      avatar_url: avatarUrl,
     });
 
     if (error) {
@@ -132,6 +131,9 @@ export default function ProfileSettingsForm() {
           onChange={setFullName}
           placeholder="Your full name"
           disabled={loading || savingProfile}
+          iconLeft={
+            <Feather name="user" size={18} color={theme.colors.black} />
+          }
         />
         <InputField
           label="Email"
@@ -139,13 +141,9 @@ export default function ProfileSettingsForm() {
           onChange={setEmail}
           placeholder="Your email address"
           disabled={loading || savingProfile}
-        />
-        <InputField
-          label="Avatar URL"
-          value={avatarUrl}
-          onChange={setAvatarUrl}
-          placeholder="Link to your profile image"
-          disabled={loading || savingProfile}
+          iconLeft={
+            <Feather name="mail" size={18} color={theme.colors.black} />
+          }
         />
         <Button
           label={savingProfile ? "Saving..." : "Save changes"}
@@ -153,6 +151,13 @@ export default function ProfileSettingsForm() {
           fullWidth
           onPress={handleSaveProfile}
           disabled={savingProfile}
+          iconRight={
+            <MaterialIcons
+              name="save-alt"
+              size={22}
+              color={theme.colors.white}
+            />
+          }
         />
         {profileStatus && (
           <StatusText $type={profileStatus.type}>
@@ -170,6 +175,9 @@ export default function ProfileSettingsForm() {
             value={currentPassword}
             onChange={setCurrentPassword}
             disabled={savingPassword}
+            iconLeft={
+              <Feather name="lock" size={18} color={theme.colors.black} />
+            }
           />
           <InputField
             label="New password"
@@ -177,6 +185,9 @@ export default function ProfileSettingsForm() {
             value={newPassword}
             onChange={setNewPassword}
             disabled={savingPassword}
+            iconLeft={
+              <Feather name="lock" size={18} color={theme.colors.black} />
+            }
           />
           <InputField
             label="Repeat new password"
@@ -184,6 +195,9 @@ export default function ProfileSettingsForm() {
             value={repeatPassword}
             onChange={setRepeatPassword}
             disabled={savingPassword}
+            iconLeft={
+              <Feather name="lock" size={18} color={theme.colors.black} />
+            }
           />
         </Row>
         <Button
@@ -192,6 +206,13 @@ export default function ProfileSettingsForm() {
           fullWidth
           onPress={handleSavePassword}
           disabled={savingPassword}
+          iconRight={
+            <MaterialIcons
+              name="save-alt"
+              size={22}
+              color={theme.colors.white}
+            />
+          }
         />
         {passwordStatus && (
           <StatusText $type={passwordStatus.type}>

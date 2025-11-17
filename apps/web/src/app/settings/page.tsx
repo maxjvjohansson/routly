@@ -31,7 +31,7 @@ const Title = styled.h2`
 export default function SettingsPage() {
   const router = useRouter();
 
-  const handleBack = () => {
+  const handleGoBack = () => {
     router.back();
   };
 
@@ -42,7 +42,7 @@ export default function SettingsPage() {
         <Button
           label="Go Back"
           color="teal"
-          onClick={handleBack}
+          onClick={handleGoBack}
           iconLeft={<FiArrowLeft size={20} />}
         />
       </HeaderRow>
