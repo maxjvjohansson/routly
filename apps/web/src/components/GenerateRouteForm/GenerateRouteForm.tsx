@@ -6,12 +6,16 @@ import { Button } from "../Button/Button";
 import ActivitySelect from "./ActivitySelect";
 import DistanceSelector from "./DistanceSelector";
 import LocationInputs from "./LocationInputs";
-import { useAuth } from "@routly/lib/context/AuthContext";
-import { useRouter, usePathname } from "next/navigation";
 import { useRouteGeneration } from "@routly/lib/context/RouteGenerationContext";
 import { fetchCombinedRouteData } from "@routly/lib/routeAlgorithms/fetchCombinedRouteData";
 import { useEffect, useState } from "react";
 import { TbWand } from "react-icons/tb";
+import { useRouter } from "next/navigation";
+import { FiArrowRight } from "react-icons/fi";
+
+type GenerateRouteFormProps = {
+  mode?: "home" | "generate";
+};
 
 const FormContainer = styled.form`
   display: flex;
@@ -41,10 +45,10 @@ const ErrorText = styled.p`
   margin-bottom: ${theme.spacing.xs};
 `;
 
-export default function GenerateRouteForm() {
-  const { user } = useAuth();
+export default function GenerateRouteForm({
+  mode = "generate",
+}: GenerateRouteFormProps) {
   const router = useRouter();
-  const pathname = usePathname();
 
   const {
     startPoint,
@@ -62,11 +66,17 @@ export default function GenerateRouteForm() {
 
   useEffect(() => {
     if (error && (startPoint || endPoint)) setError(null);
-  }, [startPoint, endPoint]);
+  }, [startPoint, endPoint, error]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // In on homepage, navigate to /generate
+    if (mode === "home") {
+      router.push("/generate");
+      return;
+    }
 
     if (!startPoint) {
       setError(
@@ -88,8 +98,6 @@ export default function GenerateRouteForm() {
       setRoutes(routes.map((r) => r.data));
       setWeatherByRoute(weatherByRoute);
       setActiveRouteIndex(0);
-
-      if (pathname !== "/generate") router.push("/generate");
     } catch (err) {
       console.error("Route generation failed:", err);
       setError(
@@ -112,11 +120,19 @@ export default function GenerateRouteForm() {
       <ButtonWrapper>
         <Button
           type="submit"
-          label={isLoading ? "Generating..." : "Generate Route"}
+          label={
+            isLoading
+              ? "Generating..."
+              : mode === "home"
+                ? "Generate a Route"
+                : "Generate Route"
+          }
           color="orange"
           fullWidth
           disabled={isLoading}
-          iconRight={<TbWand size={20} />}
+          iconRight={
+            mode === "home" ? <FiArrowRight size={20} /> : <TbWand size={20} />
+          }
         />
       </ButtonWrapper>
     </FormContainer>

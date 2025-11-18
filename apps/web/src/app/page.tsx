@@ -51,7 +51,7 @@ export default function HomePage() {
           Generate your own route in seconds, test the same engine that powers
           Routly’s smart route suggestions.
         </Subtext>
-        <GenerateRouteSection />
+        <GenerateRouteSection mode="home" />
       </TryItSection>
     </>
   );
