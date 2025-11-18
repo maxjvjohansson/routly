@@ -68,11 +68,6 @@ export default function GenerateRouteForm() {
     e.preventDefault();
     setError(null);
 
-    if (!user) {
-      router.push("/login?next=/generate");
-      return;
-    }
-
     if (!startPoint) {
       setError(
         "Please select a start point on the map before generating a route."
