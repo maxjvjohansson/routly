@@ -3,8 +3,8 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import Image from "next/image";
-import cycleImage from "src/assets/images/routly_cycle_2_stock_photo.jpg";
-import runImage from "src/assets/images/routly_run_2_stock_photo.jpg";
+import cycleImage from "src/assets/images/routly_cycle_2_stock_photo.webp";
+import runImage from "src/assets/images/routly_run_2_stock_photo.webp";
 import { useEffect, useState } from "react";
 
 const Container = styled.section`

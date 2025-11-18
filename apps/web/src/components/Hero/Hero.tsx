@@ -4,8 +4,8 @@ import Image from "next/image";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import { Button } from "../Button/Button";
-import splashMockup from "src/assets/images/routly_splash_screen.png";
-import generateMockup from "src/assets/images/routly_generate_screen.png";
+import splashMockup from "src/assets/images/routly_splash_screen.webp";
+import generateMockup from "src/assets/images/routly_generate_screen.webp";
 import { useRouter } from "next/navigation";
 import { FiArrowRight } from "react-icons/fi";
 

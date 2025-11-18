@@ -1,7 +1,7 @@
 "use client";
 
 import AuthLayout from "src/components/AuthLayout/AuthLayout";
-import loginImage from "src/assets/images/routly_run_3_stock_photo.jpg";
+import loginImage from "src/assets/images/routly_run_3_stock_photo.webp";
 import { useAuthActions } from "@routly/lib/hooks/useAuthActions";
 import AuthForm from "src/components/AuthForm/AuthForm";
 import { useRouter, useSearchParams } from "next/navigation";
