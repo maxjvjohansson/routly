@@ -1,4 +1,5 @@
-"use client";
+export const dynamic = "force-dynamic";
+("use client");
 
 import AuthLayout from "src/components/AuthLayout/AuthLayout";
 import loginImage from "src/assets/images/routly_run_3_stock_photo.webp";
