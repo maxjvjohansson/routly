@@ -1,40 +1,47 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isProtectedPath } from "@routly/lib/config/routes";
+import { createServerClient } from "@supabase/ssr";
+import { JwtPayload } from "@supabase/supabase-js";
+import { NextURL } from "next/dist/server/web/next-url";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        getAll() {
+        getAll(): RequestCookie[] {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
 
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value }) =>
+            response.cookies.set(name, value)
           );
         },
       },
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getClaims();
+  const user: JwtPayload | undefined = data?.claims;
 
-  const url = request.nextUrl.clone();
-  const path = url.pathname;
+  const url: NextURL = request.nextUrl.clone();
+  const path: string = url.pathname;
 
-  if (!user && isProtectedPath(path)) {
+  if (
+    !user &&
+    (path.startsWith("/generate") ||
+      path.startsWith("/profile") ||
+      path.startsWith("/settings") ||
+      path.startsWith("/routes"))
+  ) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
@@ -44,5 +51,5 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  return response;
 }
