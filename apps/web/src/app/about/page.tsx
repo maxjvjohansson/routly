@@ -176,6 +176,7 @@ export default function AboutPage() {
               alt="Cyclist exploring a new route"
               fill
               priority
+              placeholder="blur"
               $visible={activeImage === "cycle"}
               sizes="(min-width: 768px) 50vw, 0vw"
             />
@@ -184,6 +185,7 @@ export default function AboutPage() {
               alt="Runner exploring a new route"
               fill
               priority
+              placeholder="blur"
               $visible={activeImage === "run"}
               sizes="(min-width: 768px) 50vw, 0vw"
             />

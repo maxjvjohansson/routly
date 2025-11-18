@@ -120,6 +120,7 @@ export default function AuthLayout({
             alt="Image of runner/cyclist"
             fill
             priority
+            placeholder="blur"
             sizes="(max-width: 768px) 0px, 50vw"
           />
         </ImageSide>
