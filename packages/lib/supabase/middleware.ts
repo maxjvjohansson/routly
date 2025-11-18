@@ -2,12 +2,6 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-  console.log("MIDDLEWARE START", request.nextUrl.pathname);
-  console.log(
-    "Cookies:",
-    request.cookies.getAll().map((c) => c.name)
-  );
-
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -21,10 +15,6 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          console.log(
-            "Setting cookies:",
-            cookiesToSet.map((c) => c.name)
-          );
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
@@ -40,9 +30,8 @@ export async function updateSession(request: NextRequest) {
   );
 
   const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
 
-  console.log("User found:", !!user);
+  const user = data?.claims;
 
   const url = request.nextUrl.clone();
   const path: string = url.pathname;
@@ -54,17 +43,14 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/routes");
 
   if (!user && isProtected) {
-    console.log("REDIRECTING TO LOGIN");
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
   if (user && (path.startsWith("/login") || path.startsWith("/signup"))) {
-    console.log("REDIRECTING TO HOME");
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
-  console.log("ALLOWING THROUGH");
   return supabaseResponse;
 }
