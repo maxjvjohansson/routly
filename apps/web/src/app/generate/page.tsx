@@ -3,6 +3,8 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const Container = styled.section`
   width: 100%;
@@ -36,6 +38,17 @@ const Intro = styled.p`
 `;
 
 export default function GeneratePage() {
+  const searchParams = useSearchParams();
+  const refreshed = searchParams.get("r");
+
+  useEffect(() => {
+    // HACK: Force a hard refresh on first visit to /generate
+    // This is a temporary fix to the 307 redirect loop bug
+    if (!refreshed) {
+      window.location.href = "/generate?r=1";
+    }
+  }, [refreshed]);
+
   return (
     <Container>
       <Header>
