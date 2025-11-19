@@ -3,6 +3,9 @@
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
+import { useAuth } from "@routly/lib/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Container = styled.section`
   width: 100%;
@@ -36,6 +39,23 @@ const Intro = styled.p`
 `;
 
 export default function GeneratePage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      router.push("/login");
+    }
+  }, [user, router]);
+
+  if (user === undefined || user === null) {
+    return (
+      <Container>
+        <p>Loading...</p>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Header>
