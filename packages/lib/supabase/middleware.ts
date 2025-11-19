@@ -30,11 +30,20 @@ export async function updateSession(request: NextRequest) {
   );
 
   const { data } = await supabase.auth.getClaims();
-
   const user = data?.claims;
 
   const url = request.nextUrl.clone();
   const path: string = url.pathname;
+
+  // Skip redirects for Next.js internal requests (_next/data, RSC payloads)
+  if (
+    path.startsWith("/_next") ||
+    path.includes("__nextDataReq") ||
+    request.headers.get("RSC") === "1" ||
+    request.headers.get("Next-Router-Prefetch") === "1"
+  ) {
+    return supabaseResponse;
+  }
 
   const isProtected: boolean =
     path.startsWith("/generate") ||
