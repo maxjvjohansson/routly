@@ -109,7 +109,7 @@ export default function LocationInputs() {
           iconLeft={<FiMapPin size={18} color={theme.colors.black} />}
         />
         <LocationButton type="button" onClick={handleUseLocation}>
-          <BiCurrentLocation size={24} />
+          <BiCurrentLocation size={22} />
         </LocationButton>
       </Row>
 
