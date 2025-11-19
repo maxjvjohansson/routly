@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   position: absolute;
   top: ${theme.spacing.xs};
   left: ${theme.spacing.xs};
-  z-index: 999;
+  z-index: 1;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(4px);
 
