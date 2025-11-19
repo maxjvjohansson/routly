@@ -1,7 +1,6 @@
 "use client";
 
 import Hero from "src/components/Hero/Hero";
-import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import HowItWorksSection from "src/components/HowItWorksSection/HowItWorksSection";
@@ -51,7 +50,6 @@ export default function HomePage() {
           Generate your own route in seconds, test the same engine that powers
           Routly’s smart route suggestions.
         </Subtext>
-        <GenerateRouteSection mode="home" />
       </TryItSection>
     </>
   );
