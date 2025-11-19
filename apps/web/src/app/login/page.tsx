@@ -10,18 +10,23 @@ import { useEffect } from "react";
 
 export default function LoginPage() {
   const { login, loading, error } = useAuthActions();
-  const router = useRouter();
   const { user } = useAuth();
   const searchParams = useSearchParams();
-  const nextUrl = searchParams.get("next") || "/";
+  const nextUrl: string = searchParams.get("next") || "/";
 
   useEffect(() => {
-    if (user) router.replace(nextUrl);
-  }, [user, nextUrl, router]);
+    if (user) {
+      // Force hard refresh to ensure cookies are synced
+      window.location.href = nextUrl;
+    }
+  }, [user, nextUrl]);
 
   const onSubmit = async (email: string, password: string) => {
     const user = await login(email, password);
-    if (user) router.replace(nextUrl);
+    if (user) {
+      // Force hard refresh after login
+      window.location.href = nextUrl;
+    }
   };
 
   return (
