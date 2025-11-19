@@ -1,11 +1,11 @@
 "use client";
 
 import Hero from "src/components/Hero/Hero";
+import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
 import HowItWorksSection from "src/components/HowItWorksSection/HowItWorksSection";
 import LifestyleSection from "src/components/LifestyleSection/LifestyleSection";
-import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
 
 const TryItSection = styled.section`
   width: 100%;

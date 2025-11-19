@@ -129,7 +129,7 @@ export default function Hero() {
               label="Generate a Route"
               color="orange"
               iconRight={<FiArrowRight size={20} />}
-              onClick={() => router.push("/test")}
+              onClick={() => router.push("/generate")}
             />
           </CTAGroup>
         </TextBlock>

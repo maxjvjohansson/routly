@@ -1,19 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isProtectedPath } from "@routly/lib/config/routes";
 
 export async function updateSession(request: NextRequest) {
-  const url = request.nextUrl.clone();
-  const path: string = url.pathname;
-
-  // CRITICAL: Skip auth checks for RSC requests completely
-  // They will be handled by the actual page navigation
-  if (url.searchParams.has("_rsc")) {
-    return NextResponse.next({ request });
-  }
-
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
+  let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,14 +14,13 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
+          cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value }) =>
-            supabaseResponse.cookies.set(name, value)
+
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
           );
         },
       },
@@ -39,21 +28,18 @@ export async function updateSession(request: NextRequest) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const isProtected: boolean =
-    path.startsWith("/test") ||
-    path.startsWith("/profile") ||
-    path.startsWith("/settings") ||
-    path.startsWith("/routes");
+  const url = request.nextUrl.clone();
+  const path = url.pathname;
 
-  if (!session && isProtected) {
+  if (!user && isProtectedPath(path)) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (session && (path.startsWith("/login") || path.startsWith("/signup"))) {
+  if (user && (path.startsWith("/login") || path.startsWith("/signup"))) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }

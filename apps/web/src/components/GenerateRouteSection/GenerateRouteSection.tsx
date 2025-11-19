@@ -8,10 +8,6 @@ import RoutlyMap from "../RoutlyMap/RoutlyMap";
 import PreviewRouteCarousel from "../PreviewRouteCarousel/PreviewRouteCarousel";
 import { WindDirectionOverlay } from "../WindDirectionOverlay/WindDirectionOverlay";
 
-type Props = {
-  mode?: "home" | "generate";
-};
-
 const RouteGenerationWrapper = styled.section`
   display: flex;
   flex-direction: column;
@@ -45,7 +41,7 @@ const RightContainer = styled.div`
   position: relative;
 `;
 
-export default function GenerateRouteSection({ mode = "generate" }: Props) {
+export default function GenerateRouteSection() {
   const { routes, weatherByRoute, activeRouteIndex } = useRouteGeneration();
   const full = weatherByRoute?.[activeRouteIndex] ?? null;
   const weather = full?.weather ?? null;
@@ -53,11 +49,7 @@ export default function GenerateRouteSection({ mode = "generate" }: Props) {
   return (
     <RouteGenerationWrapper>
       <LeftContainer>
-        {routes.length > 0 && mode === "generate" ? (
-          <PreviewRouteCarousel />
-        ) : (
-          <GenerateRouteForm mode={mode} />
-        )}
+        {routes.length > 0 ? <PreviewRouteCarousel /> : <GenerateRouteForm />}
       </LeftContainer>
 
       <RightContainer>

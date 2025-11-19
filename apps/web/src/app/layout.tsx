@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ClientWrapper from "./ClientWrapper";
 import StyledComponentsRegistry from "./registry";
 import { Outfit } from "next/font/google";
+import { createClient } from "@routly/lib/supabase/server";
 import { AuthProvider } from "@routly/lib/context/AuthContext";
 import { RouteGenerationProvider } from "@routly/lib/context/RouteGenerationContext";
 
@@ -22,6 +23,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <html lang="en" className={outfit.variable}>
       <head>
@@ -29,7 +35,7 @@ export default async function RootLayout({
       </head>
       <body>
         <StyledComponentsRegistry>
-          <AuthProvider>
+          <AuthProvider initialUser={user}>
             <RouteGenerationProvider>
               <ClientWrapper>
                 <main>{children}</main>
