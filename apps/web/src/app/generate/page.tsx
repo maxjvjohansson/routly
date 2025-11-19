@@ -2,7 +2,6 @@
 
 import styled from "styled-components";
 import { webTheme as theme } from "@routly/ui/theme/web";
-import GenerateRouteSection from "src/components/GenerateRouteSection/GenerateRouteSection";
 import { useAuth } from "@routly/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -64,7 +63,6 @@ export default function GeneratePage() {
           Choose your activity and let Routly find the perfect path for you.
         </Intro>
       </Header>
-      <GenerateRouteSection />
     </Container>
   );
 }
