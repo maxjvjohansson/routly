@@ -29,21 +29,12 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   const url = request.nextUrl.clone();
   const path: string = url.pathname;
-
-  // Skip redirects for Next.js internal requests (_next/data, RSC payloads)
-  if (
-    path.startsWith("/_next") ||
-    path.includes("__nextDataReq") ||
-    request.headers.get("RSC") === "1" ||
-    request.headers.get("Next-Router-Prefetch") === "1"
-  ) {
-    return supabaseResponse;
-  }
 
   const isProtected: boolean =
     path.startsWith("/generate") ||
@@ -51,12 +42,12 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/settings") ||
     path.startsWith("/routes");
 
-  if (!user && isProtected) {
+  if (!session && isProtected) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (user && (path.startsWith("/login") || path.startsWith("/signup"))) {
+  if (session && (path.startsWith("/login") || path.startsWith("/signup"))) {
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
