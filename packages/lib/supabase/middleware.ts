@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getSession();
 
   const isProtected: boolean =
-    path.startsWith("/generate") ||
+    path.startsWith("/test") ||
     path.startsWith("/profile") ||
     path.startsWith("/settings") ||
     path.startsWith("/routes");

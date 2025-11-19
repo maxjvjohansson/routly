@@ -9,7 +9,7 @@ export default function DesktopNav() {
   return (
     <NavLinks>
       <NavLink href="/">Home</NavLink>
-      <NavLink href="/generate">Generate</NavLink>
+      <NavLink href="/test">Generate</NavLink>
       <NavLink href="/explore">Explore</NavLink>
       <NavLink href="/about">About</NavLink>
 
