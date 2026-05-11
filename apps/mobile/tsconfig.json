@@ -3,6 +3,7 @@
   "compilerOptions": {
     "jsx": "react-native",
     "strict": true,
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "@routly/ui/*": ["../../packages/ui/*"],
