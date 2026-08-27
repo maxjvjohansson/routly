@@ -3,7 +3,7 @@ import { sanitizeFilename } from "../utils/sanitizeFilename";
 
 export function exportRouteToGpx(
   featureCollection: GeoJSON.FeatureCollection,
-  filename: string = "route.gpx"
+  filename: string = "route.gpx",
 ) {
   try {
     // Make a safe file name

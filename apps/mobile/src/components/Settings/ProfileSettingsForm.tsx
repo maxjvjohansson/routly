@@ -103,7 +103,7 @@ export default function ProfileSettingsForm() {
     const { error } = await updatePassword(
       currentPassword,
       newPassword,
-      repeatPassword
+      repeatPassword,
     );
 
     if (error) {

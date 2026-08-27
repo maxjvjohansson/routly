@@ -24,7 +24,7 @@ export default function SignupPage() {
   const onSubmit = async (
     email: string,
     password: string,
-    fullName: string
+    fullName: string,
   ) => {
     const user = await signup(email, password, fullName);
     if (user) {

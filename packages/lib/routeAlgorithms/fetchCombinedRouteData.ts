@@ -5,7 +5,7 @@ export async function fetchCombinedRouteData(
   start: [number, number],
   end: [number, number] | null,
   distance: number,
-  activity: string
+  activity: string,
 ) {
   const base: string = getApiBase();
   const isRoundTrip: boolean = !end;
@@ -19,7 +19,7 @@ export async function fetchCombinedRouteData(
     const startIndex = Math.floor(Math.random() * roundTripSeeds.length);
     const seeds = Array.from(
       { length: 3 },
-      (_, i) => roundTripSeeds[(startIndex + i) % roundTripSeeds.length]
+      (_, i) => roundTripSeeds[(startIndex + i) % roundTripSeeds.length],
     );
 
     routeResults = await Promise.all(
@@ -32,7 +32,7 @@ export async function fetchCombinedRouteData(
         if (!res.ok) throw new Error(`ORS request failed (seed: ${seed})`);
         const data = await res.json();
         return { profile, seed, data };
-      })
+      }),
     );
   } else {
     // Point-to-point mode: generate one direct route (seed is ignored by ORS)
@@ -59,14 +59,14 @@ export async function fetchCombinedRouteData(
       const [lon, lat] = midpoint;
 
       const weatherRes = await fetch(
-        `${base}/api/weather?lat=${lat}&lon=${lon}`
+        `${base}/api/weather?lat=${lat}&lon=${lon}`,
       );
       if (!weatherRes.ok)
         throw new Error(`Weather request failed for route ${i + 1}`);
       const weather = await weatherRes.json();
 
       return { routeIndex: i, seed: r.seed, profile: r.profile, weather };
-    })
+    }),
   );
 
   // Return all routes with their respective weather data

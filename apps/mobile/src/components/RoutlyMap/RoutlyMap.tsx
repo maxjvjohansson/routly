@@ -88,7 +88,7 @@ export default function RoutlyMap({
         heading: 0,
         pitch: 0,
       },
-      { duration: 1000 }
+      { duration: 1000 },
     );
   }, [startPoint, routeCoords]);
 
@@ -111,7 +111,7 @@ export default function RoutlyMap({
       setStartPoint,
       setEndPoint,
       clearPoints,
-    ]
+    ],
   );
 
   const handleStartDragEnd = useCallback(
@@ -120,7 +120,7 @@ export default function RoutlyMap({
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setStartPoint([longitude, latitude]);
     },
-    [setStartPoint, hasRoutes, isReadOnly]
+    [setStartPoint, hasRoutes, isReadOnly],
   );
 
   const handleEndDragEnd = useCallback(
@@ -129,7 +129,7 @@ export default function RoutlyMap({
       const { latitude, longitude } = e.nativeEvent.coordinate;
       setEndPoint([longitude, latitude]);
     },
-    [setEndPoint, hasRoutes, isReadOnly]
+    [setEndPoint, hasRoutes, isReadOnly],
   );
 
   return (

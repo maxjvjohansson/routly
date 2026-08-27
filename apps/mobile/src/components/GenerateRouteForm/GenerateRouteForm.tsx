@@ -66,7 +66,7 @@ export default function GenerateRouteForm() {
         const startIndex = Math.floor(Math.random() * roundTripSeeds.length);
         const seeds = Array.from(
           { length: 3 },
-          (_, i) => roundTripSeeds[(startIndex + i) % roundTripSeeds.length]
+          (_, i) => roundTripSeeds[(startIndex + i) % roundTripSeeds.length],
         );
 
         // Sequential fetches
@@ -110,7 +110,7 @@ export default function GenerateRouteForm() {
         const [lon, lat] = midpoint;
 
         const weatherRes = await fetch(
-          `${base}/api/weather?lat=${lat}&lon=${lon}`
+          `${base}/api/weather?lat=${lat}&lon=${lon}`,
         );
         if (!weatherRes.ok) throw new Error("Weather failed");
         const weather = await weatherRes.json();

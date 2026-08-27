@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     if (!start) {
       return NextResponse.json(
         { error: "Missing start point" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     console.error("ORS Combined API error:", err);
     return NextResponse.json(
       { error: err.message, details: err.toString() },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

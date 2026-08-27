@@ -43,7 +43,7 @@ export function useProfileSettings() {
   };
 
   const updateProfile = async (
-    updates: Partial<Profile>
+    updates: Partial<Profile>,
   ): Promise<UpdateResult> => {
     if (!user) return { error: "Not logged in" };
 
@@ -75,7 +75,7 @@ export function useProfileSettings() {
   const updatePassword = async (
     currentPassword: string,
     newPassword: string,
-    repeatPassword: string
+    repeatPassword: string,
   ): Promise<UpdateResult> => {
     if (!user) return { error: "Not logged in" };
     if (newPassword !== repeatPassword) {

@@ -89,7 +89,7 @@ export default function PreviewRouteCarousel() {
 
   const handleSaveRequest = (
     index: number,
-    route: GeoJSON.FeatureCollection
+    route: GeoJSON.FeatureCollection,
   ) => {
     setActiveModalIndex(index);
     setSelectedRoute(route);

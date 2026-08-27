@@ -12,7 +12,7 @@ type AuthFormProps = {
   onSubmit: (
     email: string,
     password: string,
-    fullName: string
+    fullName: string,
   ) => Promise<void>;
   loading?: boolean;
   error?: string;
@@ -95,7 +95,7 @@ export default function AuthForm({
 
     const newErrors = validateAuthFields(
       { email, password, confirm, fullName },
-      mode
+      mode,
     );
 
     setFieldErrors(newErrors);

@@ -34,7 +34,7 @@ type RouteGenerationContextType = {
 };
 
 const RouteGenerationContext = createContext<RouteGenerationContextType | null>(
-  null
+  null,
 );
 
 export function RouteGenerationProvider({ children }: { children: ReactNode }) {
@@ -102,7 +102,7 @@ export function useRouteGeneration() {
   const context = useContext(RouteGenerationContext);
   if (!context) {
     throw new Error(
-      "useRouteGeneration must be used within RouteGenerationProvider"
+      "useRouteGeneration must be used within RouteGenerationProvider",
     );
   }
   return context;

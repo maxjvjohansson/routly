@@ -214,7 +214,7 @@ export default function RoutlyMap({ routeData, isRoundTrip }: RoutlyMapProps) {
     routeToShow.features.forEach((feature) => {
       const coords = (feature.geometry as any).coordinates;
       coords.forEach(([lng, lat]: [number, number]) =>
-        bounds.extend([lng, lat])
+        bounds.extend([lng, lat]),
       );
     });
 
