@@ -5,6 +5,7 @@
     "strict": true,
     "noEmit": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@routly/ui/*": ["../../packages/ui/*"],
       "@routly/lib/*": ["../../packages/lib/*"]
