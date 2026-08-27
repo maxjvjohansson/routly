@@ -100,7 +100,7 @@ export default function IndexScreen() {
   const handleSubmit = async (
     email: string,
     password: string,
-    fullName: string
+    fullName: string,
   ) => {
     let user = null;
     if (mode === "login") user = await login(email, password);

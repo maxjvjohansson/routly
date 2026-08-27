@@ -119,7 +119,7 @@ export default function RouteDetailPage() {
                 coordinates: route.coordinates.map((p: any) =>
                   p.elevation != null
                     ? [p.lng, p.lat, p.elevation]
-                    : [p.lng, p.lat]
+                    : [p.lng, p.lat],
                 ),
               },
               properties: {},

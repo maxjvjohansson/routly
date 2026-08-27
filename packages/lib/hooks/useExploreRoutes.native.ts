@@ -135,7 +135,7 @@ export function useExploreRoutes() {
 
     if (roundtrip !== "all") {
       list = list.filter((r) =>
-        roundtrip === "roundtrip" ? r.is_roundtrip : !r.is_roundtrip
+        roundtrip === "roundtrip" ? r.is_roundtrip : !r.is_roundtrip,
       );
     }
 
@@ -149,13 +149,13 @@ export function useExploreRoutes() {
           userPos.lat,
           userPos.lng,
           a.start_lat,
-          a.start_lng
+          a.start_lng,
         );
         const distB = distanceKm(
           userPos.lat,
           userPos.lng,
           b.start_lat,
-          b.start_lng
+          b.start_lng,
         );
         return distA - distB;
       });
@@ -165,7 +165,7 @@ export function useExploreRoutes() {
     if (sort === "newest") {
       list.sort(
         (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
       );
     } else if (sort === "distance_asc") {
       list.sort((a, b) => a.distance_km - b.distance_km);

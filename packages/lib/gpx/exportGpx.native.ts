@@ -5,7 +5,7 @@ import { sanitizeFilename } from "../utils/sanitizeFilename";
 
 export async function exportRouteToGpxNative(
   featureCollection: GeoJSON.FeatureCollection,
-  routeName: string
+  routeName: string,
 ): Promise<void> {
   try {
     // Make a safe file name

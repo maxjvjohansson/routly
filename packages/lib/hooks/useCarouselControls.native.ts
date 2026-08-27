@@ -21,7 +21,7 @@ export function useCarouselControls<T>(items: T[]) {
 
   const handleScroll = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
-    width: number
+    width: number,
   ) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     const newIndex = Math.round(offsetX / width);

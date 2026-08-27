@@ -33,7 +33,7 @@ export const AuthProvider = ({
       } else {
         const webClient = createBrowserClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+          process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
         );
         setSupabase(webClient);
       }
@@ -65,7 +65,7 @@ export const AuthProvider = ({
     } = supabase.auth.onAuthStateChange(
       (_event: any, session: { user: any }) => {
         setUser(session?.user ?? null);
-      }
+      },
     );
 
     return () => subscription.unsubscribe();

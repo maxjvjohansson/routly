@@ -75,7 +75,7 @@ export default function GenerateRouteForm() {
 
     if (!startPoint) {
       setError(
-        "Please select a start point on the map before generating a route."
+        "Please select a start point on the map before generating a route.",
       );
       return;
     }
@@ -87,7 +87,7 @@ export default function GenerateRouteForm() {
         startPoint,
         endPoint ?? null,
         distance,
-        activity
+        activity,
       );
 
       setRoutes(routes.map((r) => r.data));
@@ -98,7 +98,7 @@ export default function GenerateRouteForm() {
     } catch (err) {
       console.error("Route generation failed:", err);
       setError(
-        "Something went wrong while generating your routes. Please try again."
+        "Something went wrong while generating your routes. Please try again.",
       );
     } finally {
       setIsLoading(false);

@@ -11,7 +11,7 @@ export type FieldErrors = Partial<Record<keyof AuthFields, string>>;
 
 export function validateAuthFields(
   fields: AuthFields,
-  mode: AuthMode
+  mode: AuthMode,
 ): FieldErrors {
   const { email, password, confirm, fullName } = fields;
   const errors: FieldErrors = {};

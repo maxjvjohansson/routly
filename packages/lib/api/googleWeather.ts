@@ -27,7 +27,7 @@ if (!API_KEY) {
 
 export async function fetchWeather(
   latitude: number,
-  longitude: number
+  longitude: number,
 ): Promise<WeatherData> {
   const url = `${BASE_URL}/currentConditions:lookup?key=${API_KEY}&location.latitude=${latitude}&location.longitude=${longitude}`;
   const res = await fetch(url);

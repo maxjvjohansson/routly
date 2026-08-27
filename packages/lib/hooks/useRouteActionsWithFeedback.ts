@@ -5,7 +5,7 @@ export const useRouteActionsWithFeedback = () => {
   const { saveRoute, renameRoute, deleteRoute, loading } = useRouteActions();
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<"success" | "error" | null>(
-    null
+    null,
   );
 
   const handleSaveRoute = async (payload: any) => {

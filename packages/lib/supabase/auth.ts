@@ -4,7 +4,7 @@ import type { AuthResponse } from "@supabase/supabase-js";
 export async function handleSignUp(
   email: string,
   password: string,
-  fullName: string
+  fullName: string,
 ): Promise<AuthResponse["data"]> {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -28,7 +28,7 @@ export async function handleSignUp(
 
 export async function handleLogin(
   email: string,
-  password: string
+  password: string,
 ): Promise<AuthResponse["data"]> {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
