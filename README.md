@@ -44,6 +44,7 @@ Postgres locally with the Supabase CLI, the mobile app, and troubleshooting.
 | [docs/SETUP.md](docs/SETUP.md)               | Prerequisites, API keys, environment variables, both database paths, running the apps, troubleshooting |
 | [docs/DATABASE.md](docs/DATABASE.md)         | Schema reference, ERD, Row Level Security model, the `routes_near_me` RPC, known issues                |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Fork workflow, monorepo conventions, migrations, good first contributions                              |
+| [docs/ROADMAP.md](docs/ROADMAP.md)           | What to work on next: entry points in the code, effort estimates and which issues block which          |
 
 ## Features
 
@@ -112,12 +113,30 @@ reasoning.
 
 ## Roadmap
 
-- Smart mode: background fetching and ranking to present the most optimal
-  route based on wind and elevation.
-- Preferred-surface and preferred-light routing improvements (e.g. gravel,
-  asphalt or roads with street lamps).
-- Elevation graph component in UI.
-- Optional address-based start input using an address API.
+Open work is tracked in
+[GitHub Issues](https://github.com/maxjvjohansson/routly/issues). The themes:
+
+- **Routing intelligence** — smart mode that ranks candidates on wind and
+  elevation ([#23](https://github.com/maxjvjohansson/routly/issues/23)),
+  lit-route preference via Overpass
+  ([#35](https://github.com/maxjvjohansson/routly/issues/35)), traffic
+  awareness ([#36](https://github.com/maxjvjohansson/routly/issues/36)).
+- **Route detail** — elevation graph
+  ([#44](https://github.com/maxjvjohansson/routly/issues/44)), weather check on
+  saved routes ([#53](https://github.com/maxjvjohansson/routly/issues/53)).
+- **Input and UI** — address autocomplete
+  ([#24](https://github.com/maxjvjohansson/routly/issues/24)), consistent error
+  handling ([#54](https://github.com/maxjvjohansson/routly/issues/54)), loading
+  animation ([#30](https://github.com/maxjvjohansson/routly/issues/30)).
+- **Platform** — Google and Apple sign-in
+  ([#10](https://github.com/maxjvjohansson/routly/issues/10)), translations
+  ([#11](https://github.com/maxjvjohansson/routly/issues/11)), theme
+  consistency so dark mode becomes possible
+  ([#55](https://github.com/maxjvjohansson/routly/issues/55)).
+
+**[→ docs/ROADMAP.md](docs/ROADMAP.md)** maps each of these to a starting point
+in the code, an effort estimate, and the dependencies between them — including
+one issue that is blocked by a defect you would otherwise hit head-on.
 
 ## License
 

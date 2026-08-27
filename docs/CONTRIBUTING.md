@@ -183,4 +183,6 @@ Outside the database, one more self-contained fix:
   `fetchCombinedRouteData()` from `packages/lib`; consolidating the two is a
   larger but more valuable change.
 
-The `Roadmap` section of the [README](../README.md) lists larger features.
+Beyond those, [ROADMAP.md](./ROADMAP.md) walks through every open issue with a
+starting point in the code and an effort estimate, sorted so the
+self-contained work comes first.
